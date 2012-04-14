@@ -1,0 +1,35 @@
+# .bashrc
+
+export PS1="\n\[\e[34m\]\u@\h \[\e[35m\]\w\n\[\e[00;37;44m\]How may I serve you, Master?\[\e[00m\]\n$ "
+
+# User specific aliases and functions
+
+alias ll='ls -l'
+alias la='ls -AlF'
+alias l='ls -CF'
+alias l.='ls -d .[a-zA-Z]*'
+
+alias cp='cp -i'
+alias rm='rm -i'
+alias mv='mv -i'
+
+alias vi='/Applications/MacVim.app/Contents/MacOS/Vim "$@"'
+alias vim='/Applications/MacVim.app/Contents/MacOS/Vim "$@"'
+alias gvim='/Applications/MacVim.app/Contents/MacOS/Vim -g "$@"'
+
+alias ack='ack --asm --cc --cpp'
+alias exp='gvim -c Ex'
+alias rmds='sudo find ~ -name .DS_Store -print -exec rm {} ";"'
+
+function mkiso {
+    hdiutil makehybrid -o ${1##*/}.iso $1
+}
+
+function tarbz2 {
+    COPYFILE_DISABLE=true tar cjvf $1.tbz --exclude .DS_Store $1
+}
+
+# Source global definitions
+
+export PATH=$PATH:/usr/local/sbin
+
