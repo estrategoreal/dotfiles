@@ -19,17 +19,17 @@ endif
 set nocompatible
 
 if has('mac')
-set enc=utf-8
-set fencs=usc-bom,iso-2022-jp,euc-jp,cp932
-set iminsert=1 imsearch=0
+  set enc=utf-8
+  set fencs=usc-bom,iso-2022-jp,euc-jp,cp932
+  set iminsert=1 imsearch=0
 elseif has('win32')
-set enc=cp932
-set fencs=usc-bom,iso-2022-jp,euc-jp,utf-8,utf-16
-set shellslash
-set noignorecase
-if has('gui_running')
-set shell=c:/cygwin/bin/bash
-endif
+  set enc=cp932
+  set fencs=usc-bom,iso-2022-jp,euc-jp,utf-8,utf-16
+  set shellslash
+  set noignorecase
+  if has('gui_running')
+    set shell=c:/cygwin/bin/bash
+  endif
 else
 " enable the line below when editting files on windows
 "set enc=cp932 fencs=ucs-bom,iso-2022-jp,euc-jp,utf-8
@@ -47,7 +47,7 @@ set laststatus=2
 set statusline=%<%f\ %m%r%h%w%{'['.(&fenc!=''?&fenc:&enc).']['.&ff.']'}%=%l,%c%V%8P
 
 if has('win32unix')
-set runtimepath^=$HOME/vimfiles
+  set runtimepath^=$HOME/vimfiles
 endif
 
 map <C-j> :GtagsCursor<CR>
@@ -82,6 +82,7 @@ Bundle 'Shougo/neocomplcache-snippets-complete'
 Bundle 'taglist.vim'
 Bundle 'unite.vim'
 Bundle 'vcscommand.vim'
+Bundle 'Shougo/vimfiler'
 
 let &directory = &backupdir
 let Tlist_Ctags_Cmd = '/usr/bin/ctags'
@@ -150,6 +151,9 @@ function! s:unite_my_settings()"{{{
   nmap <silent><buffer> <ESC><ESC> q
   imap <silent><buffer> <ESC><ESC> <ESC>q
 endfunction"}}}
+
+" vimfiler behaves as default explorer
+let g:vimfiler_as_default_explorer = 1
 
 " set the default listing style to tree one
 let g:netrw_liststyle = 3
