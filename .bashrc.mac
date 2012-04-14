@@ -1,24 +1,16 @@
 # .bashrc
 
-export PS1="\n\[\e[34m\]\u@\h \[\e[35m\]\w\n\[\e[00;37;44m\]How may I serve you, Master?\[\e[00m\]\n$ "
-
 # User specific aliases and functions
 
-alias ll='ls -l'
-alias la='ls -AlF'
-alias l='ls -CF'
-alias l.='ls -d .[a-zA-Z]*'
-
-alias cp='cp -i'
-alias rm='rm -i'
-alias mv='mv -i'
+if [ -f ~/.bash_common ]; then
+	. ~/.bash_common
+fi
 
 alias vi='/Applications/MacVim.app/Contents/MacOS/Vim "$@"'
 alias vim='/Applications/MacVim.app/Contents/MacOS/Vim "$@"'
 alias gvim='/Applications/MacVim.app/Contents/MacOS/Vim -g "$@"'
-
-alias ack='ack --asm --cc --cpp'
 alias exp='gvim -c VimFiler'
+
 alias rmds='sudo find ~ -name .DS_Store -print -exec rm {} ";"'
 
 function mkiso {

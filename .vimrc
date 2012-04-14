@@ -152,8 +152,8 @@ function! s:unite_my_settings()"{{{
   imap <silent><buffer> <ESC><ESC> <ESC>q
 endfunction"}}}
 
-" vimfiler behaves as default explorer
-let g:vimfiler_as_default_explorer = 1
+" Edit file by tabedit.
+let g:vimfiler_edit_action = 'tabopen'
 
 " set the default listing style to tree one
 let g:netrw_liststyle = 3

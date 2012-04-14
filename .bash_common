@@ -1,0 +1,42 @@
+# .bash_common
+
+# User specific aliases and functions
+
+alias ll='ls -l'
+alias la='ls -AlF'
+alias l='ls -CF'
+alias l.='ls -d .[a-zA-Z]*'
+
+alias cp='cp -i'
+alias rm='rm -i'
+alias mv='mv -i'
+
+alias ack='ack --asm --cc --cpp'
+
+function udtags {
+    if [ $# -eq 1 ]; then
+        cd $1 || exit 1
+    fi
+    if [ -e tags ]; then
+        rm -f tags
+    fi
+    ctags -R --extra=q
+    if [ -e GPATH ]; then
+        rm -f GPATH
+    fi
+    if [ -e GRTAGS ]; then
+        rm -f GRTAGS
+    fi
+    if [ -e GSYMS ]; then
+        rm -f GSYMS
+    fi
+    if [ -e GTAGS ]; then
+        rm -f GTAGS
+    fi
+    gtags -v
+}
+
+# Source global definitions
+
+export PS1="\n\[\e[34m\]\u@\h \[\e[35m\]\w\n\[\e[00;37;44m\]How may I serve you, Master?\[\e[00m\]\n$ "
+
