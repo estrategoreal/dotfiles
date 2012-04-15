@@ -11,6 +11,7 @@ alias vim='/Applications/MacVim.app/Contents/MacOS/Vim "$@"'
 alias gvim='/Applications/MacVim.app/Contents/MacOS/Vim -g "$@"'
 alias exp='gvim -c VimFiler'
 
+alias mint='/Applications/VirtualBox.app/Contents/MacOS/VBoxManage startvm Mint12 --type gui'
 alias rmds='sudo find ~ -name .DS_Store -print -exec rm {} ";"'
 
 function mkiso {
