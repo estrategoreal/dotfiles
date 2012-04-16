@@ -35,8 +35,6 @@ function udtags {
     fi
     gtags -v
 }
-
+ 
 # Source global definitions
-
-export PS1="\n\[\e[34m\]\u@\h \[\e[35m\]\w\n\[\e[00;37;44m\]How may I serve you, Master?\[\e[00m\]\n$ "
 
