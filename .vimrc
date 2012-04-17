@@ -78,7 +78,7 @@ Bundle 'motemen/git-vim'
 Bundle 'gtags.vim'
 Bundle 'Shougo/neocomplcache'
 Bundle 'Shougo/neocomplcache-snippets-complete'
-"Bundle "scrooloose/nerdtree.git"
+Bundle 'sudo.vim'
 Bundle 'taglist.vim'
 Bundle 'unite.vim'
 Bundle 'vcscommand.vim'

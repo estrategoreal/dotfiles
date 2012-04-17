@@ -36,7 +36,10 @@ else
 endif
 
 set columns=86
-set lines=54
+let g:gvim_lines_file = expand('~/.vimlines')
+if filereadable(g:gvim_lines_file)
+  execute 'source' g:gvim_lines_file
+endif
 
 set ch=2		" Make command line two lines high
 
