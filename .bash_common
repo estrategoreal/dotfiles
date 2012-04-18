@@ -2,6 +2,10 @@
 
 # User specific aliases and functions
 
+if [ -f ~/.git-completion.sh ]; then
+    . ~/.git-completion.sh
+fi
+
 alias ll='ls -l'
 alias la='ls -AlF'
 alias l='ls -CF'
