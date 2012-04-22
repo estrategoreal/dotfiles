@@ -60,29 +60,33 @@ nnoremap <C-S-Tab> gT
 nnoremap <C-l> gt
 nnoremap <C-h> gT
 
-filetype off
+filetype plugin indent off
 
-set rtp+=~/.vim/bundle/vundle/
-call vundle#rc()
+if has('vim_starting')
+  set runtimepath+=~/.vim/bundle/neobundle.vim/
+  call neobundle#rc(expand('~/.vim/bundle/'))
+endif
 
-" let Vundle manage Vundle
-Bundle 'gmarik/vundle'
+" let NeoBundle manage NeoBundle
+NeoBundle 'gmarik/vundle'
 
 " My Bundles here:
-Bundle 'ack.vim'
-Bundle 'Align'
-Bundle 'DoxygenToolkit.vim'
-Bundle 'endwise.vim'
-Bundle 'eregex.vim'
-Bundle 'motemen/git-vim'
-Bundle 'gtags.vim'
-Bundle 'Shougo/neocomplcache'
-Bundle 'Shougo/neocomplcache-snippets-complete'
-Bundle 'sudo.vim'
-Bundle 'taglist.vim'
-Bundle 'unite.vim'
-Bundle 'vcscommand.vim'
-Bundle 'Shougo/vimfiler'
+NeoBundle 'ack.vim'
+NeoBundle 'Align'
+NeoBundle 'DoxygenToolkit.vim'
+NeoBundle 'endwise.vim'
+NeoBundle 'eregex.vim'
+NeoBundle 'motemen/git-vim'
+NeoBundle 'gtags.vim'
+NeoBundle 'Shougo/neobundle.vim'
+NeoBundle 'Shougo/neocomplcache'
+NeoBundle 'Shougo/neocomplcache-snippets-complete'
+NeoBundle 'Shougo/unite.vim'
+NeoBundle 'Shougo/vimfiler'
+NeoBundle 'Shougo/vimproc'
+NeoBundle 'Shougo/vimshell'
+NeoBundle 'sudo.vim'
+NeoBundle 'taglist.vim'
 
 let &directory = &backupdir
 let Tlist_Ctags_Cmd = '/usr/bin/ctags'
