@@ -159,7 +159,11 @@ endfunction"}}}
 " Edit file by tabedit.
 let g:vimfiler_edit_action = 'tabopen'
 
-" set the default listing style to tree one
+" Display user name on Linux.
+let g:vimshell_prompt = '$ '
+let g:vimshell_user_prompt = '$USER . "@" . hostname() . " " . getcwd()'
+
+ " set the default listing style to tree one
 let g:netrw_liststyle = 3
 
 " allow backspacing over everything in insert mode
