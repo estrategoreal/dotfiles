@@ -14,6 +14,7 @@ if [ -f ~/.bash_work ]; then
 fi
 
 alias exp='gvim -c VimFiler'
+alias ide='gvim -c "set columns=204" -c Tlist -c VimShell -c vsp -c VimFiler'
 
 alias formc='find . -iregex ".+\.\(c\|h\)$" -type f -print0 | xargs -0 uncrustify -c ~/.uncrustify4c.cfg --no-backup'
 alias formcpp='find . -iregex ".+\.\(c\|cpp\|h\)$" -type f -print0 | xargs -0 uncrustify -c ~/.uncrustify4cpp.cfg --no-backup'

@@ -1,8 +1,0 @@
-alias ll='ls -l'
-alias la='ls -alF'
-alias l='ls -CF'
-alias l.='ls -d .[a-zA-Z]*'
-
-alias cp='cp -i'
-alias rm='rm -i'
-alias mv='mv -i'

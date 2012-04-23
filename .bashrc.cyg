@@ -17,7 +17,7 @@ alias ls='ls --color=auto'
 
 alias gvim='cyg-wrapper.sh "/usr/local/share/vim/gvim.exe" --binary-opt=-c,--cmd,-T,-t,--servername,--remote-send,--remote-expr --fork=1'
 alias exp='cyg-wrapper.sh "/usr/local/share/vim/gvim.exe" --binary-opt=-c,--cmd,-T,-t,--servername,--remote-send,--remote-expr --fork=1 -c VimFiler'
-
+alias ide='cyg-wrapper.sh "/usr/local/share/vim/gvim.exe" --binary-opt=-c,--cmd,-T,-t,--servername,--remote-send,--remote-expr --fork=1 -c "set columns=204" -c Tlist -c VimShell -c vsp -c VimFiler'
 alias open='cygstart'
 alias formc='find . -iregex ".+\.\(c\|h\)$" -type f -print0 | xargs -0 uncrustify -c ~/.uncrustify4c.cfg --no-backup'
 alias formcpp='find . -iregex ".+\.\(c\|cpp\|h\)$" -type f -print0 | xargs -0 uncrustify -c ~/.uncrustify4cpp.cfg --no-backup'

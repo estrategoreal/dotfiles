@@ -19,12 +19,10 @@ endif
 set nocompatible
 
 if has('mac')
-  set enc=utf-8
-  set fencs=usc-bom,iso-2022-jp,euc-jp,cp932
+  set enc=utf-8 fencs=usc-bom,iso-2022-jp,euc-jp,cp932
   set iminsert=1 imsearch=0
 elseif has('win32')
-  set enc=cp932
-  set fencs=usc-bom,iso-2022-jp,euc-jp,utf-8,utf-16
+  set enc=cp932 fencs=usc-bom,iso-2022-jp,euc-jp,utf-8,utf-16
   set shellslash
   set noignorecase
   if has('gui_running')
@@ -46,10 +44,6 @@ set showtabline=2
 set laststatus=2
 set statusline=%<%f\ %m%r%h%w%{'['.(&fenc!=''?&fenc:&enc).']['.&ff.']'}%=%l,%c%V%8P
 
-if has('win32unix')
-  set runtimepath^=$HOME/vimfiles
-endif
-
 map <C-j> :GtagsCursor<CR>
 map <C-g> :Gtags -r 
 map <C-n> :cn<CR>
@@ -68,7 +62,7 @@ if has('vim_starting')
 endif
 
 " let NeoBundle manage NeoBundle
-NeoBundle 'gmarik/vundle'
+NeoBundle 'Shougo/neobundle.vim'
 
 " My Bundles here:
 NeoBundle 'ack.vim'
@@ -78,7 +72,6 @@ NeoBundle 'endwise.vim'
 NeoBundle 'eregex.vim'
 NeoBundle 'motemen/git-vim'
 NeoBundle 'gtags.vim'
-NeoBundle 'Shougo/neobundle.vim'
 NeoBundle 'Shougo/neocomplcache'
 NeoBundle 'Shougo/neocomplcache-snippets-complete'
 NeoBundle 'Shougo/unite.vim'
@@ -88,13 +81,6 @@ NeoBundle 'Shougo/vimshell'
 NeoBundle 'sudo.vim'
 NeoBundle 'taglist.vim'
 
-let &directory = &backupdir
-let Tlist_Ctags_Cmd = '/usr/bin/ctags'
-if has("gui_running")
-  let Tlist_Auto_Open = 1
-  let Tlist_Exit_OnlyWindow = 1
-endif
-"let Grep_Default_Filelist = '*.[cChHs] *.cpp *.asm'
 let g:load_doxygen_syntax = 1
 
 " Use neocomplcache.
@@ -132,8 +118,6 @@ if !exists('g:neocomplcache_omni_patterns')
   let g:neocomplcache_omni_patterns = {}
 endif
 let g:neocomplcache_omni_patterns.ruby = '[^. *\t]\.\w*\|\h\w*::'
-"autocmd FileType ruby setlocal omnifunc=rubycomplete#Complete
-let g:neocomplcache_omni_patterns.php = '[^. \t]->\h\w*\|\h\w*::'
 let g:neocomplcache_omni_patterns.c = '\%(\.\|->\)\h\w*'
 let g:neocomplcache_omni_patterns.cpp = '\h\w*\%(\.\|->\)\h\w*\|\h\w*::'
 
@@ -157,14 +141,36 @@ function! s:unite_my_settings()"{{{
 endfunction"}}}
 
 " Edit file by tabedit.
-let g:vimfiler_edit_action = 'tabopen'
+"let g:vimfiler_edit_action = 'tabopen'
+if has('win32')
+  " Use trashbox.
+  let g:unite_kind_file_use_trashbox = 1
+else
+  " Like Textmate icons.
+  let g:vimfiler_tree_leaf_icon = ' '
+  let g:vimfiler_tree_opened_icon = '▾'
+  let g:vimfiler_tree_closed_icon = '▸'
+  let g:vimfiler_file_icon = '-'
+  let g:vimfiler_marked_file_icon = '*'
+endif
 
-" Display user name on Linux.
-let g:vimshell_prompt = '$ '
-let g:vimshell_user_prompt = '$USER . "@" . hostname() . " " . getcwd()'
+let g:vimshell_prompt = '% '
+let g:vimshell_user_prompt = 'fnamemodify(getcwd(), ":~")'
+autocmd FileType vimshell
+\ call vimshell#set_alias('ll', 'ls -l')
+\| call vimshell#set_alias('la', 'ls -alF')
+\| call vimshell#set_alias('l', 'ls -CF')
+\| call vimshell#set_alias('l.', 'ls -d .*')
+\| call vimshell#set_alias('cp', 'cp -i')
+\| call vimshell#set_alias('rm', 'rm -i')
+\| call vimshell#set_alias('mv', 'mv -i')
 
- " set the default listing style to tree one
-let g:netrw_liststyle = 3
+let &directory = &backupdir
+let Tlist_Ctags_Cmd = '/usr/bin/ctags'
+if has('gui_running')
+  let Tlist_Auto_Open = 1
+  let Tlist_Exit_OnlyWindow = 1
+endif
 
 " allow backspacing over everything in insert mode
 set backspace=indent,eol,start
@@ -216,7 +222,7 @@ if has("autocmd")
 
   " For all text files set 'textwidth' to 78 characters.
   autocmd FileType text setlocal textwidth=78
-  autocmd FileType c,cpp setlocal expandtab
+  autocmd FileType c,cpp setlocal expandtab omnifunc=ccomplete#Complete
   autocmd FileType ruby setlocal expandtab shiftwidth=2 tabstop=2
 
   " When editing a file, always jump to the last known cursor position.
