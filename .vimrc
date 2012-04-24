@@ -79,7 +79,7 @@ NeoBundle 'Shougo/vimproc'
 NeoBundle 'Shougo/vimshell'
 NeoBundle 'sudo.vim'
 NeoBundle 'taglist.vim'
-NeoBundle 'tpope/fugitive'
+NeoBundle 'tpope/vim-fugitive'
 
 let g:load_doxygen_syntax = 1
 
