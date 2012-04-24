@@ -23,11 +23,14 @@ source $VIMRUNTIME/menu.vim
 set guifont=Osaka-Mono:h14
 set antialias
 "set transparency=200
+if exists('&ambiwidth')
+ set ambiwidth=double
+endif
 elseif has('win32')
 set guifont=MS_Gothic:h12:cSHIFTJIS
-endif
 if has('kaoriya')
   set ambiwidth=auto
+endif
 endif
 
 set columns=86

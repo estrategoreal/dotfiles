@@ -157,8 +157,8 @@ endif
 let g:vimshell_prompt = '% '
 let g:vimshell_user_prompt = 'fnamemodify(getcwd(), ":~")'
 autocmd FileType vimshell
-\ call vimshell#set_alias('ll', 'ls -l')
-\| call vimshell#set_alias('la', 'ls -alF')
+\ call vimshell#set_alias('ll', 'ls -l --encoding=utf-8')
+\| call vimshell#set_alias('la', 'ls -alF --encoding=utf-8')
 \| call vimshell#set_alias('l', 'ls -CF')
 \| call vimshell#set_alias('l.', 'ls -d .*')
 \| call vimshell#set_alias('cp', 'cp -i')

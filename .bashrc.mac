@@ -12,6 +12,7 @@ alias vi='/Applications/MacVim.app/Contents/MacOS/Vim "$@"'
 alias vim='/Applications/MacVim.app/Contents/MacOS/Vim "$@"'
 alias gvim='/Applications/MacVim.app/Contents/MacOS/Vim -g "$@"'
 alias exp='gvim -c VimFiler'
+alias ide='gvim -c "set columns=204" -c Tlist -c VimShell -c vsp -c VimFiler'
 
 alias mint='/Applications/VirtualBox.app/Contents/MacOS/VBoxManage startvm Mint12 --type gui'
 alias rmds='sudo find ~ -name .DS_Store -print -exec rm {} ";"'
