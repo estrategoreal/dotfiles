@@ -70,7 +70,6 @@ NeoBundle 'Align'
 NeoBundle 'DoxygenToolkit.vim'
 NeoBundle 'endwise.vim'
 NeoBundle 'eregex.vim'
-NeoBundle 'motemen/git-vim'
 NeoBundle 'gtags.vim'
 NeoBundle 'Shougo/neocomplcache'
 NeoBundle 'Shougo/neocomplcache-snippets-complete'
@@ -80,6 +79,7 @@ NeoBundle 'Shougo/vimproc'
 NeoBundle 'Shougo/vimshell'
 NeoBundle 'sudo.vim'
 NeoBundle 'taglist.vim'
+NeoBundle 'tpope/fugitive'
 
 let g:load_doxygen_syntax = 1
 
