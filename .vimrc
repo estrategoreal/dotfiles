@@ -45,9 +45,10 @@ set laststatus=2
 set statusline=%<%f\ %m%r%h%w%{'['.(&fenc!=''?&fenc:&enc).']['.&ff.']'}%=%l,%c%V%8P
 
 map <C-j> :GtagsCursor<CR>
-map <C-g> :Gtags -r 
+map <C-s> :Gtags -r 
 map <C-n> :cn<CR>
 map <C-p> :cp<CR>
+map <C-t> :tabnew<CR>
 
 nnoremap <C-Tab> gt
 nnoremap <C-S-Tab> gT
@@ -131,11 +132,22 @@ inoremap <silent> <C-f> <ESC>:<C-u>UniteWithBufferDir -buffer-name=files file<CR
 nnoremap <silent> <C-b> :<C-u>Unite buffer file_mru<CR>
 inoremap <silent> <C-b> <ESC>:<C-u>Unite buffer file_mru<CR>
 
+nnoremap <silent> <C-g> :<C-u>Unite grep -buffer-name=search -no-quit<CR>
+inoremap <silent> <C-g> <ESC>:<C-u>Unite grep -buffer-name=search -no-quit<CR>
+
 " Keymapping in unite.vim.
 autocmd FileType unite call s:unite_my_settings()
 function! s:unite_my_settings()"{{{
   " Delete a path upward.
   imap <buffer> <C-w> <Plug>(unite_delete_backward_path)
+  " Hide the window in hitting ESC key twice.
+  nmap <silent><buffer> <ESC><ESC> q
+  imap <silent><buffer> <ESC><ESC> <ESC>q
+endfunction"}}}
+
+nnoremap <C-k> :VimFiler -buffer-name=explorer -split -horizontal -simple -toggle -no-quit<CR>
+autocmd FileType vimfiler call s:vimfiler_my_settings()
+function! s:vimfiler_my_settings()"{{{
   " Hide the window in hitting ESC key twice.
   nmap <silent><buffer> <ESC><ESC> q
   imap <silent><buffer> <ESC><ESC> <ESC>q
