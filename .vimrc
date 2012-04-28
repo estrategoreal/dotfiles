@@ -66,22 +66,23 @@ endif
 NeoBundle 'Shougo/neobundle.vim'
 
 " My Bundles here:
-NeoBundle 'ack.vim'
-NeoBundle 'Align'
-NeoBundle 'DoxygenToolkit.vim'
-NeoBundle 'endwise.vim'
-NeoBundle 'eregex.vim'
-NeoBundle 'gtags.vim'
+NeoBundle 'kana/vim-smartchr.git'
+NeoBundle 'mileszs/ack.vim'
+NeoBundle 'mrtazz/DoxygenToolkit.vim'
+NeoBundle 'othree/eregex.vim'
 NeoBundle 'Shougo/neocomplcache'
 NeoBundle 'Shougo/neocomplcache-snippets-complete'
 NeoBundle 'Shougo/unite.vim'
 NeoBundle 'Shougo/vimfiler'
 NeoBundle 'Shougo/vimproc'
 NeoBundle 'Shougo/vimshell'
-NeoBundle 'sudo.vim'
-NeoBundle 'taglist.vim'
 NeoBundle 'thinca/vim-quickrun'
+NeoBundle 'tpope/vim-endwise'
 NeoBundle 'tpope/vim-fugitive'
+NeoBundle 'tsaleh/vim-align'
+NeoBundle 'vim-scripts/gtags.vim'
+NeoBundle 'vim-scripts/sudo.vim'
+NeoBundle 'vim-scripts/taglist.vim'
 
 let g:load_doxygen_syntax = 1
 
@@ -122,6 +123,14 @@ endif
 let g:neocomplcache_omni_patterns.ruby = '[^. *\t]\.\w*\|\h\w*::'
 let g:neocomplcache_omni_patterns.c = '\%(\.\|->\)\h\w*'
 let g:neocomplcache_omni_patterns.cpp = '\h\w*\%(\.\|->\)\h\w*\|\h\w*::'
+
+inoremap <expr> , smartchr#one_of(', ', ',')
+inoremap <expr> ? smartchr#one_of('?', '? ')
+
+" Smart =.
+inoremap <expr> = search('\(&\<bar><bar>\<bar>+\<bar>-\<bar>/\<bar>>\<bar><\) \%#', 'bcn')? '<bs>= '
+      \ : search('\(*\<bar>!\)\%#', 'bcn') ? '= '
+      \ : smartchr#one_of(' = ', '=', ' == ')
 
 " Start insert.
 let g:unite_enable_start_insert = 1
