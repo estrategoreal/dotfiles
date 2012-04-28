@@ -167,7 +167,11 @@ autocmd FileType vimshell
 \| call vimshell#set_alias('mv', 'mv -i')
 
 let &directory = &backupdir
-let Tlist_Ctags_Cmd = '/usr/bin/ctags'
+if has('mac')
+  let Tlist_Ctags_Cmd = '/usr/local/bin/ctags'
+else
+  let Tlist_Ctags_Cmd = '/usr/bin/ctags'
+endif
 if has('gui_running')
   let Tlist_Auto_Open = 1
   let Tlist_Exit_OnlyWindow = 1
