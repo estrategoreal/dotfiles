@@ -8,7 +8,7 @@ fi
 
 alias ls='ls -G'
 
-alias ctags="`brew --prefix`/bin/ctags"
+alias ctags='Applications/MacVim.app/Contents/MacOS/ctags "$@"'
 alias vi='/Applications/MacVim.app/Contents/MacOS/Vim "$@"'
 alias vim='/Applications/MacVim.app/Contents/MacOS/Vim "$@"'
 alias gvim='/Applications/MacVim.app/Contents/MacOS/Vim -g "$@"'

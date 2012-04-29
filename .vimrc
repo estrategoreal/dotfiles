@@ -20,7 +20,6 @@ set nocompatible
 
 if has('mac')
   set enc=utf-8 fencs=usc-bom,iso-2022-jp,euc-jp,cp932
-  set iminsert=1 imsearch=0
 elseif has('win32')
   set enc=cp932 fencs=usc-bom,iso-2022-jp,euc-jp,utf-8,utf-16
   set shellslash
@@ -84,8 +83,11 @@ NeoBundle 'vim-scripts/gtags.vim'
 NeoBundle 'vim-scripts/sudo.vim'
 NeoBundle 'vim-scripts/taglist.vim'
 
+" DoxygenToolkit.vim"{{{
 let g:load_doxygen_syntax = 1
+"}}}
 
+" neocomplcache.vim"{{{
 " Use neocomplcache.
 let g:neocomplcache_enable_at_startup = 1
 " Use smartcase.
@@ -123,7 +125,9 @@ endif
 let g:neocomplcache_omni_patterns.ruby = '[^. *\t]\.\w*\|\h\w*::'
 let g:neocomplcache_omni_patterns.c = '\%(\.\|->\)\h\w*'
 let g:neocomplcache_omni_patterns.cpp = '\h\w*\%(\.\|->\)\h\w*\|\h\w*::'
+"}}}
 
+" smartchr.vim"{{{
 inoremap <expr> , smartchr#one_of(', ', ',')
 inoremap <expr> ? smartchr#one_of('?', '? ')
 
@@ -131,7 +135,9 @@ inoremap <expr> ? smartchr#one_of('?', '? ')
 inoremap <expr> = search('\(&\<bar><bar>\<bar>+\<bar>-\<bar>/\<bar>>\<bar><\) \%#', 'bcn')? '<bs>= '
       \ : search('\(*\<bar>!\)\%#', 'bcn') ? '= '
       \ : smartchr#one_of(' = ', '=', ' == ')
+"}}}
 
+" unite.vim"{{{
 " Start insert.
 let g:unite_enable_start_insert = 1
 
@@ -153,14 +159,10 @@ function! s:unite_my_settings()"{{{
   nmap <silent><buffer> <ESC><ESC> q
   imap <silent><buffer> <ESC><ESC> <ESC>q
 endfunction"}}}
+"}}}
 
-nnoremap <C-k> :VimFiler -buffer-name=explorer -split -horizontal -simple -toggle -no-quit<CR>
-autocmd FileType vimfiler call s:vimfiler_my_settings()
-function! s:vimfiler_my_settings()"{{{
-  " Hide the window in hitting ESC key twice.
-  nmap <silent><buffer> <ESC><ESC> q
-  imap <silent><buffer> <ESC><ESC> <ESC>q
-endfunction"}}}
+" vimfiler.vim"{{{
+nnoremap <C-k> :VimFiler -buffer-name=explorer -simple -toggle<CR>
 
 " Edit file by tabedit.
 "let g:vimfiler_edit_action = 'tabopen'
@@ -175,7 +177,9 @@ else
   let g:vimfiler_file_icon = '-'
   let g:vimfiler_marked_file_icon = '*'
 endif
+"}}}
 
+" vimshell.vim"{{{
 let g:vimshell_prompt = '% '
 let g:vimshell_user_prompt = 'fnamemodify(getcwd(), ":~")'
 autocmd FileType vimshell
@@ -186,10 +190,11 @@ autocmd FileType vimshell
 \| call vimshell#set_alias('cp', 'cp -i')
 \| call vimshell#set_alias('rm', 'rm -i')
 \| call vimshell#set_alias('mv', 'mv -i')
+"}}}
 
-let &directory = &backupdir
+" taglist.vim"{{{
 if has('mac')
-  let Tlist_Ctags_Cmd = '/usr/local/bin/ctags'
+  let Tlist_Ctags_Cmd = '/Applications/MacVim.app/Contents/MacOS/ctags'
 else
   let Tlist_Ctags_Cmd = '/usr/bin/ctags'
 endif
@@ -197,6 +202,9 @@ if has('gui_running')
   let Tlist_Auto_Open = 1
   let Tlist_Exit_OnlyWindow = 1
 endif
+"}}}
+
+let &directory = &backupdir
 
 " allow backspacing over everything in insert mode
 set backspace=indent,eol,start

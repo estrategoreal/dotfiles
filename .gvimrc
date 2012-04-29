@@ -16,15 +16,12 @@
 " set the X11 font to use
 " set guifont=-misc-fixed-medium-r-normal--14-130-75-75-c-70-iso8859-1
 if has('mac')
-source $VIMRUNTIME/delmenu.vim
-set langmenu=none
-source $VIMRUNTIME/menu.vim
-
+set noimdisableactivate
 set guifont=Osaka-Mono:h14
 set antialias
-"set transparency=200
+set transparency=10
 if exists('&ambiwidth')
- set ambiwidth=double
+  set ambiwidth=double
 endif
 elseif has('win32')
 set guifont=MS_Gothic:h12:cSHIFTJIS
@@ -78,8 +75,5 @@ if version >= 500
   highlight NonText guibg=grey80
   highlight Constant gui=NONE guibg=grey95
   highlight Special gui=NONE guibg=grey95
-if has('mac')
-  highlight Visual guibg=grey70
-endif
 
 endif
