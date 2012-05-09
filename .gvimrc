@@ -31,9 +31,21 @@ endif
 endif
 
 set columns=86
-let g:gvim_lines_file = expand('~/.vimlines')
-if filereadable(g:gvim_lines_file)
-  execute 'source' g:gvim_lines_file
+let g:save_window_file = expand('~/.vimwinpos')
+augroup SaveWindow
+  autocmd!
+  autocmd VimLeavePre * call s:save_window()
+  function! s:save_window()
+    let options = [
+      \ 'set lines=' . &lines,
+      \ 'winpos ' . getwinposx() . ' ' . getwinposy(),
+      \ ]
+    call writefile(options, g:save_window_file)
+  endfunction
+augroup END
+
+if filereadable(g:save_window_file)
+  execute 'source' g:save_window_file
 endif
 
 set ch=2		" Make command line two lines high

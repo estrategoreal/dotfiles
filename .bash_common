@@ -18,6 +18,7 @@ alias mv='mv -i'
 alias ack='ack --asm --cc --cpp'
 
 function udtags {
+	currpath=$(pwd)
     if [ $# -eq 1 ]; then
         cd $1 || exit 1
     fi
@@ -37,7 +38,10 @@ function udtags {
     if [ -e GTAGS ]; then
         rm -f GTAGS
     fi
-    gtags -v
+	echo
+	echo "updating tags..."
+    gtags -v 2>/dev/null
+    cd $currpath
 }
  
 # Source global definitions

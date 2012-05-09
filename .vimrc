@@ -41,13 +41,14 @@ set tabstop=4
 set backupdir=~/.tmp
 set showtabline=2
 set laststatus=2
+set grepprg=ack\ -a
+set tags& tags-=tags tags+=./tags;
 set statusline=%<%f\ %m%r%h%w%{'['.(&fenc!=''?&fenc:&enc).']['.&ff.']'}%=%l,%c%V%8P
 
-map <C-j> :GtagsCursor<CR>
-map <C-s> :Gtags -r 
-map <C-n> :cn<CR>
-map <C-p> :cp<CR>
-map <C-t> :tabnew<CR>
+nnoremap <C-j> :GtagsCursor<CR>
+nnoremap <C-s> :Gtags -r 
+nnoremap <C-n> :cn<CR>
+nnoremap <C-p> :cp<CR>
 
 nnoremap <C-Tab> gt
 nnoremap <C-S-Tab> gT
@@ -65,7 +66,6 @@ endif
 NeoBundle 'Shougo/neobundle.vim'
 
 " My Bundles here:
-NeoBundle 'kana/vim-smartchr.git'
 NeoBundle 'mileszs/ack.vim'
 NeoBundle 'mrtazz/DoxygenToolkit.vim'
 NeoBundle 'othree/eregex.vim'
@@ -82,6 +82,10 @@ NeoBundle 'tsaleh/vim-align'
 NeoBundle 'vim-scripts/gtags.vim'
 NeoBundle 'vim-scripts/sudo.vim'
 NeoBundle 'vim-scripts/taglist.vim'
+
+" ack.vim"{{{
+let g:AckCmd = "ack-grep"
+"}}}
 
 " DoxygenToolkit.vim"{{{
 let g:load_doxygen_syntax = 1
@@ -127,19 +131,17 @@ let g:neocomplcache_omni_patterns.c = '\%(\.\|->\)\h\w*'
 let g:neocomplcache_omni_patterns.cpp = '\h\w*\%(\.\|->\)\h\w*\|\h\w*::'
 "}}}
 
-" smartchr.vim"{{{
-inoremap <expr> , smartchr#one_of(', ', ',')
-inoremap <expr> ? smartchr#one_of('?', '? ')
-
-" Smart =.
-inoremap <expr> = search('\(&\<bar><bar>\<bar>+\<bar>-\<bar>/\<bar>>\<bar><\) \%#', 'bcn')? '<bs>= '
-      \ : search('\(*\<bar>!\)\%#', 'bcn') ? '= '
-      \ : smartchr#one_of(' = ', '=', ' == ')
-"}}}
-
 " unite.vim"{{{
 " Start insert.
 let g:unite_enable_start_insert = 1
+let g:unite_source_grep_default_opts = '-n --include=\*.c --include=\*.cpp --include=\*.h'
+
+" For ack.
+if executable('ack-grep')
+  " let g:unite_source_grep_command = 'ack-grep'
+  " let g:unite_source_grep_default_opts = '--no-heading --no-color -a'
+  " let g:unite_source_grep_recursive_opt = ''
+endif
 
 " Keymap to call in both insert and normal mode.
 nnoremap <silent> <C-f> :<C-u>UniteWithBufferDir -buffer-name=files file<CR>
@@ -162,7 +164,8 @@ endfunction"}}}
 "}}}
 
 " vimfiler.vim"{{{
-nnoremap <C-k> :VimFiler -buffer-name=explorer -simple -toggle<CR>
+nnoremap <silent> <C-k> :VimFiler -buffer-name=explorer -simple -toggle<CR>
+nnoremap <silent> <S-t> :VimFilerTab -buffer-name=explorer -simple -toggle<CR>
 
 " Edit file by tabedit.
 "let g:vimfiler_edit_action = 'tabopen'
@@ -180,6 +183,8 @@ endif
 "}}}
 
 " vimshell.vim"{{{
+nmap <silent> <C-@> :VimShellPop<CR>
+
 let g:vimshell_prompt = '% '
 let g:vimshell_user_prompt = 'fnamemodify(getcwd(), ":~")'
 autocmd FileType vimshell
@@ -190,6 +195,13 @@ autocmd FileType vimshell
 \| call vimshell#set_alias('cp', 'cp -i')
 \| call vimshell#set_alias('rm', 'rm -i')
 \| call vimshell#set_alias('mv', 'mv -i')
+
+autocmd FileType vimshell call s:vimshell_my_settings()
+function! s:vimshell_my_settings()"{{{
+  " Hide the window in hitting ESC key twice.
+  nmap <silent><buffer> <ESC><ESC> q
+  imap <silent><buffer> <ESC><ESC> <ESC>q
+endfunction"}}}
 "}}}
 
 " taglist.vim"{{{
@@ -199,9 +211,14 @@ else
   let Tlist_Ctags_Cmd = '/usr/bin/ctags'
 endif
 if has('gui_running')
-  let Tlist_Auto_Open = 1
+  let Tlist_Close_On_Select = 1
   let Tlist_Exit_OnlyWindow = 1
+  let Tlist_GainFocus_On_ToggleOpen = 1
+  let Tlist_Show_One_File = 1
+  let Tlist_Use_Right_Window = 1
 endif
+
+nnoremap <silent> <C-i> :TlistToggle<CR>
 "}}}
 
 let &directory = &backupdir
