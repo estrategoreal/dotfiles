@@ -41,7 +41,6 @@ set tabstop=4
 set backupdir=~/.tmp
 set showtabline=2
 set laststatus=2
-set grepprg=ack\ -a
 set tags& tags-=tags tags+=./tags;
 set statusline=%<%f\ %m%r%h%w%{'['.(&fenc!=''?&fenc:&enc).']['.&ff.']'}%=%l,%c%V%8P
 
@@ -82,10 +81,6 @@ NeoBundle 'tsaleh/vim-align'
 NeoBundle 'vim-scripts/gtags.vim'
 NeoBundle 'vim-scripts/sudo.vim'
 NeoBundle 'vim-scripts/taglist.vim'
-
-" ack.vim"{{{
-let g:AckCmd = "ack-grep"
-"}}}
 
 " DoxygenToolkit.vim"{{{
 let g:load_doxygen_syntax = 1
@@ -138,9 +133,9 @@ let g:unite_source_grep_default_opts = '-n --include=\*.c --include=\*.cpp --inc
 
 " For ack.
 if executable('ack-grep')
-  " let g:unite_source_grep_command = 'ack-grep'
-  " let g:unite_source_grep_default_opts = '--no-heading --no-color -a'
-  " let g:unite_source_grep_recursive_opt = ''
+  let g:unite_source_grep_command = 'ack-grep'
+  let g:unite_source_grep_default_opts = '--no-heading --no-color'
+  let g:unite_source_grep_recursive_opt = ''
 endif
 
 " Keymap to call in both insert and normal mode.
@@ -149,8 +144,8 @@ inoremap <silent> <C-f> <ESC>:<C-u>UniteWithBufferDir -buffer-name=files file<CR
 nnoremap <silent> <C-b> :<C-u>Unite buffer file_mru<CR>
 inoremap <silent> <C-b> <ESC>:<C-u>Unite buffer file_mru<CR>
 
-nnoremap <silent> <C-g> :<C-u>Unite grep -buffer-name=search -no-quit<CR>
-inoremap <silent> <C-g> <ESC>:<C-u>Unite grep -buffer-name=search -no-quit<CR>
+nnoremap <silent> <C-g> :<C-u>Unite grep:. -buffer-name=search -no-quit<CR>
+inoremap <silent> <C-g> <ESC>:<C-u>Unite grep:. -buffer-name=search -no-quit<CR>
 
 " Keymapping in unite.vim.
 autocmd FileType unite call s:unite_my_settings()
@@ -164,7 +159,7 @@ endfunction"}}}
 "}}}
 
 " vimfiler.vim"{{{
-nnoremap <silent> <C-k> :VimFiler -buffer-name=explorer -simple -toggle<CR>
+nnoremap <silent> <C-i> :VimFiler -buffer-name=explorer -simple -toggle<CR>
 nnoremap <silent> <S-t> :VimFilerTab -buffer-name=explorer -simple -toggle<CR>
 
 " Edit file by tabedit.
@@ -218,7 +213,7 @@ if has('gui_running')
   let Tlist_Use_Right_Window = 1
 endif
 
-nnoremap <silent> <C-i> :TlistToggle<CR>
+nnoremap <silent> <C-k> :TlistToggle<CR>
 "}}}
 
 let &directory = &backupdir
