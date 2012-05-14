@@ -12,9 +12,7 @@ alias formcpp='find . -iregex ".+\.\(c\|cpp\|h\)$" -type f -print0 | xargs -0 un
 
 # Source global definitions
 
-export PROMPT="
-%F{cyan}%n@%M %F{magenta}%~$(__git_ps1)
-%F{white}%K{blue}How may I serve you, Master?%k%f
-%% "
+export PROMPT="%F{cyan}%n@%m%f%% "
+export RPROMPT="%F{magenta}%~$(__git_ps1)%f"
 
 PATH=$PATH:$HOME/.rvm/bin # Add RVM to PATH for scripting
