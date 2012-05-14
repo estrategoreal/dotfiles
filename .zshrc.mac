@@ -27,10 +27,8 @@ function tarbz2 {
 
 # Source global definitions
 
-export PROMPT="
-%F{blue}%n@%M %F{magenta}%~$(__git_ps1)
-%F{white}%K{blue}How may I serve you, Master?%k%f
-%% "
+export PROMPT="%F{blue}%n@%m%f%% "
+export RPROMPT="%F{magenta}[%~]$(__git_ps1)%f"
 
 export PATH=$PATH:/usr/local/sbin
 
