@@ -48,6 +48,7 @@ zstyle ':completion:*:kill:*' command 'ps -u $USER -o pid,%cpu,tty,cputime,cmd'
 
 [ -f ~/.git-completion.sh ] && source ~/.git-completion.sh
 
+alias ls='ls --color'
 alias ll='ls -l'
 alias la='ls -AlF'
 alias l='ls -CF'
