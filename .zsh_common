@@ -50,8 +50,8 @@ alias mv='mv -i'
 
 alias ack='ack --asm --cc --cpp'
 
-if [ -f ~/.zsh/auto-fu.zsh ]; then
-    source ~/.zsh/auto-fu.zsh
+if [ -f ~/.zsh.d/auto-fu.zsh ]; then
+    source ~/.zsh.d/auto-fu.zsh
     function zle-line-init () {
         auto-fu-init
     }
