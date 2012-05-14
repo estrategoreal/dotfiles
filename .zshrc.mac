@@ -2,7 +2,7 @@
 
 # User specific aliases and functions
 
-[ -f ~/.bash_common ] && source ~/.bash_common
+[ -f ~/.zsh_common ] && source ~/.zsh_common
 
 alias ls='ls -G'
 
@@ -28,8 +28,8 @@ function tarbz2 {
 # Source global definitions
 
 export PROMPT="
-%F{blue}%n@%M %F{purple}\w$(__git_ps1)
-%F{gray}%K{blue}How may I serve you, Master?%k%f
+%F{blue}%n@%M %F{magenta}%~$(__git_ps1)
+%F{white}%K{blue}How may I serve you, Master?%k%f
 %% "
 
 export PATH=$PATH:/usr/local/sbin
