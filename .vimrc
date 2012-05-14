@@ -25,7 +25,7 @@ elseif has('win32')
   set shellslash
   set noignorecase
   if has('gui_running')
-    set shell=c:/cygwin/bin/bash
+    set shell=c:/cygwin/bin/zsh
   endif
 else
 " enable the line below when editting files on windows
