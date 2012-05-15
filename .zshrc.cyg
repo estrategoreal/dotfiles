@@ -17,7 +17,7 @@ alias formcpp='find . -iregex ".+\.\(c\|cpp\|h\)$" -type f -print0 | xargs -0 un
 # Source global definitions
 
 export PROMPT="%F{cyan}%n@%m%f%% "
-export RPROMPT="%F{magenta}%~$(__git_ps1)%f"
+export RPROMPT="%F{magenta}[%~]$(__git_ps1)%f"
 
 export PATH=/usr/local/share/vim:/usr/local/share/git-svn-clone-externals:$PATH
 export LIBRARY_PATH=/lib:/lib/w32api:/usr/local/lib
