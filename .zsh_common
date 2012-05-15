@@ -1,11 +1,5 @@
 # .zsh_common
 
-# Set up the prompt
-
-#autoload -Uz promptinit
-#promptinit
-#prompt adam1
-
 #setopt histignorealldups sharehistory
 
 # Use emacs keybindings even if our EDITOR is set to vi
@@ -28,8 +22,8 @@ setopt list_packed
 setopt no_beep
 
 zstyle ':completion:*' menu select=2
-zstyle ':completion:*' matcher-list 'm:{a-z}={A-Z}'
-zstyle ':completion:*:sudo:*' command-path /usr/local/sbin /usr/local/bin /usr/sbin /usr/bin /sbin /bin
+zstyle ':completion:*' list-colors ''
+zstyle ':completion:*' matcher-list '' 'm:{a-z}={A-Z}' 'm:{a-zA-Z}={A-Za-z}' 'r:|[._-]=* r:|=* l:|=*'
 
 zstyle ':completion:*:*:kill:*:processes' list-colors '=(#b) #([0-9]#)*=0=01;31'
 zstyle ':completion:*:kill:*' command 'ps -u $USER -o pid,%cpu,tty,cputime,cmd'
@@ -67,6 +61,7 @@ if [ -f ~/.zsh.d/auto-fu.zsh ]; then
     }
     zle -N zle-line-init
     zstyle ':completion:*' completer _oldlist _complete
+    zstyle ':auto-fu:var' postdisplay $''
 fi
 
 function udtags {
