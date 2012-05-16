@@ -5,9 +5,9 @@
 # Use emacs keybindings even if our EDITOR is set to vi
 bindkey -e
 
-# Keep 1000 lines of history within the shell and save it to ~/.zsh_history: 
-HISTSIZE=10000
-SAVEHIST=10000
+# Keep 100000 lines of history within the shell and save it to ~/.zsh_history: 
+HISTSIZE=100000
+SAVEHIST=100000
 HISTFILE=~/.zsh_history
 setopt hist_ignore_dups
 setopt share_history
@@ -37,6 +37,12 @@ precmd () {
     LANG=en_US.UTF-8 vcs_info
     [[ -n "$vcs_info_msg_0_" ]] && psvar[1]="$vcs_info_msg_0_"
 }
+
+autoload history-search-end
+zle -N history-beginning-search-backward-end history-search-end
+zle -N history-beginning-search-forward-end history-search-end
+bindkey "^P" history-beginning-search-backward-end
+bindkey "^N" history-beginning-search-forward-end
 
 # User specific aliases and functions
 

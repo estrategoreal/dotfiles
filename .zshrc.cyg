@@ -16,6 +16,7 @@ alias formcpp='find . -iregex ".+\.\(c\|cpp\|h\)$" -type f -print0 | xargs -0 un
 
 # Source global definitions
 
+export CYGWIN=nodosfilewarning
 export PATH=/usr/local/share/vim:/usr/local/share/git-svn-clone-externals:$PATH
 export LIBRARY_PATH=/lib:/lib/w32api:/usr/local/lib
 export TCL_LIBRARY=/usr/share/tcl8.4
