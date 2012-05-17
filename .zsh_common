@@ -5,9 +5,9 @@
 # Use emacs keybindings even if our EDITOR is set to vi
 bindkey -e
 
-# Keep 100000 lines of history within the shell and save it to ~/.zsh_history: 
-HISTSIZE=100000
-SAVEHIST=100000
+# Keep 1000000 lines of history within the shell and save it to ~/.zsh_history: 
+HISTSIZE=1000000
+SAVEHIST=1000000
 HISTFILE=~/.zsh_history
 setopt hist_ignore_dups
 setopt hist_ignore_all_dups
@@ -19,7 +19,7 @@ setopt share_history
 autoload -Uz compinit
 compinit
 
-setopt autopushd
+setopt auto_pushd
 setopt correct
 setopt list_packed
 setopt no_beep
