@@ -133,9 +133,9 @@ let g:unite_source_grep_default_opts = '-n --include=\*.c --include=\*.cpp --inc
 
 " For ack.
 if executable('ack-grep')
-  let g:unite_source_grep_command = 'ack-grep'
-  let g:unite_source_grep_default_opts = '--no-heading --no-color'
-  let g:unite_source_grep_recursive_opt = ''
+  "let g:unite_source_grep_command = 'ack-grep'
+  "let g:unite_source_grep_default_opts = '--no-heading --no-color'
+  "let g:unite_source_grep_recursive_opt = ''
 endif
 
 " Keymap to call in both insert and normal mode.
@@ -202,6 +202,8 @@ endfunction"}}}
 " taglist.vim"{{{
 if has('mac')
   let Tlist_Ctags_Cmd = '/Applications/MacVim.app/Contents/MacOS/ctags'
+elseif has('win32')
+  let Tlist_Ctags_Cmd = '/usr/local/bin/ctags'
 else
   let Tlist_Ctags_Cmd = '/usr/bin/ctags'
 endif

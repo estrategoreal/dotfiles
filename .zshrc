@@ -2,17 +2,17 @@
 
 ### OS judge function
 ## Mac OS X
-function is_darwin () {
+function is_darwin() {
   [[ $OSTYPE == darwin* ]] && return 0
   return 1
 }
 ## Linux
-function is_linux () {
+function is_linux() {
   [[ $OSTYPE == linux* ]] && return 0
   return 1
 }
 ## Cygwin
-function is_cygwin () {
+function is_cygwin() {
   [[ $OSTYPE == cygwin* ]] && return 0
   return 1
 }
@@ -45,7 +45,7 @@ zstyle ':completion:*' menu select=2
 if is_darwin ; then
   zstyle ':completion:*' list-colors 'di=34' 'ln=35' 'ex=31'
 elif is_linux || is_cygwin ; then
-  zstyle ':completion:*' list-colors 'di=34'
+  zstyle ':completion:*' list-colors 'di=1;34'
 fi
 zstyle ':completion:*' matcher-list '' 'm:{a-z}={A-Z}' 'm:{a-zA-Z}={A-Za-z}' 'r:|[._-]=* r:|=* l:|=*'
 
@@ -56,7 +56,7 @@ autoload -Uz vcs_info
 zstyle ':vcs_info:*' formats '(%s)-[%b]'
 zstyle ':vcs_info:*' actionformats '(%s)-[%b|%a]'
 
-precmd () {
+precmd() {
   psvar=()
   LANG=en_US.UTF-8 vcs_info
   [[ -n "$vcs_info_msg_0_" ]] && psvar[1]="$vcs_info_msg_0_"
@@ -68,15 +68,15 @@ zle -N history-beginning-search-forward-end history-search-end
 bindkey "^P" history-beginning-search-backward-end
 bindkey "^N" history-beginning-search-forward-end
 
-if [ -f ~/.zsh.d/auto-fu.zsh ]; then
-  source ~/.zsh.d/auto-fu.zsh
-  function zle-line-init () {
-    auto-fu-init
-  }
-  zle -N zle-line-init
-  zstyle ':completion:*' completer _oldlist _complete
-  zstyle ':auto-fu:var' postdisplay $''
-fi
+#if [ -f ~/.zsh.d/auto-fu.zsh ]; then
+#  source ~/.zsh.d/auto-fu.zsh
+#  function zle-line-init () {
+#    auto-fu-init
+#  }
+#  zle -N zle-line-init
+#  zstyle ':completion:*' completer _oldlist _complete
+#  zstyle ':auto-fu:var' postdisplay $''
+#fi
 
 [ -f ~/.zsh.d/git-completion.sh ] && source ~/.zsh.d/git-completion.sh
 
@@ -124,13 +124,12 @@ fi
 
 function udtags() {
   currpath=$(pwd)
-  [ $# -eq 1 ] && cd $1 || exit 1
-  [ -e tags ] && rm -f tags
-  [ -e GPATH ] && rm -f GPATH
-  [ -e GRTAGS ] && rm -f GRTAGS
-  [ -e GSYMS ] && rm -f GSYMS
-  [ -e GTAGS ] && rm -f GTAGS
-  echo
+  [[ $# -eq 1 ]] && cd $1 || exit 1
+  [[ -e tags ]] && rm -f tags
+  [[ -e GPATH ]] && rm -f GPATH
+  [[ -e GRTAGS ]] && rm -f GRTAGS
+  [[ -e GSYMS ]] && rm -f GSYMS
+  [[ -e GTAGS ]] && rm -f GTAGS
   echo "updating tags..."
   ctags -R --extra=q
   gtags -v 2>/dev/null
@@ -138,16 +137,16 @@ function udtags() {
 }
 
 if is_darwin ; then
-  function mkiso () {
+  function mkiso() {
     hdiutil makehybrid -o ${1##*/}.iso $1
   }
 
-  function tarbz2 () {
+  function tarbz2() {
     COPYFILE_DISABLE=true tar cjvf $1.tbz --exclude .DS_Store $1
   }
 fi
 
-[ -f ~/.zsh_work ] && source ~/.zsh_work
+[ -f ~/.zshrc.local ] && source ~/.zshrc.local
 
 # Source global definitions
 
