@@ -99,6 +99,12 @@ let g:neocomplcache_enable_underbar_completion = 1
 let g:neocomplcache_min_syntax_length = 3
 let g:neocomplcache_lock_buffer_name_pattern = '\*ku\*'
 
+" Define dictionary.
+let g:neocomplcache_dictionary_filetype_lists = {
+    \ 'default' : '',
+    \ 'vimshell' : $HOME.'/.vimshell/command-history'
+    \ }
+
 " Define keyword.
 if !exists('g:neocomplcache_keyword_patterns')
   let g:neocomplcache_keyword_patterns = {}
@@ -113,6 +119,8 @@ let g:neocomplcache_snippets_dir = '~/.vim/snippets'
 " <C-h>, <BS>: close popup and delete backword char.
 inoremap <expr><C-h> neocomplcache#smart_close_popup()."\<C-h>"
 inoremap <expr><BS> neocomplcache#smart_close_popup()."\<C-h>"
+inoremap <expr><C-y>  neocomplcache#close_popup()
+inoremap <expr><C-e>  neocomplcache#cancel_popup()
 
 " AutoComplPop like behavior. 
 let g:neocomplcache_enable_auto_select = 1
@@ -271,7 +279,7 @@ if has("autocmd")
   " For all text files set 'textwidth' to 78 characters.
   autocmd FileType text setlocal textwidth=78
   autocmd FileType c,cpp setlocal expandtab omnifunc=ccomplete#Complete
-  autocmd FileType ruby setlocal expandtab shiftwidth=2 tabstop=2
+  autocmd FileType ruby setlocal expandtab shiftwidth=2 tabstop=2 omnifunc=rubycomplete#Complete 
 
   " When editing a file, always jump to the last known cursor position.
   " Don't do it when the position is invalid or when inside an event handler

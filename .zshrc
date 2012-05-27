@@ -6,6 +6,11 @@ function is_darwin() {
   [[ $OSTYPE == darwin* ]] && return 0
   return 1
 }
+## FreeBSD
+function is_freebsd() {
+  [[ $OSTYPE == freebsd* ]] && return 0
+  return 1
+}
 ## Linux
 function is_linux() {
   [[ $OSTYPE == linux* ]] && return 0
@@ -106,6 +111,7 @@ if is_darwin ; then
   alias exp='gvim -c VimFiler'
   alias ide='gvim -c "set columns=204" -c Tlist -c VimShell -c vsp -c VimFiler'
 
+  alias bsd='/Applications/VirtualBox.app/Contents/MacOS/VBoxManage startvm FreeBSD --type gui'
   alias mint='/Applications/VirtualBox.app/Contents/MacOS/VBoxManage startvm Mint12 --type gui'
   alias lmde='/Applications/VirtualBox.app/Contents/MacOS/VBoxManage startvm LMDE --type gui'
   alias rmds='sudo find ~ -name .DS_Store -print -exec rm {} ";"'
@@ -156,6 +162,8 @@ export RPROMPT="%1(v|%F{green}%1v%f|)"
 
 if is_darwin ; then
   export PATH=$PATH:/usr/local/sbin
+elif is_freebsd ; then
+  export PATH=$PATH:/sbin:/usr/sbin:/usr/local/sbin
 elif is_linux ; then
   PATH=$PATH:$HOME/.rvm/bin # Add RVM to PATH for scripting
 elif is_cygwin ; then
