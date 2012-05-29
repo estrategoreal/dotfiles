@@ -130,7 +130,9 @@ fi
 
 function udtags() {
   currpath=$(pwd)
-  [[ $# -eq 1 ]] && cd $1 || exit 1
+  if [[ $# -eq 1 ]] ; then
+	cd $1 || exit 1
+  fi
   [[ -e tags ]] && rm -f tags
   [[ -e GPATH ]] && rm -f GPATH
   [[ -e GRTAGS ]] && rm -f GRTAGS
