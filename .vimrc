@@ -171,6 +171,8 @@ endfunction"}}}
 nnoremap <silent> <C-i> :VimFiler -buffer-name=explorer -simple -toggle<CR>
 nnoremap <silent> <S-t> :VimFilerTab -buffer-name=explorer -simple -toggle<CR>
 
+let g:vimfiler_as_default_explorer = 1
+
 " Edit file by tabedit.
 "let g:vimfiler_edit_action = 'tabopen'
 if has('win32')
