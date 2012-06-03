@@ -355,8 +355,8 @@ if s:is_windows
 else
   " Like Textmate icons.
   let g:vimfiler_tree_leaf_icon = ' '
-  let g:vimfiler_tree_opened_icon = '笆ｾ'
-  let g:vimfiler_tree_closed_icon = '笆ｸ'
+  let g:vimfiler_tree_opened_icon = '▾'
+  let g:vimfiler_tree_closed_icon = '▸'
   let g:vimfiler_file_icon = '-'
   let g:vimfiler_marked_file_icon = '*'
 endif
