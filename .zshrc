@@ -83,7 +83,7 @@ bindkey "^N" history-beginning-search-forward-end
 #  zstyle ':auto-fu:var' postdisplay $''
 #fi
 
-[ -f ~/.zsh.d/git-completion.sh ] && source ~/.zsh.d/git-completion.sh
+#[ -f ~/.zsh.d/git-completion.sh ] && source ~/.zsh.d/git-completion.sh
 
 # User specific aliases and functions
 
