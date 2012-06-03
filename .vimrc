@@ -18,24 +18,20 @@ endif
 " This must be first, because it changes other options as a side effect.
 set nocompatible
 
-if has('mac')
-  set enc=utf-8 fencs=usc-bom,iso-2022-jp,euc-jp,cp932
-elseif has('win32')
-  set enc=cp932 fencs=usc-bom,iso-2022-jp,euc-jp,utf-8,utf-16
+let s:is_windows = has('win32') || has('win64')
+
+if s:is_windows
   set shellslash
   set noignorecase
   if has('gui_running')
     set shell=c:/cygwin/bin/zsh
   endif
-else
-" enable the line below when editting files on windows
-"set enc=cp932 fencs=ucs-bom,iso-2022-jp,euc-jp,utf-8
-set enc=utf-8 fencs=ucs-bom,iso-2022-jp,euc-jp,cp932
 endif
 set visualbell
 set number
 set numberwidth=6
 set cindent
+set expandtab
 set shiftwidth=4
 set tabstop=4
 set backupdir=~/.tmp
@@ -83,6 +79,152 @@ NeoBundle 'tsaleh/vim-align.git'
 NeoBundle 'vim-scripts/gtags.vim.git'
 NeoBundle 'vim-scripts/sudo.vim.git'
 NeoBundle 'vim-scripts/taglist.vim.git'
+
+"---------------------------------------------------------------------------
+" Encoding:"{{{
+"
+" The automatic recognition of the character code.
+
+" Setting of the encoding to use for a save and reading.
+" Make it normal in UTF-8 in Unix.
+set encoding=utf-8
+
+" Setting of terminal encoding."{{{
+if !has('gui_running')
+  if &term == 'win32' || &term == 'win64'
+    " Setting when use the non-GUI Japanese console.
+
+    " Garbled unless set this.
+    set termencoding=cp932
+    " Japanese input changes itself unless set this.
+    " Be careful because the automatic recognition of the character code is not possible!
+    set encoding=japan
+  else
+    if $ENV_ACCESS ==# 'linux'
+      set termencoding=euc-jp
+    elseif $ENV_ACCESS ==# 'colinux'
+      set termencoding=utf-8
+    else  " fallback
+      set termencoding=  " same as 'encoding'
+    endif
+  endif
+elseif s:is_windows
+  " For system.
+  set termencoding=cp932
+endif
+"}}}
+
+" The automatic recognition of the character code."{{{
+if !exists('did_encoding_settings') && has('iconv')
+  let s:enc_euc = 'euc-jp'
+  let s:enc_jis = 'iso-2022-jp'
+
+  " Does iconv support JIS X 0213?
+  if iconv("\x87\x64\x87\x6a", 'cp932', 'euc-jisx0213') ==# "\xad\xc5\xad\xcb"
+    let s:enc_euc = 'euc-jisx0213,euc-jp'
+    let s:enc_jis = 'iso-2022-jp-3'
+  endif
+
+  " Build encodings.
+  let &fileencodings = 'ucs-bom'
+  if &encoding !=# 'utf-8'
+    let &fileencodings = &fileencodings . ',' . 'ucs-2le'
+    let &fileencodings = &fileencodings . ',' . 'ucs-2'
+  endif
+  let &fileencodings = &fileencodings . ',' . s:enc_jis
+
+  if &encoding ==# 'utf-8'
+    let &fileencodings = &fileencodings . ',' . s:enc_euc
+    let &fileencodings = &fileencodings . ',' . 'cp932'
+  elseif &encoding =~# '^euc-\%(jp\|jisx0213\)$'
+    let &encoding = s:enc_euc
+    let &fileencodings = &fileencodings . ',' . 'utf-8'
+    let &fileencodings = &fileencodings . ',' . 'cp932'
+  else  " cp932
+    let &fileencodings = &fileencodings . ',' . 'utf-8'
+    let &fileencodings = &fileencodings . ',' . s:enc_euc
+  endif
+  let &fileencodings = &fileencodings . ',' . &encoding
+
+  unlet s:enc_euc
+  unlet s:enc_jis
+
+  let did_encoding_settings = 1
+endif
+"}}}
+
+if has('kaoriya')
+  " For Kaoriya only.
+  "set fileencodings=guess
+endif
+
+" When do not include Japanese, use encoding for fileencoding.
+function! AU_ReCheck_FENC() "{{{
+  if &fileencoding =~# 'iso-2022-jp' && search("[^\x01-\x7e]", 'n') == 0
+    let &fileencoding=&encoding
+  endif
+endfunction"}}}
+
+autocmd BufReadPost * call AU_ReCheck_FENC()
+
+" Default fileformat.
+set fileformat=unix
+" Automatic recognition of a new line cord.
+set fileformats=unix,dos,mac
+" A fullwidth character is displayed in vim properly.
+set ambiwidth=double
+
+" Command group opening with a specific character code again."{{{
+" In particular effective when I am garbled in a terminal.
+" Open in UTF-8 again.
+command! -bang -bar -complete=file -nargs=? Utf8 edit<bang> ++enc=utf-8 <args>
+" Open in iso-2022-jp again.
+command! -bang -bar -complete=file -nargs=? Iso2022jp edit<bang> ++enc=iso-2022-jp <args>
+" Open in Shift_JIS again.
+command! -bang -bar -complete=file -nargs=? Cp932 edit<bang> ++enc=cp932 <args>
+" Open in EUC-jp again.
+command! -bang -bar -complete=file -nargs=? Euc edit<bang> ++enc=euc-jp <args>
+" Open in UTF-16 again.
+command! -bang -bar -complete=file -nargs=? Utf16 edit<bang> ++enc=ucs-2le <args>
+" Open in UTF-16BE again.
+command! -bang -bar -complete=file -nargs=? Utf16be edit<bang> ++enc=ucs-2 <args>
+
+" Aliases.
+command! -bang -bar -complete=file -nargs=? Jis  Iso2022jp<bang> <args>
+command! -bang -bar -complete=file -nargs=? Sjis  Cp932<bang> <args>
+command! -bang -bar -complete=file -nargs=? Unicode Utf16<bang> <args>
+"}}}
+
+" Tried to make a file note version."{{{
+" Don't save it because dangerous.
+command! WUtf8 setlocal fenc=utf-8
+command! WIso2022jp setlocal fenc=iso-2022-jp
+command! WCp932 setlocal fenc=cp932
+command! WEuc setlocal fenc=euc-jp
+command! WUtf16 setlocal fenc=ucs-2le
+command! WUtf16be setlocal fenc=ucs-2
+" Aliases.
+command! WJis  WIso2022jp
+command! WSjis  WCp932
+command! WUnicode WUtf16
+"}}}
+
+" Handle it in nkf and open.
+command! Nkf !nkf -g %
+
+" Appoint a line feed."{{{
+command! -bang -bar -complete=file -nargs=? Unix edit<bang> ++fileformat=unix <args>
+command! -bang -bar -complete=file -nargs=? Mac edit<bang> ++fileformat=mac <args>
+command! -bang -bar -complete=file -nargs=? Dos edit<bang> ++fileformat=dos <args>
+command! -bang -complete=file -nargs=? WUnix write<bang> ++fileformat=unix <args> | edit <args>
+command! -bang -complete=file -nargs=? WMac write<bang> ++fileformat=mac <args> | edit <args>
+command! -bang -complete=file -nargs=? WDos write<bang> ++fileformat=dos <args> | edit <args>
+"}}}
+
+if has('multi_byte_ime')
+  set iminsert=0 imsearch=0
+endif
+"}}}
 
 " DoxygenToolkit.vim"{{{
 let g:load_doxygen_syntax = 1
@@ -207,14 +349,14 @@ let g:vimfiler_as_default_explorer = 1
 
 " Edit file by tabedit.
 "let g:vimfiler_edit_action = 'tabopen'
-if has('win32')
+if s:is_windows
   " Use trashbox.
   let g:unite_kind_file_use_trashbox = 1
 else
   " Like Textmate icons.
   let g:vimfiler_tree_leaf_icon = ' '
-  let g:vimfiler_tree_opened_icon = '▾'
-  let g:vimfiler_tree_closed_icon = '▸'
+  let g:vimfiler_tree_opened_icon = '笆ｾ'
+  let g:vimfiler_tree_closed_icon = '笆ｸ'
   let g:vimfiler_file_icon = '-'
   let g:vimfiler_marked_file_icon = '*'
 endif
@@ -245,7 +387,7 @@ endfunction"}}}
 " taglist.vim"{{{
 if has('mac')
   let Tlist_Ctags_Cmd = '/Applications/MacVim.app/Contents/MacOS/ctags'
-elseif has('win32')
+elseif s:is_windows
   let Tlist_Ctags_Cmd = '/usr/local/bin/ctags'
 else
   let Tlist_Ctags_Cmd = '/usr/bin/ctags'
@@ -313,8 +455,8 @@ if has("autocmd")
 
   " For all text files set 'textwidth' to 78 characters.
   autocmd FileType text setlocal textwidth=78
-  autocmd FileType c,cpp setlocal expandtab omnifunc=ccomplete#Complete
-  autocmd FileType ruby setlocal expandtab shiftwidth=2 tabstop=2
+  autocmd FileType c,cpp setlocal omnifunc=ccomplete#Complete
+  autocmd FileType ruby setlocal shiftwidth=2 tabstop=2
 
   " When editing a file, always jump to the last known cursor position.
   " Don't do it when the position is invalid or when inside an event handler
