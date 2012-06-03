@@ -115,7 +115,7 @@ if is_darwin ; then
   alias mint='/Applications/VirtualBox.app/Contents/MacOS/VBoxManage startvm Mint12 --type gui'
   alias lmde='/Applications/VirtualBox.app/Contents/MacOS/VBoxManage startvm LMDE --type gui'
   alias rmds='sudo find ~ -name .DS_Store -print -exec rm {} ";"'
-elif is_linux ; then
+elif is_linux || is_freebsd ; then
   alias vf='gvim -c "VimFiler -buffer-name=explorer -simple -toggle"'
   alias formc='find . -iregex ".+\.\(c\|h\)$" -type f -print0 | xargs -0 uncrustify -c ~/.uncrustify4c.cfg --no-backup'
   alias formcpp='find . -iregex ".+\.\(c\|cpp\|h\)$" -type f -print0 | xargs -0 uncrustify -c ~/.uncrustify4cpp.cfg --no-backup'
