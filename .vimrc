@@ -92,14 +92,21 @@ let g:load_doxygen_syntax = 1
 " Use neocomplcache.
 let g:neocomplcache_enable_at_startup = 1
 " Use smartcase.
-let g:neocomplcache_enable_smart_case = 1
+let g:neocomplcache_enable_smart_case = 0
 " Use camel case completion.
-let g:neocomplcache_enable_camel_case_completion = 1
+let g:neocomplcache_enable_camel_case_completion = 0
 " Use underbar completion.
 let g:neocomplcache_enable_underbar_completion = 1
+" Use fuzzy completion.
+let g:neocomplcache_enable_fuzzy_completion = 1
 " Set minimum syntax keyword length.
 let g:neocomplcache_min_syntax_length = 3
-let g:neocomplcache_lock_buffer_name_pattern = '\*ku\*'
+" Set auto completion length.
+let g:neocomplcache_auto_completion_start_length = 2
+" Set manual completion length.
+let g:neocomplcache_manual_completion_start_length = 0
+" Set minimum keyword length.
+let g:neocomplcache_min_keyword_length = 3
 
 " Define dictionary.
 let g:neocomplcache_dictionary_filetype_lists = {
@@ -113,19 +120,33 @@ if !exists('g:neocomplcache_keyword_patterns')
 endif
 let g:neocomplcache_keyword_patterns['default'] = '\h\w*'
 
+" Plugin key-mappings. 
+imap <C-k>    <Plug>(neocomplcache_snippets_expand) 
+smap <C-k>    <Plug>(neocomplcache_snippets_expand) 
+inoremap <expr><C-g>    neocomplcache#undo_completion() 
+inoremap <expr><C-l>    neocomplcache#complete_common_string() 
+
 " SuperTab like snippets behavior. 
-imap <expr><TAB> neocomplcache#sources#snippets_complete#expandable() ? "\<Plug>(neocomplcache_snippets_expand)" : pumvisible() ? "\<C-n>" : "\<TAB>" 
+"imap <expr><TAB> neocomplcache#sources#snippets_complete#expandable() ? "\<Plug>(neocomplcache_snippets_expand)" : pumvisible() ? "\<C-n>" : "\<TAB>" 
 
 let g:neocomplcache_snippets_dir = '~/.vim/snippets'
 
+" <CR>: close popup and save indent. 
+"inoremap <expr><CR>  neocomplcache#close_popup() . "\<CR>" 
+" <TAB>: completion. 
+inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>" 
 " <C-h>, <BS>: close popup and delete backword char.
-inoremap <expr><C-h> neocomplcache#smart_close_popup()."\<C-h>"
-inoremap <expr><BS> neocomplcache#smart_close_popup()."\<C-h>"
+inoremap <expr><C-h>  neocomplcache#smart_close_popup()."\<C-h>"
+inoremap <expr><BS>  neocomplcache#smart_close_popup()."\<C-h>"
 inoremap <expr><C-y>  neocomplcache#close_popup()
 inoremap <expr><C-e>  neocomplcache#cancel_popup()
 
 " AutoComplPop like behavior. 
 let g:neocomplcache_enable_auto_select = 1
+
+let g:neocomplcache_omni_functions = {
+    \ 'ruby' : 'rubycomplete#Complete',
+    \ }
 
 " Enable heavy omni completion.
 if !exists('g:neocomplcache_omni_patterns')
@@ -179,7 +200,7 @@ endif
 "}}}
 
 " vimfiler.vim"{{{
-nnoremap <silent> <C-i> :VimFiler -buffer-name=explorer -simple -toggle<CR>
+nnoremap <silent> <C-g> :VimFiler -buffer-name=explorer -simple -toggle<CR>
 nnoremap <silent> <S-t> :VimFilerTab -buffer-name=explorer -simple -toggle<CR>
 
 let g:vimfiler_as_default_explorer = 1
@@ -237,7 +258,7 @@ if has('gui_running')
   let Tlist_Use_Right_Window = 1
 endif
 
-nnoremap <silent> <C-k> :TlistToggle<CR>
+nnoremap <silent> <C-n> :TlistToggle<CR>
 "}}}
 
 let &directory = &backupdir
@@ -293,7 +314,7 @@ if has("autocmd")
   " For all text files set 'textwidth' to 78 characters.
   autocmd FileType text setlocal textwidth=78
   autocmd FileType c,cpp setlocal expandtab omnifunc=ccomplete#Complete
-  autocmd FileType ruby setlocal expandtab shiftwidth=2 tabstop=2 "omnifunc=rubycomplete#Complete 
+  autocmd FileType ruby setlocal expandtab shiftwidth=2 tabstop=2
 
   " When editing a file, always jump to the last known cursor position.
   " Don't do it when the position is invalid or when inside an event handler
