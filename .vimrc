@@ -65,23 +65,24 @@ endif
 NeoBundle 'Shougo/neobundle.vim'
 
 " My Bundles here:
-NeoBundle 'mileszs/ack.vim'
-NeoBundle 'mrtazz/DoxygenToolkit.vim'
-NeoBundle 'othree/eregex.vim'
-NeoBundle 'Shougo/neocomplcache'
-NeoBundle 'Shougo/neocomplcache-snippets-complete'
-NeoBundle 'Shougo/unite.vim'
-NeoBundle 'Shougo/unite-ssh'
-NeoBundle 'Shougo/vimfiler'
-NeoBundle 'Shougo/vimproc'
-NeoBundle 'Shougo/vimshell'
-NeoBundle 'thinca/vim-quickrun'
-NeoBundle 'tpope/vim-endwise'
-NeoBundle 'tpope/vim-fugitive'
-NeoBundle 'tsaleh/vim-align'
-NeoBundle 'vim-scripts/gtags.vim'
-NeoBundle 'vim-scripts/sudo.vim'
-NeoBundle 'vim-scripts/taglist.vim'
+NeoBundle 'mileszs/ack.vim.git'
+NeoBundle 'mrtazz/DoxygenToolkit.vim.git'
+NeoBundle 'othree/eregex.vim.git'
+NeoBundle 'Shougo/neocomplcache.git'
+NeoBundle 'Shougo/neocomplcache-snippets-complete.git'
+NeoBundle 'Shougo/unite.vim.git'
+NeoBundle 'Shougo/unite-ssh.git'
+NeoBundle 'Shougo/vimfiler.git'
+NeoBundle 'Shougo/vimproc.git'
+NeoBundle 'Shougo/vimshell.git'
+NeoBundle 'Shougo/vinarise.git'
+NeoBundle 'thinca/vim-quickrun.git'
+NeoBundle 'tpope/vim-endwise.git'
+NeoBundle 'tpope/vim-fugitive.git'
+NeoBundle 'tsaleh/vim-align.git'
+NeoBundle 'vim-scripts/gtags.vim.git'
+NeoBundle 'vim-scripts/sudo.vim.git'
+NeoBundle 'vim-scripts/taglist.vim.git'
 
 " DoxygenToolkit.vim"{{{
 let g:load_doxygen_syntax = 1
@@ -136,25 +137,24 @@ let g:neocomplcache_omni_patterns.cpp = '\h\w*\%(\.\|->\)\h\w*\|\h\w*::'
 "}}}
 
 " unite.vim"{{{
-" Start insert.
-let g:unite_enable_start_insert = 1
-let g:unite_source_grep_default_opts = '-n --include=\*.c --include=\*.cpp --include=\*.h'
-
-" For ack.
-if executable('ack-grep')
-  "let g:unite_source_grep_command = 'ack-grep'
-  "let g:unite_source_grep_default_opts = '--no-heading --no-color'
-  "let g:unite_source_grep_recursive_opt = ''
-endif
+" The prefix key.
+nnoremap    [unite]   <Nop>
+xnoremap    [unite]   <Nop>
+nmap    f [unite]
+xmap    f [unite]
 
 " Keymap to call in both insert and normal mode.
-nnoremap <silent> <C-f> :<C-u>UniteWithBufferDir -buffer-name=files file<CR>
-inoremap <silent> <C-f> <ESC>:<C-u>UniteWithBufferDir -buffer-name=files file<CR>
-nnoremap <silent> <C-b> :<C-u>Unite buffer file_mru<CR>
-inoremap <silent> <C-b> <ESC>:<C-u>Unite buffer file_mru<CR>
+nnoremap <silent> [unite]f :<C-u>UniteWithBufferDir -buffer-name=files file<CR>
+inoremap <silent> [unite]f <ESC>:<C-u>UniteWithBufferDir -buffer-name=files file<CR>
+nnoremap <silent> [unite]b :<C-u>Unite buffer<CR>
+inoremap <silent> [unite]b <ESC>:<C-u>Unite buffer<CR>
+nnoremap <silent> [unite]m :<C-u>Unite file_mru<CR>
+inoremap <silent> [unite]m <ESC>:<C-u>Unite file_mru<CR>
+nnoremap <silent> [unite]u :<C-u>Unite buffer file_mru<CR>
+inoremap <silent> [unite]u <ESC>:<C-u>Unite buffer file_mru<CR>
 
-nnoremap <silent> <C-g> :<C-u>Unite grep:. -buffer-name=search -no-quit<CR>
-inoremap <silent> <C-g> <ESC>:<C-u>Unite grep:. -buffer-name=search -no-quit<CR>
+nnoremap <silent> [unite]g :<C-u>Unite grep:. -buffer-name=search -no-quit<CR>
+inoremap <silent> [unite]g <ESC>:<C-u>Unite grep:. -buffer-name=search -no-quit<CR>
 
 " Keymapping in unite.vim.
 autocmd FileType unite call s:unite_my_settings()
@@ -165,6 +165,17 @@ function! s:unite_my_settings()"{{{
   nmap <silent><buffer> <ESC><ESC> q
   imap <silent><buffer> <ESC><ESC> <ESC>q
 endfunction"}}}
+
+" Start insert.
+let g:unite_enable_start_insert = 1
+let g:unite_source_grep_default_opts = '-n --include=\*.c --include=\*.cpp --include=\*.h'
+
+" For ack.
+if executable('ack-grep')
+  "let g:unite_source_grep_command = 'ack-grep'
+  "let g:unite_source_grep_default_opts = '--no-heading --no-color'
+  "let g:unite_source_grep_recursive_opt = ''
+endif
 "}}}
 
 " vimfiler.vim"{{{

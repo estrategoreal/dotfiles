@@ -108,7 +108,7 @@ if is_darwin ; then
   alias vi='/Applications/MacVim.app/Contents/MacOS/Vim "$@"'
   alias vim='/Applications/MacVim.app/Contents/MacOS/Vim "$@"'
   alias gvim='/Applications/MacVim.app/Contents/MacOS/Vim -g "$@"'
-  alias vf='gvim -c VimFiler'
+  alias vf='gvim -c "VimFiler -buffer-name=explorer -simple -toggle"'
   alias ide='gvim -c "set columns=204" -c Tlist -c VimShell -c vsp -c VimFiler'
 
   alias bsd='/Applications/VirtualBox.app/Contents/MacOS/VBoxManage startvm FreeBSD --type gui'
