@@ -19,7 +19,13 @@ if has('mac')
 set noimdisableactivate
 set guifont=Osaka-Mono:h14
 set antialias
-set transparency=10
+augroup Transparency
+  autocmd!
+  if has('mac')
+    autocmd FocusGained * set transparency=10
+    autocmd FocusLost * set transparency=50
+  endif
+augroup END
 if exists('&ambiwidth')
   set ambiwidth=double
 endif
