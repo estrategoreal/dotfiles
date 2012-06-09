@@ -43,6 +43,7 @@ NeoBundle 'Shougo/neocomplcache.git'
 NeoBundle 'Shougo/neocomplcache-snippets-complete.git'
 NeoBundle 'Shougo/unite.vim.git'
 NeoBundle 'Shougo/unite-ssh.git'
+NeoBundle 'Shougo/vim-vcs.git'
 NeoBundle 'Shougo/vimfiler.git'
 NeoBundle 'Shougo/vimproc.git'
 NeoBundle 'Shougo/vimshell.git'
@@ -249,6 +250,10 @@ set numberwidth=6
 " Show <TAB> and <CR>
 set list
 set listchars=tab:>-,trail:-,extends:>,precedes:<
+" Wrap long line.
+set wrap
+" Wrap conditions.
+set whichwrap+=h,l,<,>,[,],b,s,~
 " Always display statusline.
 set laststatus=2
 " Set statusline.
@@ -418,8 +423,9 @@ endif
 " vimshell.vim"{{{
 nmap <silent> <C-@> :VimShellPop<CR>
 
-let g:vimshell_prompt = '% '
 let g:vimshell_user_prompt = 'fnamemodify(getcwd(), ":~")'
+let g:vimshell_right_prompt = 'vcs#info("(%s)-[%b]%p", "(%s)-[%b|%a]%p")'
+let g:vimshell_prompt = '% '
 autocmd FileType vimshell
 \ call vimshell#set_alias('ll', 'ls -l --encoding=utf-8')
 \| call vimshell#set_alias('la', 'ls -alF --encoding=utf-8')
@@ -468,7 +474,7 @@ nnoremap <silent> <C-m> :TlistToggle<CR>
 "---------------------------------------------------------------------------
 " Key-mappings: "{{{
 "
-" item select mappings
+" Item select mappings
 nnoremap <C-n> :cn<CR>
 nnoremap <C-p> :cp<CR>
 
@@ -477,6 +483,9 @@ nnoremap <C-Tab> gt
 nnoremap <C-S-Tab> gT
 nnoremap <C-l> gt
 nnoremap <C-h> gT
+
+" Clear highlight.
+nnoremap <silent> <ESC><ESC> :nohlsearch<CR>
 "}}}
 
 "---------------------------------------------------------------------------

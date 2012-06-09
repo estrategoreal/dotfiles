@@ -93,5 +93,6 @@ if version >= 500
   highlight NonText guibg=grey80
   highlight Constant gui=NONE guibg=grey95
   highlight Special gui=NONE guibg=grey95
+  highlight SpecialKey guifg=grey75
 
 endif
