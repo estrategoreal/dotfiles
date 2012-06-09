@@ -21,34 +21,9 @@ set nocompatible
 let s:is_windows = has('win32') || has('win64')
 
 if s:is_windows
+  " Exchange path separator.
   set shellslash
-  set noignorecase
-  if has('gui_running')
-    set shell=c:/cygwin/bin/zsh
-  endif
 endif
-set visualbell
-set number
-set numberwidth=6
-set cindent
-set expandtab
-set shiftwidth=4
-set tabstop=4
-set backupdir=~/.tmp
-set showtabline=2
-set laststatus=2
-set tags& tags-=tags tags+=./tags;
-set statusline=%<%f\ %m%r%h%w%{'['.(&fenc!=''?&fenc:&enc).']['.&ff.']'}%=%l,%c%V%8P
-
-nnoremap <C-j> :GtagsCursor<CR>
-nnoremap <C-s> :Gtags -r
-nnoremap <C-n> :cn<CR>
-nnoremap <C-p> :cp<CR>
-
-nnoremap <C-Tab> gt
-nnoremap <C-S-Tab> gT
-nnoremap <C-l> gt
-nnoremap <C-h> gT
 
 filetype plugin indent off
 
@@ -225,6 +200,86 @@ if has('multi_byte_ime')
 endif
 "}}}
 
+"---------------------------------------------------------------------------
+" Search:"{{{
+"
+" Ignore the case of normal letters.
+set ignorecase
+" If the search pattern contains upper case characters, override ignorecase option.
+set smartcase
+"}}}
+
+"---------------------------------------------------------------------------
+" Edit:"{{{
+"
+" Exchange tab to spaces.
+set expandtab
+" Substitute <Tab> with blanks.
+set tabstop=4
+" Spaces instead <Tab>.
+set softtabstop=4
+" Autoindent width.
+set shiftwidth=4
+" Round indent by shiftwidth.
+set shiftround
+
+" Highlight parenthesis.
+set showmatch
+
+" Set tags file.
+" Don't search tags file in current directory. And search upward.
+set tags& tags-=tags tags+=./tags;
+
+" Set cindent.
+set cindent
+
+" Set backupdir.
+set backupdir=~/.vim/backup
+let &directory = &backupdir
+
+autocmd FileType ruby setlocal shiftwidth=2 tabstop=2
+"}}}
+
+"---------------------------------------------------------------------------
+" View:"{{{
+"
+" Show line number.
+set number
+set numberwidth=6
+" Show <TAB> and <CR>
+set list
+set listchars=tab:>-,trail:-,extends:>,precedes:<
+" Always display statusline.
+set laststatus=2
+" Set statusline.
+set statusline=%<%f\ %m%r%h%w%{'['.(&fenc!=''?&fenc:&enc).']['.&ff.']'}%=%l,%c%V%8P
+" Set tabline.
+set showtabline=2
+" Set visualbell.
+set visualbell
+
+" Enable spell check.
+set spelllang=en_us
+
+" Completion setting.
+" Don't complete from other buffer.
+set complete=.
+"}}}
+
+"---------------------------------------------------------------------------
+" Syntax:"{{{
+"
+" Enable smart indent.
+set smartindent
+
+" Enable omni completion.
+autocmd FileType c,cpp setlocal omnifunc=ccomplete#Complete
+"}}}
+
+"---------------------------------------------------------------------------
+" Plugin:"{{{
+"
+
 " DoxygenToolkit.vim"{{{
 let g:load_doxygen_syntax = 1
 "}}}
@@ -383,6 +438,11 @@ function! s:vimshell_my_settings()"{{{
 endfunction"}}}
 "}}}
 
+" gtags.vim"{{{
+nnoremap <C-j> :GtagsCursor<CR>
+nnoremap <C-s> :Gtags -r
+"}}}
+
 " taglist.vim"{{{
 if has('mac')
   let Tlist_Ctags_Cmd = '/Applications/MacVim.app/Contents/MacOS/ctags'
@@ -398,10 +458,40 @@ if has('gui_running')
   let Tlist_Use_Right_Window = 1
 endif
 
-nnoremap <silent> <C-n> :TlistToggle<CR>
+nnoremap <silent> <C-m> :TlistToggle<CR>
 "}}}
 
-let &directory = &backupdir
+"}}}
+
+"---------------------------------------------------------------------------
+" Key-mappings: "{{{
+"
+
+" item select mappings
+nnoremap <C-n> :cn<CR>
+nnoremap <C-p> :cp<CR>
+
+" Tab focus mappings
+nnoremap <C-Tab> gt
+nnoremap <C-S-Tab> gT
+nnoremap <C-l> gt
+nnoremap <C-h> gT
+"}}}
+
+"---------------------------------------------------------------------------
+" Platform depends:"{{{
+"
+if s:is_windows
+  set shell=c:/cygwin/bin/zsh
+endif
+"}}}
+
+"---------------------------------------------------------------------------
+" Others:"{{{
+"
+" Enable mouse support.
+set mouse=a
+"}}}
 
 " allow backspacing over everything in insert mode
 set backspace=indent,eol,start
@@ -453,8 +543,6 @@ if has("autocmd")
 
   " For all text files set 'textwidth' to 78 characters.
   autocmd FileType text setlocal textwidth=78
-  autocmd FileType c,cpp setlocal omnifunc=ccomplete#Complete
-  autocmd FileType ruby setlocal shiftwidth=2 tabstop=2
 
   " When editing a file, always jump to the last known cursor position.
   " Don't do it when the position is invalid or when inside an event handler
@@ -481,3 +569,4 @@ if !exists(":DiffOrig")
   command DiffOrig vert new | set bt=nofile | r ++edit # | 0d_ | diffthis
 		  \ | wincmd p | diffthis
 endif
+
