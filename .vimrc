@@ -234,7 +234,7 @@ set tags& tags-=tags tags+=./tags;
 set cindent
 
 " Set backupdir.
-set backupdir=~/.vim/backup
+set backupdir=~/.vim/tmp
 let &directory = &backupdir
 
 autocmd FileType ruby setlocal shiftwidth=2 tabstop=2
