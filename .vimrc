@@ -279,7 +279,6 @@ autocmd FileType c,cpp setlocal omnifunc=ccomplete#Complete
 "---------------------------------------------------------------------------
 " Plugin:"{{{
 "
-
 " DoxygenToolkit.vim"{{{
 let g:load_doxygen_syntax = 1
 "}}}
@@ -438,6 +437,10 @@ function! s:vimshell_my_settings()"{{{
 endfunction"}}}
 "}}}
 
+" align.vim"{{{
+vmap <silent> <C-a> :Align =<CR>
+"}}}
+
 " gtags.vim"{{{
 nnoremap <C-j> :GtagsCursor<CR>
 nnoremap <C-s> :Gtags -r
@@ -460,13 +463,11 @@ endif
 
 nnoremap <silent> <C-m> :TlistToggle<CR>
 "}}}
-
 "}}}
 
 "---------------------------------------------------------------------------
 " Key-mappings: "{{{
 "
-
 " item select mappings
 nnoremap <C-n> :cn<CR>
 nnoremap <C-p> :cp<CR>
