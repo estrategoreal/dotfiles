@@ -495,11 +495,35 @@ nnoremap <silent> <C-m> :TlistToggle<CR>
 nnoremap <C-n> :cn<CR>
 nnoremap <C-p> :cp<CR>
 
-" Tab focus mappings
-nnoremap <C-Tab> gt
-nnoremap <C-S-Tab> gT
-nnoremap <C-l> gt
-nnoremap <C-h> gT
+" [Space]: Other useful commands "{{{
+" Smart space mapping.
+" Notice: when starting other <Space> mappings in noremap, disappeared [Space].
+nmap  <Space>   [Space]
+xmap  <Space>   [Space]
+nnoremap  [Space]   <Nop>
+xnoremap  [Space]   <Nop>
+
+" Change tab width. "{{{
+nnoremap <silent> [Space]t2 :<C-u>setl shiftwidth=2 softtabstop=2<CR>
+nnoremap <silent> [Space]t4 :<C-u>setl shiftwidth=4 softtabstop=4<CR>
+"}}}
+"}}}
+
+" <C-t>: Tab pages"{{{
+"
+" The prefix key.
+nmap <C-t> [Tabbed]
+nnoremap [Tabbed]   <Nop>
+" Create tab page.
+nnoremap <silent> [Tabbed]c  :<C-u>tabnew<CR>
+nnoremap <silent> [Tabbed]d  :<C-u>tabclose<CR>
+" Move to other tab page.
+nnoremap <silent> [Tabbed]l  :<C-u>tabnext<CR>
+nnoremap <silent> [Tabbed]h  :<C-u>tabprevious<CR>
+nnoremap <silent> [Tabbed]H  :<C-u>tabfirst<CR>
+nnoremap <silent> [Tabbed]L  :<C-u>tablast<CR>
+nnoremap <silent> [Tabbed]<C-t>  :<C-u>Unite tab<CR>
+"}}}
 
 " Clear highlight.
 nnoremap <silent> <ESC><ESC> :nohlsearch<CR>
