@@ -418,7 +418,6 @@ endif
 
 " vimfiler.vim"{{{
 nnoremap <silent> <C-g> :VimFiler -buffer-name=explorer -simple -toggle<CR>
-nnoremap <silent> <S-t> :VimFilerTab -buffer-name=explorer -simple -toggle<CR>
 
 let g:vimfiler_as_default_explorer = 1
 
@@ -515,7 +514,8 @@ nnoremap <silent> [Space]t4 :<C-u>setl shiftwidth=4 softtabstop=4<CR>
 nmap <C-t> [Tabbed]
 nnoremap [Tabbed]   <Nop>
 " Create tab page.
-nnoremap <silent> [Tabbed]c  :<C-u>tabnew<CR>
+"nnoremap <silent> [Tabbed]c  :<C-u>tabnew<CR>
+nnoremap <silent> [Tabbed]c  :<C-u>VimFilerTab -buffer-name=explorer -simple -toggle<CR>
 nnoremap <silent> [Tabbed]d  :<C-u>tabclose<CR>
 " Move to other tab page.
 nnoremap <silent> [Tabbed]l  :<C-u>tabnext<CR>
