@@ -51,6 +51,7 @@ NeoBundle 'Shougo/vinarise.git'
 NeoBundle 'thinca/vim-quickrun.git'
 NeoBundle 'tpope/vim-fugitive.git'
 NeoBundle 'tsaleh/vim-align.git'
+NeoBundle 'tsukkee/unite-tag.git'
 NeoBundle 'vim-scripts/gtags.vim.git'
 NeoBundle 'vim-scripts/sudo.vim.git'
 NeoBundle 'vim-scripts/taglist.vim.git'
@@ -386,6 +387,22 @@ function! s:unite_my_settings()"{{{
   nmap <silent><buffer> <ESC><ESC> q
   imap <silent><buffer> <ESC><ESC> <ESC>q
 endfunction"}}}
+
+" t: tags-and-searches "{{{
+" The prefix key.
+nnoremap    [Tag]   <Nop>
+nmap    t [Tag]
+" Jump.
+" nnoremap [Tag]t  <C-]>
+nnoremap <silent><expr> [Tag]t  &filetype == 'help' ?  "\<C-]>" :
+      \ ":\<C-u>UniteWithCursorWord -buffer-name=tag tag/include\<CR>"
+" Jump next.
+nnoremap <silent> [Tag]n  :<C-u>tag<CR>
+" Jump previous.
+" nnoremap <silent> [Tag]p  :<C-u>pop<CR>
+nnoremap <silent><expr> [Tag]p  &filetype == 'help' ?
+      \ ":\<C-u>pop\<CR>" : ":\<C-u>Unite jump\<CR>"
+"}}}
 
 " Start insert.
 let g:unite_enable_start_insert = 1
