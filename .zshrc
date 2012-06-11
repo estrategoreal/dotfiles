@@ -104,7 +104,7 @@ alias mv='mv -i'
 alias ack='ack --asm --cc --cpp'
 
 if is_darwin ; then
-  alias ctags='Applications/MacVim.app/Contents/MacOS/ctags "$@"'
+  alias ctags='/Applications/MacVim.app/Contents/MacOS/ctags "$@"'
   alias vi='/Applications/MacVim.app/Contents/MacOS/Vim "$@"'
   alias vim='/Applications/MacVim.app/Contents/MacOS/Vim "$@"'
   alias gvim='/Applications/MacVim.app/Contents/MacOS/Vim -g "$@"'
