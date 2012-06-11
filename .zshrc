@@ -132,13 +132,12 @@ fi
 function udtags() {
   currpath=$(pwd)
   if [[ $# -eq 1 ]] ; then
-	cd $1 || exit 1
+    cd $1 || exit 1
   fi
-  [[ -e tags ]] && rm -f tags
-  [[ -e GPATH ]] && rm -f GPATH
-  [[ -e GRTAGS ]] && rm -f GRTAGS
-  [[ -e GSYMS ]] && rm -f GSYMS
-  [[ -e GTAGS ]] && rm -f GTAGS
+  for t in tags GPATH GRTAGS GSYSMS GTAGS
+  do
+    [[ -e $t ]] && rm -f $t
+  done
   echo "updating tags..."
   ctags -R --extra=q
   gtags -v 2>/dev/null

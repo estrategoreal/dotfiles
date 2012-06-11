@@ -393,14 +393,14 @@ endfunction"}}}
 nnoremap    [Tag]   <Nop>
 nmap    t [Tag]
 " Jump.
-" nnoremap [Tag]t  <C-]>
-nnoremap <silent><expr> [Tag]t  &filetype == 'help' ?  "\<C-]>" :
+nnoremap [Tag]t  <C-]>
+"nnoremap <silent><expr> [Tag]t  &filetype == 'help' ?  "\<C-]>" :
       \ ":\<C-u>UniteWithCursorWord -buffer-name=tag tag/include\<CR>"
 " Jump next.
 nnoremap <silent> [Tag]n  :<C-u>tag<CR>
 " Jump previous.
-" nnoremap <silent> [Tag]p  :<C-u>pop<CR>
-nnoremap <silent><expr> [Tag]p  &filetype == 'help' ?
+ nnoremap <silent> [Tag]p  :<C-u>pop<CR>
+"nnoremap <silent><expr> [Tag]p  &filetype == 'help' ?
       \ ":\<C-u>pop\<CR>" : ":\<C-u>Unite jump\<CR>"
 "}}}
 
