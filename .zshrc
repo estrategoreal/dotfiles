@@ -169,6 +169,7 @@ elif is_freebsd ; then
 elif is_linux ; then
   PATH=$PATH:$HOME/.rvm/bin # Add RVM to PATH for scripting
 elif is_cygwin ; then
+  export LC_MESSAGES=C
   export CYGWIN=nodosfilewarning
   export PATH=/usr/local/share/vim:/usr/local/share/git-svn-clone-externals:$PATH
   export LIBRARY_PATH=/lib:/lib/w32api:/usr/local/lib
