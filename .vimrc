@@ -483,7 +483,7 @@ if has('gui_running')
   let Tlist_Use_Right_Window = 1
 endif
 
-nnoremap <silent> <C-m> :TlistToggle<CR>
+nnoremap <silent> <C-i> :TlistToggle<CR>
 "}}}
 "}}}
 

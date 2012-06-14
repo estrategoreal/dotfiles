@@ -1,11 +1,43 @@
 # .bashrc
 
+### OS judge function
+## Mac OS X
+function is_darwin() {
+  [[ $OSTYPE == darwin* ]] && return 0
+  return 1
+}
+## FreeBSD
+function is_freebsd() {
+  [[ $OSTYPE == freebsd* ]] && return 0
+  return 1
+}
+## Linux
+function is_linux() {
+  [[ $OSTYPE == linux* ]] && return 0
+  return 1
+}
+## Cygwin
+function is_cygwin() {
+  [[ $OSTYPE == cygwin* ]] && return 0
+  return 1
+}
+## Msys
+function is_msys() {
+  [[ $OSTYPE == msys* ]] && return 0
+  return 1
+}
+
 if [ -f ~/.git-completion.sh ]; then
   source ~/.git-completion.sh
 fi
 
 # User specific aliases and functions
 
+if is_darwin ; then
+  alias ls='ls -G'
+else
+  alias ls='ls --color=auto'
+fi
 alias ll='ls -l'
 alias la='ls -AlF'
 alias l='ls -CF'
@@ -17,82 +49,63 @@ alias mv='mv -i'
 
 alias ack='ack --asm --cc --cpp'
 
-case $OSTYPE in
-  darwin*)
-    alias ls='ls -G'
-    alias ctags='Applications/MacVim.app/Contents/MacOS/ctags "$@"'
-    alias vi='/Applications/MacVim.app/Contents/MacOS/Vim "$@"'
-    alias vim='/Applications/MacVim.app/Contents/MacOS/Vim "$@"'
-    alias gvim='/Applications/MacVim.app/Contents/MacOS/Vim -g "$@"'
-    alias exp='gvim -c VimFiler'
-    alias ide='gvim -c "set columns=204" -c Tlist -c VimShell -c vsp -c VimFiler'
-    
-    alias mint='/Applications/VirtualBox.app/Contents/MacOS/VBoxManage startvm Mint12 --type gui'
-    alias lmde='/Applications/VirtualBox.app/Contents/MacOS/VBoxManage startvm LMDE --type gui'
-    alias rmds='sudo find ~ -name .DS_Store -print -exec rm {} ";"'
-    ;;
-  linux*)
-    alias ls='ls --color=auto'
-    alias exp='gvim -c "VimFiler -buffer-name=explorer -simple -toggle"'
-    alias formc='find . -iregex ".+\.\(c\|h\)$" -type f -print0 | xargs -0 uncrustify -c ~/.uncrustify4c.cfg --no-backup'
-    alias formcpp='find . -iregex ".+\.\(c\|cpp\|h\)$" -type f -print0 | xargs -0 uncrustify -c ~/.uncrustify4cpp.cfg --no-backup'
-    ;;
-  cygwin*)
-    alias ls='ls --color=auto'
-    alias open='cygstart'
-    alias vim='/usr/bin/vim'
-    alias gvim='cyg-wrapper.sh gvim --binary-opt=-c,--cmd,-T,-t,--servername,--remote-send,--remote-expr --fork=1'
-    alias exp='cyg-wrapper.sh gvim --binary-opt=-c,--cmd,-T,-t,--servername,--remote-send,--remote-expr --fork=1 -c "VimFiler -buffer-name=explorer -simple -toggle"'
-    alias formc='find . -iregex ".+\.\(c\|h\)$" -type f -print0 | xargs -0 uncrustify -c ~/.uncrustify4c.cfg --no-backup'
-    alias formcpp='find . -iregex ".+\.\(c\|cpp\|h\)$" -type f -print0 | xargs -0 uncrustify -c ~/.uncrustify4cpp.cfg --no-backup'
-    ;;
-esac
+if is_darwin ; then
+  alias ls='ls -G'
+  alias ctags='Applications/MacVim.app/Contents/MacOS/ctags "$@"'
+  alias vi='/Applications/MacVim.app/Contents/MacOS/Vim "$@"'
+  alias vim='/Applications/MacVim.app/Contents/MacOS/Vim "$@"'
+  alias gvim='/Applications/MacVim.app/Contents/MacOS/Vim -g "$@"'
+  alias vf='gvim -c "VimFiler -buffer-name=explorer -simple -toggle"'
 
-function udtags {
+  alias bsd='/Applications/VirtualBox.app/Contents/MacOS/VBoxManage startvm FreeBSD --type gui'
+  alias mint='/Applications/VirtualBox.app/Contents/MacOS/VBoxManage startvm Mint12 --type gui'
+  alias lmde='/Applications/VirtualBox.app/Contents/MacOS/VBoxManage startvm LMDE --type gui'
+  alias rmds='sudo find ~ -name .DS_Store -print -exec rm {} ";"'
+elif is_linux || is_freebsd ; then
+  alias vf='gvim -c "VimFiler -buffer-name=explorer -simple -toggle"'
+  alias formc='find . -iregex ".+\.\(c\|h\)$" -type f -print0 | xargs -0 uncrustify -c ~/.uncrustify4c.cfg --no-backup'
+  alias formcpp='find . -iregex ".+\.\(c\|cpp\|h\)$" -type f -print0 | xargs -0 uncrustify -c ~/.uncrustify4cpp.cfg --no-backup'
+elif is_cygwin ; then
+  alias open='cygstart'
+  alias vim='/usr/bin/vim'
+  alias gvim='cyg-wrapper.sh gvim --binary-opt=-c,--cmd,-T,-t,--servername,--remote-send,--remote-expr --fork=1'
+  alias vf='cyg-wrapper.sh gvim --binary-opt=-c,--cmd,-T,-t,--servername,--remote-send,--remote-expr --fork=1 -c "VimFiler -buffer-name=explorer -simple -toggle"'
+  alias ide='cyg-wrapper.sh gvim --binary-opt=-c,--cmd,-T,-t,--servername,--remote-send,--remote-expr --fork=1 -c +"set columns=153" +"VimFiler -buffer-name=explorer -simple -toggle c:/Development" +tabnew +TlistOpen +"VimFiler -buffer-name=explorer -split -simple -winwidth=35 -toggle -no-quit"'
+  alias formc='find . -iregex ".+\.\(c\|h\)$" -type f -print0 | xargs -0 uncrustify -c ~/.uncrustify4c.cfg --no-backup'
+  alias formcpp='find . -iregex ".+\.\(c\|cpp\|h\)$" -type f -print0 | xargs -0 uncrustify -c ~/.uncrustify4cpp.cfg --no-backup'
+elif is_msys ; then
+  alias vim='/usr/bin/vim'
+  alias vf='gvim +"VimFiler -buffer-name=explorer -simple -toggle"'
+  alias ide='gvim +"set columns=153" +"VimFiler -buffer-name=explorer -simple -toggle c:/Development" +tabnew +TlistOpen +"VimFiler -buffer-name=explorer -split -simple -winwidth=35 -toggle -no-quit"'
+fi
+
+function udtags() {
   currpath=$(pwd)
-  if [ $# -eq 1 ]; then
+  if [[ $# -eq 1 ]] ; then
     cd $1 || exit 1
   fi
-  if [ -e tags ]; then
-    rm -f tags
-  fi
-  ctags -R --extra=q
-  if [ -e GPATH ]; then
-    rm -f GPATH
-  fi
-  if [ -e GRTAGS ]; then
-    rm -f GRTAGS
-  fi
-  if [ -e GSYMS ]; then
-    rm -f GSYMS
-  fi
-  if [ -e GTAGS ]; then
-    rm -f GTAGS
-  fi
+  for t in tags GPATH GRTAGS GSYMS GTAGS
+  do
+    [[ -e $t ]] && rm -f $t
+  done
   echo
   echo "updating tags..."
+  ctags -R --extra=q
   gtags -v 2>/dev/null
   cd $currpath
 }
 
-case $OSTYPE in
-  darwin*)
-    function mkiso {
-      hdiutil makehybrid -o ${1##*/}.iso $1
-    }
+if is_darwin ; then
+  function mkiso() {
+    hdiutil makehybrid -o ${1##*/}.iso $1
+  }
 
-    function tarbz2 {
-      COPYFILE_DISABLE=true tar cjvf $1.tbz --exclude .DS_Store $1
-    }
-  linux*)
-    ;;
-  cygwin*)
-    ;;
-esac
-
-if [ -f ~/.bash_work ]; then
-  source ~/.bash_work
+  function tarbz2() {
+    COPYFILE_DISABLE=true tar cjvf $1.tbz --exclude .DS_Store $1
+  }
 fi
+
+[ -f ~/.bashrc.local ] &&  source ~/.bashrc.local
 
 # Source global definitions
 
@@ -100,20 +113,23 @@ if [ -f /etc/bashrc ]; then
   source /etc/bashrc
 fi
 
-case $OSTYPE in
-  darwin*)
-    export PS1="\n\[\e[34m\]\u@\h \[\e[35m\]\w$(__git_ps1)\n\[\e[00;37;44m\]How may I serve you, Master?\[\e[00m\]\n$ "
-    export PATH=$PATH:/usr/local/sbin
-    ;;
-  linux*)
-    export PS1="\n\[\e[36m\]\u@\h \[\e[35m\]\w$(__git_ps1)\n\[\e[00;37;44m\]How may I serve you, Master?\[\e[00m\]\n$ "
-    PATH=$PATH:$HOME/.rvm/bin # Add RVM to PATH for scripting
-    ;;
-  cygwin*)
-    export PS1="\n\[\e[36m\]\u@\h \[\e[35m\]\w$(__git_ps1)\n\[\e[00;37;44m\]How may I serve you, Master?\[\e[00m\]\n$ "
-    export PATH=/usr/local/share/vim:$PATH
-    export LIBRARY_PATH=/lib:/lib/w32api:/usr/local/lib
-    export TCL_LIBRARY=/usr/share/tcl8.4
-    ;;
-esac
+if is_darwin ; then
+  export PS1="\n\[\e[34m\]\u@\h \[\e[35m\]\w$(__git_ps1)\n\[\e[00;37;44m\]How may I serve you, Master?\[\e[00m\]\n$ "
+  export PATH=$PATH:/usr/local/sbin
+elif is_freebsd ; then
+  export PATH=$PATH:/sbin:/usr/sbin:/usr/local/sbin
+elif is_linux ; then
+  export PS1="\n\[\e[36m\]\u@\h \[\e[35m\]\w$(__git_ps1)\n\[\e[00;37;44m\]How may I serve you, Master?\[\e[00m\]\n$ "
+  PATH=$PATH:$HOME/.rvm/bin # Add RVM to PATH for scripting
+elif is_cygwin ; then
+  export PS1="\n\[\e[36m\]\u@\h \[\e[35m\]\w$(__git_ps1)\n\[\e[00;37;44m\]How may I serve you, Master?\[\e[00m\]\n$ "
+  export LC_MESSAGES=C
+  export PATH=/usr/local/share/vim:/usr/local/share/git-svn-clone-externals:$PATH
+  export LIBRARY_PATH=/lib:/lib/w32api:/usr/local/lib
+  export TCL_LIBRARY=/usr/share/tcl8.4
+  PATH=$PATH:$HOME/.rvm/bin # Add RVM to PATH for scripting
+elif is_msys ; then
+  export PS1="\n\[\e[36m\]\u@\h \[\e[35m\]\w$(__git_ps1)\n\[\e[00;37;44m\]How may I serve you, Master?\[\e[00m\]\n$ "
+  export PATH=$PATH:/usr/local/share/vim:/c/Python27:/c/msysgit/bin
+fi
 

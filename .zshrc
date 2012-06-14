@@ -134,7 +134,7 @@ function udtags() {
   if [[ $# -eq 1 ]] ; then
     cd $1 || exit 1
   fi
-  for t in tags GPATH GRTAGS GSYSMS GTAGS
+  for t in tags GPATH GRTAGS GSYMS GTAGS
   do
     [[ -e $t ]] && rm -f $t
   done
