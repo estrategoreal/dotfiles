@@ -35,6 +35,8 @@ fi
 
 if is_darwin ; then
   alias ls='ls -G'
+elif is_msys ; then
+  alias ls='ls --color=auto --show-control-chars'
 else
   alias ls='ls --color=auto'
 fi
@@ -74,7 +76,7 @@ elif is_cygwin ; then
   alias formc='find . -iregex ".+\.\(c\|h\)$" -type f -print0 | xargs -0 uncrustify -c ~/.uncrustify4c.cfg --no-backup'
   alias formcpp='find . -iregex ".+\.\(c\|cpp\|h\)$" -type f -print0 | xargs -0 uncrustify -c ~/.uncrustify4cpp.cfg --no-backup'
 elif is_msys ; then
-  alias vim='/usr/bin/vim'
+  alias vim='/bin/vim'
   alias vf='gvim +"VimFiler -buffer-name=explorer -simple -toggle"'
   alias ide='gvim +"set columns=153" +"VimFiler -buffer-name=explorer -simple -toggle c:/Development" +tabnew +TlistOpen +"VimFiler -buffer-name=explorer -split -simple -winwidth=35 -toggle -no-quit"'
 fi
@@ -129,7 +131,8 @@ elif is_cygwin ; then
   export TCL_LIBRARY=/usr/share/tcl8.4
   PATH=$PATH:$HOME/.rvm/bin # Add RVM to PATH for scripting
 elif is_msys ; then
+  export LC_MESSAGES=C
   export PS1="\n\[\e[36m\]\u@\h \[\e[35m\]\w$(__git_ps1)\n\[\e[00;37;44m\]How may I serve you, Master?\[\e[00m\]\n$ "
-  export PATH=$PATH:/usr/local/share/vim:/c/Python27:/c/msysgit/bin
+  export PATH=$PATH:/usr/local/share/vim:/usr/local/share/git-svn-clone-externals:/c/Python27:/c/Git/bin:/c/Ruby19/bin
 fi
 
