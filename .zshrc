@@ -105,29 +105,22 @@ alias ack='ack --asm --cc --cpp'
 
 if is_darwin ; then
   alias ctags='/Applications/MacVim.app/Contents/MacOS/ctags "$@"'
-  alias vi='/Applications/MacVim.app/Contents/MacOS/Vim "$@"'
   alias vim='/Applications/MacVim.app/Contents/MacOS/Vim "$@"'
   alias gvim='/Applications/MacVim.app/Contents/MacOS/Vim -g "$@"'
-  alias vf='gvim -c "VimFiler -buffer-name=explorer -simple -toggle"'
-  alias ide='gvim -c "set columns=204" -c Tlist -c VimShell -c vsp -c VimFiler'
 
   alias bsd='/Applications/VirtualBox.app/Contents/MacOS/VBoxManage startvm FreeBSD --type gui'
   alias mint='/Applications/VirtualBox.app/Contents/MacOS/VBoxManage startvm Mint12 --type gui'
   alias lmde='/Applications/VirtualBox.app/Contents/MacOS/VBoxManage startvm LMDE --type gui'
   alias rmds='sudo find ~ -name .DS_Store -print -exec rm {} ";"'
-elif is_linux || is_freebsd ; then
-  alias vf='gvim -c "VimFiler -buffer-name=explorer -simple -toggle"'
-  alias formc='find . -iregex ".+\.\(c\|h\)$" -type f -print0 | xargs -0 uncrustify -c ~/.uncrustify4c.cfg --no-backup'
-  alias formcpp='find . -iregex ".+\.\(c\|cpp\|h\)$" -type f -print0 | xargs -0 uncrustify -c ~/.uncrustify4cpp.cfg --no-backup'
 elif is_cygwin ; then
   alias open='cygstart'
   alias vim='/usr/bin/vim'
   alias gvim='cyg-wrapper.sh gvim --binary-opt=-c,--cmd,-T,-t,--servername,--remote-send,--remote-expr --fork=1'
-  alias vf='cyg-wrapper.sh gvim --binary-opt=-c,--cmd,-T,-t,--servername,--remote-send,--remote-expr --fork=1 -c "VimFiler -buffer-name=explorer -simple -toggle"'
-  alias ide='cyg-wrapper.sh gvim --binary-opt=-c,--cmd,-T,-t,--servername,--remote-send,--remote-expr --fork=1 +"set columns=153" +"VimFiler -buffer-name=explorer -simple -toggle c:/Development" +tabnew +TlistOpen +"VimFiler -buffer-name=explorer -split -simple -winwidth=35 -toggle -no-quit"'
-  alias formc='find . -iregex ".+\.\(c\|h\)$" -type f -print0 | xargs -0 uncrustify -c ~/.uncrustify4c.cfg --no-backup'
-  alias formcpp='find . -iregex ".+\.\(c\|cpp\|h\)$" -type f -print0 | xargs -0 uncrustify -c ~/.uncrustify4cpp.cfg --no-backup'
 fi
+alias vf='gvim +"VimFiler -buffer-name=explorer -simple -toggle"'
+alias ide='gvim +"set columns=153" +"VimFiler -buffer-name=explorer -simple -toggle $HOME/work" +tabnew +TlistOpen +"VimFiler -buffer-name=explorer -split -simple -winwidth=35 -toggle -no-quit"'
+alias formc='find . -iregex ".+\.\(c\|h\)$" -type f -print0 | xargs -0 uncrustify -c ~/.uncrustify4c.cfg --no-backup'
+alias formcpp='find . -iregex ".+\.\(c\|cpp\|h\)$" -type f -print0 | xargs -0 uncrustify -c ~/.uncrustify4cpp.cfg --no-backup'
 
 function udtags() {
   currpath=$(pwd)
