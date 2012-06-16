@@ -55,6 +55,7 @@ NeoBundle 'tsukkee/unite-tag.git'
 NeoBundle 'vim-scripts/gtags.vim.git'
 NeoBundle 'vim-scripts/sudo.vim.git'
 NeoBundle 'vim-scripts/taglist.vim.git'
+NeoBundle 'yuratomo/w3m.vim'
 
 "---------------------------------------------------------------------------
 " Encoding:"{{{
@@ -484,6 +485,18 @@ if has('gui_running')
 endif
 
 nnoremap <silent> <C-i> :TlistToggle<CR>
+"}}}
+
+" w3m.vim"{{{
+nnoremap W      :<C-u>W3m<Space>
+let g:w3m#search_engine = 
+    \ 'https://www.google.co.jp/search?aq=f&ix=seb&sourceid=chrome&ie=' . &encoding . '&q='
+autocmd FileType w3m call s:w3m_settings()
+function! s:w3m_settings()
+  nnoremap H :call w3m#Back()<CR>
+  nnoremap L :call w3m#Click(0)<CR>
+  nnoremap Q :W3mClose<CR>
+endfunction
 "}}}
 "}}}
 
