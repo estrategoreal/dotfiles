@@ -239,8 +239,6 @@ set cindent
 " Set backupdir.
 set backupdir=~/.vim/tmp
 let &directory = &backupdir
-
-autocmd FileType ruby setlocal shiftwidth=2 tabstop=2
 "}}}
 
 "---------------------------------------------------------------------------
@@ -281,6 +279,7 @@ set smartindent
 
 " Enable omni completion.
 autocmd FileType c,cpp setlocal omnifunc=ccomplete#Complete
+"autocmd FileType ruby setlocal omnifunc=rubycomplete#Complete
 "}}}
 
 "---------------------------------------------------------------------------
@@ -443,20 +442,30 @@ nmap <silent> <C-@> :VimShellPop<CR>
 let g:vimshell_user_prompt = 'fnamemodify(getcwd(), ":~")'
 let g:vimshell_right_prompt = 'vcs#info("(%s)-[%b]%p", "(%s)-[%b|%a]%p")'
 let g:vimshell_prompt = '% '
-autocmd FileType vimshell
-\ call vimshell#set_alias('ll', 'ls -l --encoding=utf-8')
-\| call vimshell#set_alias('la', 'ls -alF --encoding=utf-8')
-\| call vimshell#set_alias('l', 'ls -CF')
-\| call vimshell#set_alias('l.', 'ls -d .*')
-\| call vimshell#set_alias('cp', 'cp -i')
-\| call vimshell#set_alias('rm', 'rm -i')
-\| call vimshell#set_alias('mv', 'mv -i')
+
+if !s:is_windows
+  " Use zsh history.
+  let g:vimshell_external_history_path = expand('~/.zsh_history')
+endif
+
+" Initialize execute file list.
+let g:vimshell_execute_file_list = {}
+call vimshell#set_execute_file('txt,vim,c,h,cpp', 'vim')
+let g:vimshell_execute_file_list['rb'] = 'ruby'
 
 autocmd FileType vimshell call s:vimshell_my_settings()
 function! s:vimshell_my_settings()"{{{
   " Hide the window in hitting ESC key twice.
   nmap <silent><buffer> <ESC><ESC> q
   imap <silent><buffer> <ESC><ESC> <ESC>q
+
+  call vimshell#set_alias('ll', 'ls -l --encoding=utf-8')
+  call vimshell#set_alias('la', 'ls -alF --encoding=utf-8')
+  call vimshell#set_alias('l', 'ls -CF')
+  call vimshell#set_alias('l.', 'ls -d .*')
+  call vimshell#set_alias('cp', 'cp -i')
+  call vimshell#set_alias('rm', 'rm -i')
+  call vimshell#set_alias('mv', 'mv -i')
 endfunction"}}}
 "}}}
 
@@ -520,6 +529,15 @@ nmap  <Space>   [Space]
 xmap  <Space>   [Space]
 nnoremap  [Space]   <Nop>
 xnoremap  [Space]   <Nop>
+
+" Useful save mappings."{{{
+nnoremap <silent> [Space]w  :<C-u>update<CR>
+nnoremap <silent> [Space]fw  :<C-u>write!<CR>
+nnoremap <silent> [Space]q  :<C-u>quit<CR>
+nnoremap <silent> [Space]aq  :<C-u>quitall<CR>
+nnoremap <silent> [Space]fq  :<C-u>quitall!<CR>
+nnoremap <Leader><Leader> :<C-u>update<CR>
+"}}}
 
 " Change tab width. "{{{
 nnoremap <silent> [Space]t2 :<C-u>setl shiftwidth=2 softtabstop=2<CR>
