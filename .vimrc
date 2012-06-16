@@ -418,7 +418,7 @@ endif
 "}}}
 
 " vimfiler.vim"{{{
-nnoremap <silent> <C-g> :VimFiler -buffer-name=explorer -simple -toggle<CR>
+nnoremap <silent> <C-g> :<C-u>VimFiler -buffer-name=explorer -simple -toggle<CR>
 
 let g:vimfiler_as_default_explorer = 1
 
@@ -465,8 +465,8 @@ vmap <silent> <C-a> :Align =<CR>
 "}}}
 
 " gtags.vim"{{{
-nnoremap <C-j> :GtagsCursor<CR>
-nnoremap <C-s> :Gtags -r
+nnoremap <C-j> :<C-u>GtagsCursor<CR>
+nnoremap <C-s> :<C-u>Gtags -r
 "}}}
 
 " taglist.vim"{{{
@@ -484,18 +484,24 @@ if has('gui_running')
   let Tlist_Use_Right_Window = 1
 endif
 
-nnoremap <silent> <C-i> :TlistToggle<CR>
+nnoremap <silent> <C-i> :<C-u>TlistToggle<CR>
 "}}}
 
 " w3m.vim"{{{
-nnoremap W      :<C-u>W3m<Space>
+nnoremap W      :<C-u>W3mTab<Space>
+if has('mac')
+  let g:w3m#external_browser = 'open -a "Google Chrome"'
+else
+  let g:w3m#external_browser = 'chrome'
+endif
 let g:w3m#search_engine = 
     \ 'https://www.google.co.jp/search?aq=f&ix=seb&sourceid=chrome&ie=' . &encoding . '&q='
 autocmd FileType w3m call s:w3m_settings()
 function! s:w3m_settings()
-  nnoremap H :call w3m#Back()<CR>
-  nnoremap L :call w3m#Click(0)<CR>
-  nnoremap Q :W3mClose<CR>
+  nnoremap <buffer> H :<C-u>call w3m#Back()<CR>
+  nnoremap <buffer> L :<C-u>call w3m#Forward()<CR>
+  nnoremap <buffer> E :<C-u>W3mShowExtenalBrowser<CR>
+  nnoremap <buffer> Q :<C-u>W3mClose<CR>
 endfunction
 "}}}
 "}}}
@@ -504,8 +510,8 @@ endfunction
 " Key-mappings: "{{{
 "
 " Item select mappings
-nnoremap <C-n> :cn<CR>
-nnoremap <C-p> :cp<CR>
+nnoremap <C-n> :<C-u>cn<CR>
+nnoremap <C-p> :<C-u>cp<CR>
 
 " [Space]: Other useful commands "{{{
 " Smart space mapping.
