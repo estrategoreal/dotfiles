@@ -53,9 +53,10 @@ NeoBundle 'tpope/vim-fugitive.git'
 NeoBundle 'tsaleh/vim-align.git'
 NeoBundle 'tsukkee/unite-tag.git'
 NeoBundle 'vim-scripts/gtags.vim.git'
-NeoBundle 'vim-scripts/sudo.vim.git'
 NeoBundle 'vim-scripts/taglist.vim.git'
 NeoBundle 'yuratomo/w3m.vim'
+" From vim.org
+NeoBundle 'SudoEdit.vim'
 
 "---------------------------------------------------------------------------
 " Encoding:"{{{
