@@ -258,7 +258,7 @@ set whichwrap+=h,l,<,>,[,],b,s,~
 " Always display statusline.
 set laststatus=2
 " Set statusline.
-set statusline=%<%f\ %m%r%h%w%{'['.(&fenc!=''?&fenc:&enc).']['.&ff.']'}%=%l,%c%V%8P
+set statusline=%<%m%r%h%w%y%{'['.(&fenc!=''?&fenc:&enc).':'.&ff.']'}\ %f%=%{fugitive#statusline()}\ \ %l/%L,%c%V%5P
 " Set tabline.
 set showtabline=2
 " Set visualbell.
