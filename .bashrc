@@ -68,8 +68,8 @@ elif is_cygwin ; then
 elif is_msys ; then
   alias vim='/bin/vim'
 fi
-alias vf='gvim -c "VimFiler -buffer-name=explorer -simple -toggle"'
-alias ide='gvim +"set columns=153" +"VimFiler -buffer-name=explorer -simple -toggle $HOME" +tabnew +TlistOpen +"VimFiler -buffer-name=explorer -split -simple -winwidth=35 -toggle -no-quit"'
+alias vf='gvim +"VimFiler -buffer-name=explorer -simple -toggle"'
+alias ide='gvim +"set columns=173" +"VimFiler -buffer-name=explorer -simple -toggle ~/work" +tabnew +TlistOpen +"VimFiler -buffer-name=explorer -split -simple -winwidth=45 -toggle -no-quit"'
 alias formc='find . -iregex ".+\.\(c\|h\)$" -type f -print0 | xargs -0 uncrustify -c ~/.uncrustify4c.cfg --no-backup'
 alias formcpp='find . -iregex ".+\.\(c\|cpp\|h\)$" -type f -print0 | xargs -0 uncrustify -c ~/.uncrustify4cpp.cfg --no-backup'
 
@@ -125,6 +125,6 @@ elif is_cygwin ; then
 elif is_msys ; then
   export LC_MESSAGES=C
   export PS1="\n\[\e[36m\]\u@\h \[\e[35m\]\w$(__git_ps1)\n\[\e[00;37;44m\]How may I serve you, Master?\[\e[00m\]\n$ "
-  export PATH=$PATH:/usr/local/share/vim:/usr/local/share/git-svn-clone-externals:/c/Python27:/c/Git/bin:/c/Ruby19/bin
+  export PATH=$PATH:/usr/local/share/vim:/usr/local/share/git-svn-clone-externals:/c/git/bin:/c/Python27:/c/Ruby19/bin
 fi
 

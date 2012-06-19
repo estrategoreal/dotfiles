@@ -500,6 +500,9 @@ nnoremap <silent> <C-i> :<C-u>TlistToggle<CR>
 
 " w3m.vim"{{{
 nnoremap W      :<C-u>W3mTab<Space>
+if s:is_windows
+  let g:w3m#command = 'c:/MinGW/msys/1.0/local/bin/w3m.exe'
+endif
 if has('mac')
   let g:w3m#external_browser = 'open -a "Google Chrome"'
 else
@@ -572,7 +575,7 @@ nnoremap <silent> <ESC><ESC> :nohlsearch<CR>
 " Platform depends:"{{{
 "
 if s:is_windows
-  set shell=c:/cygwin/bin/zsh
+  set shell=c:/MinGW/msys/1.0/bin/bash
 endif
 "}}}
 
