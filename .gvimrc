@@ -30,10 +30,15 @@ if exists('&ambiwidth')
   set ambiwidth=double
 endif
 elseif has('win32')
-set guifont=MS_Gothic:h12:cSHIFTJIS
+"set guifont=MS_Gothic:h12:cSHIFTJIS
+set guifont=Ricty:h12
+"gui
+"set transparency=220
 if has('kaoriya')
   set ambiwidth=auto
 endif
+else
+set guifont=Ricty\ 11
 endif
 
 set columns=86
