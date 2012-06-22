@@ -17,7 +17,8 @@
 " set guifont=-misc-fixed-medium-r-normal--14-130-75-75-c-70-iso8859-1
 if has('mac')
 set noimdisableactivate
-set guifont=Osaka-Mono:h14
+"set guifont=Osaka-Mono:h14
+set guifont=Ricty:h14
 set antialias
 augroup Transparency
   autocmd!
