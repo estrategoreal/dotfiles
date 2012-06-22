@@ -67,6 +67,7 @@ elif is_cygwin ; then
   alias gvim='cyg-wrapper.sh gvim --binary-opt=-c,--cmd,-T,-t,--servername,--remote-send,--remote-expr --fork=1'
 elif is_msys ; then
   alias vim='/bin/vim'
+  alias mingw-search='mingw-get list | grep Package: | grep'
 fi
 alias vf='gvim +"VimFiler -buffer-name=explorer -simple -toggle"'
 alias ide='gvim +"set columns=173" +"VimFiler -buffer-name=explorer -simple -toggle ~/work" +tabnew +TlistOpen +"VimFiler -buffer-name=explorer -split -simple -winwidth=45 -toggle -no-quit"'

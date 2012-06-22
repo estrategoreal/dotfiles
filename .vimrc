@@ -500,11 +500,11 @@ nnoremap <silent> <C-i> :<C-u>TlistToggle<CR>
 
 " w3m.vim"{{{
 nnoremap W      :<C-u>W3mTab<Space>
-if s:is_windows
-  let g:w3m#command = 'c:/MinGW/msys/1.0/local/bin/w3m.exe'
-endif
 if has('mac')
   let g:w3m#external_browser = 'open -a "Google Chrome"'
+elseif s:is_windows
+  let g:w3m#command = 'c:/MinGW/msys/1.0/local/bin/w3m.exe'
+  let g:w3m#external_browser = '"'.$USERPROFILE.'/Local Settings/Application Data/Google/Chrome/Application/chrome.exe'.'"'
 else
   let g:w3m#external_browser = 'chrome'
 endif
