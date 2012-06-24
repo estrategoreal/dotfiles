@@ -287,6 +287,7 @@ autocmd FileType c,cpp setlocal omnifunc=ccomplete#Complete
 " Plugin:"{{{
 "
 " DoxygenToolkit.vim"{{{
+nnoremap <silent> [Space]d :<C-u>Dox<CR>
 let g:load_doxygen_syntax = 1
 "}}}
 
