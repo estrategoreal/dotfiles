@@ -472,7 +472,7 @@ endfunction"}}}
 "}}}
 
 " align.vim"{{{
-vmap <silent> <C-a> :Align =<CR>
+vmap <silent> <C-a> \t=
 "}}}
 
 " gtags.vim"{{{
