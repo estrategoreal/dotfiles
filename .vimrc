@@ -374,6 +374,8 @@ nnoremap <silent> [unite]b :<C-u>Unite buffer<CR>
 inoremap <silent> [unite]b <ESC>:<C-u>Unite buffer<CR>
 nnoremap <silent> [unite]m :<C-u>Unite file_mru<CR>
 inoremap <silent> [unite]m <ESC>:<C-u>Unite file_mru<CR>
+nnoremap <silent> [unite]r :<C-u>Unite -buffer-name=register register history/yank<CR>
+nnoremap <silent> [unite]r <ESC>:<C-u>Unite -buffer-name=register register history/yank<CR>
 nnoremap <silent> [unite]u :<C-u>Unite buffer file_mru<CR>
 inoremap <silent> [unite]u <ESC>:<C-u>Unite buffer file_mru<CR>
 
