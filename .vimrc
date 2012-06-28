@@ -230,6 +230,9 @@ set shiftround
 " Highlight parenthesis.
 set showmatch
 
+" Display another buffer even if current buffer isn't saved.
+set hidden
+
 " Set tags file.
 " Don't search tags file in current directory. And search upward.
 set tags& tags-=tags tags+=./tags;
