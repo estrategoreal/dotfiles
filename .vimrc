@@ -36,6 +36,8 @@ endif
 NeoBundle 'Shougo/neobundle.vim'
 
 " My Bundles here:
+NeoBundle 'anyakichi/vim-surround'
+NeoBundle 'h1mesuke/vim-alignta.git'
 NeoBundle 'mileszs/ack.vim.git'
 NeoBundle 'mrtazz/DoxygenToolkit.vim.git'
 NeoBundle 'othree/eregex.vim.git'
@@ -50,8 +52,8 @@ NeoBundle 'Shougo/vimshell.git'
 NeoBundle 'Shougo/vinarise.git'
 NeoBundle 'thinca/vim-quickrun.git'
 NeoBundle 'tpope/vim-fugitive.git'
-NeoBundle 'tsaleh/vim-align.git'
 NeoBundle 'tsukkee/unite-tag.git'
+NeoBundle 'tyru/open-browser.vim.git'
 NeoBundle 'vim-scripts/gtags.vim.git'
 NeoBundle 'vim-scripts/taglist.vim.git'
 NeoBundle 'yuratomo/w3m.vim'
@@ -289,6 +291,29 @@ autocmd FileType c,cpp setlocal omnifunc=ccomplete#Complete
 "---------------------------------------------------------------------------
 " Plugin:"{{{
 "
+" surround.vim"{{{
+let g:surround_no_mappings = 1
+autocmd FileType * call s:define_surround_keymappings()
+
+function! s:define_surround_keymappings()
+  if !&modifiable
+    return
+  endif
+
+  nmap <buffer> ds  <Plug>Dsurround
+  nmap <buffer> cs  <Plug>Csurround
+  nmap <buffer> ys  <Plug>Ysurround
+  nmap <buffer> yS  <Plug>YSurround
+  nmap <buffer> yss <Plug>Yssurround
+  nmap <buffer> ySs <Plug>YSsurround
+  nmap <buffer> ySS <Plug>YSsurround
+endfunction
+"}}}
+
+" alignta.vim"{{{
+vmap <silent> <C-a> :Alignta = /* */<CR>
+"}}}
+
 " DoxygenToolkit.vim"{{{
 nnoremap <silent> [Space]d :<C-u>Dox<CR>
 let g:load_doxygen_syntax = 1
@@ -327,10 +352,10 @@ endif
 let g:neocomplcache_keyword_patterns['default'] = '\h\w*'
 
 " Plugin key-mappings.
-imap <C-k>    <Plug>(neocomplcache_snippets_expand)
-smap <C-k>    <Plug>(neocomplcache_snippets_expand)
-inoremap <expr><C-g>    neocomplcache#undo_completion()
-inoremap <expr><C-l>    neocomplcache#complete_common_string()
+imap <C-k> <Plug>(neocomplcache_snippets_expand)
+smap <C-k> <Plug>(neocomplcache_snippets_expand)
+inoremap <expr><C-g> neocomplcache#undo_completion()
+inoremap <expr><C-l> neocomplcache#complete_common_string()
 
 " SuperTab like snippets behavior.
 "imap <expr><TAB> neocomplcache#sources#snippets_complete#expandable() ? "\<Plug>(neocomplcache_snippets_expand)" : pumvisible() ? "\<C-n>" : "\<TAB>"
@@ -338,14 +363,14 @@ inoremap <expr><C-l>    neocomplcache#complete_common_string()
 let g:neocomplcache_snippets_dir = '~/.vim/snippets'
 
 " <CR>: close popup and save indent.
-inoremap <expr><CR>  neocomplcache#close_popup() . "\<CR>"
+inoremap <expr><CR> neocomplcache#close_popup() . "\<CR>"
 " <TAB>: completion.
-inoremap <expr><TAB>  pumvisible() ? "\<C-n>" : "\<TAB>"
+inoremap <expr><TAB> pumvisible() ? "\<C-n>" : "\<TAB>"
 " <C-h>, <BS>: close popup and delete backword char.
-inoremap <expr><C-h>  neocomplcache#smart_close_popup()."\<C-h>"
+inoremap <expr><C-h> neocomplcache#smart_close_popup()."\<C-h>"
 inoremap <expr><BS>  neocomplcache#smart_close_popup()."\<C-h>"
-inoremap <expr><C-y>  neocomplcache#close_popup()
-inoremap <expr><C-e>  neocomplcache#cancel_popup()
+inoremap <expr><C-y> neocomplcache#close_popup()
+inoremap <expr><C-e> neocomplcache#cancel_popup()
 
 " AutoComplPop like behavior.
 let g:neocomplcache_enable_auto_select = 1
@@ -365,10 +390,10 @@ let g:neocomplcache_omni_patterns.cpp = '\h\w*\%(\.\|->\)\h\w*\|\h\w*::'
 
 " unite.vim"{{{
 " The prefix key.
-nnoremap    [unite]   <Nop>
-xnoremap    [unite]   <Nop>
-nmap    f [unite]
-xmap    f [unite]
+nnoremap [unite] <Nop>
+xnoremap [unite] <Nop>
+nmap f [unite]
+xmap f [unite]
 
 " Keymap to call in both insert and normal mode.
 nnoremap <silent> [unite]f :<C-u>UniteWithBufferDir -buffer-name=files file<CR>
@@ -397,16 +422,16 @@ endfunction"}}}
 
 " t: tags-and-searches "{{{
 " The prefix key.
-nnoremap    [Tag]   <Nop>
-nmap    t [Tag]
+nnoremap [Tag] <Nop>
+nmap t [Tag]
 " Jump.
-nnoremap [Tag]t  <C-]>
+nnoremap [Tag]t <C-]>
 "nnoremap <silent><expr> [Tag]t  &filetype == 'help' ?  "\<C-]>" :
       \ ":\<C-u>UniteWithCursorWord -buffer-name=tag tag/include\<CR>"
 " Jump next.
-nnoremap <silent> [Tag]n  :<C-u>tag<CR>
+nnoremap <silent> [Tag]n :<C-u>tag<CR>
 " Jump previous.
- nnoremap <silent> [Tag]p  :<C-u>pop<CR>
+nnoremap <silent> [Tag]p :<C-u>pop<CR>
 "nnoremap <silent><expr> [Tag]p  &filetype == 'help' ?
       \ ":\<C-u>pop\<CR>" : ":\<C-u>Unite jump\<CR>"
 "}}}
@@ -476,8 +501,10 @@ function! s:vimshell_my_settings()"{{{
 endfunction"}}}
 "}}}
 
-" align.vim"{{{
-vmap <silent> <C-a> \t=
+" open-browser.vim"{{{
+let g:netrw_nogx = 1 " disable netrw's gx mapping.
+nmap gx <Plug>(openbrowser-smart-search)
+vmap gx <Plug>(openbrowser-smart-search)
 "}}}
 
 " gtags.vim"{{{
@@ -505,7 +532,7 @@ nnoremap <silent> <C-i> :<C-u>TlistToggle<CR>
 "}}}
 
 " w3m.vim"{{{
-nnoremap W      :<C-u>W3mTab<Space>
+nnoremap W :<C-u>W3mTab<Space>
 if has('mac')
   let g:w3m#external_browser = 'open -a "Google Chrome"'
 elseif s:is_windows
@@ -536,18 +563,18 @@ nnoremap <C-p> :<C-u>cp<CR>
 " [Space]: Other useful commands "{{{
 " Smart space mapping.
 " Notice: when starting other <Space> mappings in noremap, disappeared [Space].
-nmap  <Space>   [Space]
-xmap  <Space>   [Space]
-nnoremap  [Space]   <Nop>
-xnoremap  [Space]   <Nop>
+nmap <Space> [Space]
+xmap <Space> [Space]
+nnoremap [Space] <Nop>
+xnoremap [Space] <Nop>
 
 " Useful save mappings."{{{
 nnoremap <silent> [Space]w  :<C-u>update<CR>
-nnoremap <silent> [Space]fw  :<C-u>write!<CR>
+nnoremap <silent> [Space]fw :<C-u>write!<CR>
 nnoremap <silent> [Space]q  :<C-u>quit<CR>
-nnoremap <silent> [Space]aq  :<C-u>quitall<CR>
-nnoremap <silent> [Space]fq  :<C-u>quitall!<CR>
-nnoremap <Leader><Leader> :<C-u>update<CR>
+nnoremap <silent> [Space]aq :<C-u>quitall<CR>
+nnoremap <silent> [Space]fq :<C-u>quitall!<CR>
+nnoremap <Leader><Leader>   :<C-u>update<CR>
 "}}}
 
 " Change tab width. "{{{
@@ -560,17 +587,17 @@ nnoremap <silent> [Space]t4 :<C-u>setl shiftwidth=4 softtabstop=4<CR>
 "
 " The prefix key.
 nmap <C-t> [Tabbed]
-nnoremap [Tabbed]   <Nop>
+nnoremap [Tabbed] <Nop>
 " Create tab page.
-"nnoremap <silent> [Tabbed]c  :<C-u>tabnew<CR>
-nnoremap <silent> [Tabbed]c  :<C-u>VimFilerTab -buffer-name=explorer -simple -toggle<CR>
-nnoremap <silent> [Tabbed]d  :<C-u>tabclose<CR>
+"nnoremap <silent> [Tabbed]c :<C-u>tabnew<CR>
+nnoremap <silent> [Tabbed]c :<C-u>VimFilerTab -buffer-name=explorer -simple -toggle<CR>
+nnoremap <silent> [Tabbed]d :<C-u>tabclose<CR>
 " Move to other tab page.
-nnoremap <silent> [Tabbed]l  :<C-u>tabnext<CR>
-nnoremap <silent> [Tabbed]h  :<C-u>tabprevious<CR>
-nnoremap <silent> [Tabbed]H  :<C-u>tabfirst<CR>
-nnoremap <silent> [Tabbed]L  :<C-u>tablast<CR>
-nnoremap <silent> [Tabbed]<C-t>  :<C-u>Unite tab<CR>
+nnoremap <silent> [Tabbed]l :<C-u>tabnext<CR>
+nnoremap <silent> [Tabbed]h :<C-u>tabprevious<CR>
+nnoremap <silent> [Tabbed]H :<C-u>tabfirst<CR>
+nnoremap <silent> [Tabbed]L :<C-u>tablast<CR>
+nnoremap <silent> [Tabbed]<C-t> :<C-u>Unite tab<CR>
 "}}}
 
 " Clear highlight.
