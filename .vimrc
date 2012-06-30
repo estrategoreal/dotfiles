@@ -36,13 +36,16 @@ endif
 NeoBundle 'Shougo/neobundle.vim'
 
 " My Bundles here:
-NeoBundle 'anyakichi/vim-surround'
+NeoBundle 'anyakichi/vim-surround.git'
+NeoBundle 'gregsexton/gitv.git'
 NeoBundle 'h1mesuke/vim-alignta.git'
 NeoBundle 'mileszs/ack.vim.git'
 NeoBundle 'mrtazz/DoxygenToolkit.vim.git'
 NeoBundle 'othree/eregex.vim.git'
+NeoBundle 'Rip-Rip/clang_complete.git'
 NeoBundle 'Shougo/neocomplcache.git'
 NeoBundle 'Shougo/neocomplcache-snippets-complete.git'
+NeoBundle 'Shougo/unite-build.git'
 NeoBundle 'Shougo/unite.vim.git'
 NeoBundle 'Shougo/unite-ssh.git'
 NeoBundle 'Shougo/vim-vcs.git'
@@ -52,8 +55,10 @@ NeoBundle 'Shougo/vimshell.git'
 NeoBundle 'Shougo/vinarise.git'
 NeoBundle 'thinca/vim-quickrun.git'
 NeoBundle 'tpope/vim-fugitive.git'
+NeoBundle 'tsukkee/unite-help.git'
 NeoBundle 'tsukkee/unite-tag.git'
 NeoBundle 'tyru/open-browser.vim.git'
+NeoBundle 'ujihisa/vimshell-ssh.git'
 NeoBundle 'vim-scripts/gtags.vim.git'
 NeoBundle 'vim-scripts/taglist.vim.git'
 NeoBundle 'yuratomo/w3m.vim'
@@ -339,6 +344,12 @@ let g:neocomplcache_manual_completion_start_length = 0
 " Set minimum keyword length.
 let g:neocomplcache_min_keyword_length = 3
 
+" For clang_complete.
+let g:neocomplcache_force_overwrite_completefunc = 1
+let g:clang_complete_auto = 1
+let g:clang_use_library = 1
+let g:clang_auto_select = 1
+
 " Define dictionary.
 let g:neocomplcache_dictionary_filetype_lists = {
     \ 'default' : '',
@@ -396,19 +407,21 @@ nmap f [unite]
 xmap f [unite]
 
 " Keymap to call in both insert and normal mode.
+nnoremap <expr><silent> [unite]b <SID>unite_build()
+function! s:unite_build()
+  return ":\<C-u>Unite -buffer-name=build". tabpagenr() ." -no-quit build\<CR>"
+endfunction
 nnoremap <silent> [unite]f :<C-u>UniteWithBufferDir -buffer-name=files file<CR>
 inoremap <silent> [unite]f <ESC>:<C-u>UniteWithBufferDir -buffer-name=files file<CR>
-nnoremap <silent> [unite]b :<C-u>Unite buffer<CR>
-inoremap <silent> [unite]b <ESC>:<C-u>Unite buffer<CR>
-nnoremap <silent> [unite]m :<C-u>Unite file_mru<CR>
-inoremap <silent> [unite]m <ESC>:<C-u>Unite file_mru<CR>
 nnoremap <silent> [unite]r :<C-u>Unite -buffer-name=register register history/yank<CR>
 nnoremap <silent> [unite]r <ESC>:<C-u>Unite -buffer-name=register register history/yank<CR>
 nnoremap <silent> [unite]u :<C-u>Unite buffer file_mru<CR>
 inoremap <silent> [unite]u <ESC>:<C-u>Unite buffer file_mru<CR>
 
-nnoremap <silent> [unite]g :<C-u>Unite grep:. -buffer-name=search -no-quit<CR>
-inoremap <silent> [unite]g <ESC>:<C-u>Unite grep:. -buffer-name=search -no-quit<CR>
+"nnoremap <silent> [unite]g :<C-u>Unite grep:. -buffer-name=search -no-quit<CR>
+"inoremap <silent> [unite]g <ESC>:<C-u>Unite grep:. -buffer-name=search -no-quit<CR>
+nnoremap [unite]g :<C-u>Ack<Space>
+inoremap [unite]g <ESC>:<C-u>Ack<Space>
 
 " Keymapping in unite.vim.
 autocmd FileType unite call s:unite_my_settings()
@@ -435,6 +448,13 @@ nnoremap <silent> [Tag]p :<C-u>pop<CR>
 "nnoremap <silent><expr> [Tag]p  &filetype == 'help' ?
       \ ":\<C-u>pop\<CR>" : ":\<C-u>Unite jump\<CR>"
 "}}}
+
+" Execute help.
+nnoremap <C-h> :<C-u>UniteWithInput help<CR>
+" Execute help by cursor keyword.
+nnoremap <silent> g<C-h> :<C-u>UniteWithCursorWord help<CR>
+
+let g:unite_source_history_yank_enable = 1
 
 " Start insert.
 let g:unite_enable_start_insert = 1
@@ -474,6 +494,7 @@ nmap <silent> <C-@> :VimShellPop<CR>
 let g:vimshell_user_prompt = 'fnamemodify(getcwd(), ":~")'
 let g:vimshell_right_prompt = 'vcs#info("(%s)-[%b]%p", "(%s)-[%b|%a]%p")'
 let g:vimshell_prompt = '% '
+let g:vimshell_popup_height = 50
 
 if !s:is_windows
   " Use zsh history.
@@ -499,6 +520,26 @@ function! s:vimshell_my_settings()"{{{
   call vimshell#set_alias('rm', 'rm -i')
   call vimshell#set_alias('mv', 'mv -i')
 endfunction"}}}
+"}}}
+
+" gitv.vim"{{{
+nnoremap <silent> [Space]gv :<C-u>Gitv<CR>
+nnoremap <silent> [Space]gf :<C-u>Gitv!<CR>
+"}}}
+
+" fugitive.vim"{{{
+nnoremap <silent> [Space]gd :call Fugitive_Tab("Gdiff")<CR>
+nnoremap <silent> [Space]gs :<C-u>Gstatus<CR>
+nnoremap <silent> [Space]gl :call Fugitive_Tab("Glog")<CR>
+nnoremap <silent> [Space]ga :<C-u>Gwrite<CR>
+nnoremap <silent> [Space]gA :<C-u>Gwrite <cfile><CR>
+nnoremap <silent> [Space]gc :<C-u>Gcommit<CR>
+nnoremap <silent> [Space]gC :<C-u>Gcommit --amend<CR>
+nnoremap <silent> [Space]gb :call Fugitive_Tab("Gblame")<CR>
+function! Fugitive_Tab(cmd)
+  execute ":tabnew " . expand("%:p")
+  execute a:cmd
+endfunction
 "}}}
 
 " open-browser.vim"{{{
@@ -591,6 +632,7 @@ nnoremap [Tabbed] <Nop>
 " Create tab page.
 "nnoremap <silent> [Tabbed]c :<C-u>tabnew<CR>
 nnoremap <silent> [Tabbed]c :<C-u>VimFilerTab -buffer-name=explorer -simple -toggle<CR>
+nnoremap <silent> [Tabbed]C :<C-u>tabnew %<CR>
 nnoremap <silent> [Tabbed]d :<C-u>tabclose<CR>
 " Move to other tab page.
 nnoremap <silent> [Tabbed]l :<C-u>tabnext<CR>
