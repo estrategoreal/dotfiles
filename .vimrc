@@ -39,6 +39,7 @@ NeoBundle 'Shougo/neobundle.vim'
 NeoBundle 'anyakichi/vim-surround.git'
 NeoBundle 'gregsexton/gitv.git'
 NeoBundle 'h1mesuke/vim-alignta.git'
+NeoBundle 'kana/vim-smartchr.git'
 NeoBundle 'mileszs/ack.vim.git'
 NeoBundle 'mrtazz/DoxygenToolkit.vim.git'
 NeoBundle 'othree/eregex.vim.git'
@@ -291,7 +292,7 @@ set complete=.
 set smartindent
 
 " Enable omni completion.
-autocmd FileType c,cpp setlocal omnifunc=ccomplete#Complete
+autocmd FileType c setlocal omnifunc=ccomplete#Complete
 "autocmd FileType ruby setlocal omnifunc=rubycomplete#Complete
 "}}}
 
@@ -319,6 +320,19 @@ endfunction
 
 " alignta.vim"{{{
 vmap <silent> <C-a> :Alignta = /* */<CR>
+"}}}
+
+" smartchr.vim"{{{
+inoremap <expr> , smartchr#one_of(', ', ',')
+inoremap <expr> ? smartchr#one_of(' ? ', '?')
+
+" Smart =.
+inoremap <expr> = search('\(&\<bar><bar>\<bar>+\<bar>-\<bar>/\<bar>>\<bar><\) \%#', 'bcn')? '<bs>= '
+      \ : search('\(*\<bar>!\)\%#', 'bcn') ? '= '
+      \ : smartchr#one_of(' = ', ' == ', '=')
+" Substitute .. into -> .
+autocmd FileType c,cpp inoremap <buffer> <expr> . smartchr#loop('.', '->', '...')
+autocmd FileType vim inoremap <buffer> <expr> . smartchr#loop('.', ' . ', '..', '...')
 "}}}
 
 " DoxygenToolkit.vim"{{{
