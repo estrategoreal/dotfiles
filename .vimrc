@@ -278,6 +278,8 @@ set visualbell
 set spelllang=en_us
 
 " Completion setting.
+set completeopt=menuone
+" Completion setting.
 " Don't complete from other buffer.
 set complete=.
 "}}}
