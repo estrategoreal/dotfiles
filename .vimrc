@@ -61,6 +61,7 @@ NeoBundle 'tsukkee/unite-tag.git'
 NeoBundle 'tyru/open-browser.vim.git'
 NeoBundle 'ujihisa/vimshell-ssh.git'
 NeoBundle 'othree/eregex.vim.git'
+NeoBundle 'vim-ruby/vim-ruby.git'
 NeoBundle 'vim-scripts/gtags.vim.git'
 NeoBundle 'vim-scripts/taglist.vim.git'
 NeoBundle 'yuratomo/w3m.vim'
@@ -330,7 +331,7 @@ inoremap <expr> ? smartchr#one_of(' ? ', '?')
 " Smart =.
 inoremap <expr> = search('\(&\<bar><bar>\<bar>+\<bar>-\<bar>/\<bar>>\<bar><\) \%#', 'bcn')? '<bs>= '
       \ : search('\(*\<bar>!\)\%#', 'bcn') ? '= '
-      \ : smartchr#one_of(' = ', ' == ', '=')
+      \ : smartchr#one_of(' = ', '=', ' == ')
 " Substitute .. into -> .
 autocmd FileType c,cpp inoremap <buffer> <expr> . smartchr#loop('.', '->', '...')
 autocmd FileType vim inoremap <buffer> <expr> . smartchr#loop('.', ' . ', '..', '...')
@@ -366,6 +367,9 @@ let g:neocomplcache_force_overwrite_completefunc = 1
 let g:clang_complete_auto = 1
 let g:clang_use_library = 1
 let g:clang_auto_select = 1
+if s:is_windows
+  let g:clang_library_path = 'c:/MinGW/msys/1.0/lib'
+endif
 
 " Define dictionary.
 let g:neocomplcache_dictionary_filetype_lists = {
@@ -439,6 +443,13 @@ inoremap <silent> [unite]u <ESC>:<C-u>Unite buffer file_mru<CR>
 "inoremap <silent> [unite]g <ESC>:<C-u>Unite grep:. -buffer-name=search -no-quit<CR>
 nnoremap [unite]g :<C-u>Ack<Space>
 inoremap [unite]g <ESC>:<C-u>Ack<Space>
+nnoremap [unite]G :call Ack_Tab()<CR>
+inoremap [unite]G <ESC>:call Ack_Tab()<CR>
+function! Ack_Tab()
+  let w = expand("<cword>")
+  execute ":tabnew"
+  execute ":Ack " . w
+endfunction
 
 " Keymapping in unite.vim.
 autocmd FileType unite call s:unite_my_settings()
