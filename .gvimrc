@@ -42,6 +42,7 @@ else
 set guifont=Ricty\ 11
 endif
 
+" Save the setting of window.
 set columns=86
 let g:save_window_file = expand('~/.vimwinpos')
 augroup SaveWindow
@@ -58,6 +59,12 @@ augroup END
 
 if filereadable(g:save_window_file)
   execute 'source' g:save_window_file
+endif
+
+" Setting of colorscheme.
+" Don't override colorscheme.
+if !exists('g:colors_name')
+  colorscheme macvim
 endif
 
 set ch=2		" Make command line two lines high

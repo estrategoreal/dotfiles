@@ -482,6 +482,9 @@ nnoremap <C-h> :<C-u>UniteWithInput help<CR>
 " Execute help by cursor keyword.
 nnoremap <silent> g<C-h> :<C-u>UniteWithCursorWord help<CR>
 
+let g:unite_kind_file_cd_command = 'TabpageCD'
+let g:unite_kind_file_lcd_command = 'TabpageCD'
+
 let g:unite_source_history_yank_enable = 1
 
 " Start insert.
@@ -523,6 +526,7 @@ let g:vimshell_user_prompt = 'fnamemodify(getcwd(), ":~")'
 let g:vimshell_right_prompt = 'vcs#info("(%s)-[%b]%p", "(%s)-[%b|%a]%p")'
 let g:vimshell_prompt = '% '
 let g:vimshell_popup_height = 50
+"let g:vimshell_cd_command = 'TabpageCD'
 
 if !s:is_windows
   " Use zsh history.
