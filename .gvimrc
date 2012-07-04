@@ -33,8 +33,6 @@ endif
 elseif has('win32')
 "set guifont=MS_Gothic:h12:cSHIFTJIS
 set guifont=Ricty:h12
-"gui
-"set transparency=220
 if has('kaoriya')
   set ambiwidth=auto
 endif
@@ -61,11 +59,13 @@ if filereadable(g:save_window_file)
   execute 'source' g:save_window_file
 endif
 
-" Setting of colorscheme.
-" Don't override colorscheme.
-if !exists('g:colors_name')
-  colorscheme macvim
+if has('win32')
+gui
+set transparency=240
 endif
+
+" Setting of colorscheme.
+colorscheme macvim
 
 set ch=2		" Make command line two lines high
 

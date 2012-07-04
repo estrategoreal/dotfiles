@@ -28,6 +28,10 @@ endif
 filetype plugin indent off
 
 if has('vim_starting')
+  if s:is_windows
+    set runtimepath+=~/.vim
+  endif
+
   set runtimepath+=~/.vim/bundle/neobundle.vim/
   call neobundle#rc(expand('~/.vim/bundle/'))
 endif
@@ -88,13 +92,7 @@ if !has('gui_running')
     " Be careful because the automatic recognition of the character code is not possible!
     set encoding=japan
   else
-    if $ENV_ACCESS ==# 'linux'
-      set termencoding=euc-jp
-    elseif $ENV_ACCESS ==# 'colinux'
-      set termencoding=utf-8
-    else  " fallback
-      set termencoding=  " same as 'encoding'
-    endif
+    set termencoding=  " same as 'encoding'
   endif
 elseif s:is_windows
   " For system.
@@ -445,10 +443,19 @@ nnoremap [unite]g :<C-u>Ack<Space>
 inoremap [unite]g <ESC>:<C-u>Ack<Space>
 nnoremap [unite]G :call Ack_Tab()<CR>
 inoremap [unite]G <ESC>:call Ack_Tab()<CR>
+vmap     [unite]G :call VAck_Tab()<CR>
 function! Ack_Tab()
   let w = expand("<cword>")
   execute ":tabnew"
   execute ":Ack " . w
+endfunction
+function! VAck_Tab()
+  let tmp = @@
+  silent normal gvy
+  let selected = @@
+  let @@ = tmp
+  execute ":tabnew"
+  execute ":Ack \'" . selected . "\'"
 endfunction
 
 " Keymapping in unite.vim.
