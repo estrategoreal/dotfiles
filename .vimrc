@@ -29,10 +29,14 @@ filetype plugin indent off
 
 if has('vim_starting')
   if s:is_windows
-    set runtimepath+=~/.vim
+    execute 'set runtimepath+=' . expand('~/.vim')
   endif
 
-  set runtimepath+=~/.vim/bundle/neobundle.vim/
+  if filereadable(expand('~/.vimrc.local'))
+    execute 'source' expand('~/.vimrc.local')
+  endif
+
+  execute 'set runtimepath+=' . expand('~/.vim/bundle/neobundle.vim')
   call neobundle#rc(expand('~/.vim/bundle/'))
 endif
 
@@ -696,9 +700,6 @@ endif
 "---------------------------------------------------------------------------
 " Others:"{{{
 "
-" Enable mouse support.
-set mouse=a
-"}}}
 
 " allow backspacing over everything in insert mode
 set backspace=indent,eol,start

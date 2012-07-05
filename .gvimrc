@@ -16,28 +16,26 @@
 " set the X11 font to use
 " set guifont=-misc-fixed-medium-r-normal--14-130-75-75-c-70-iso8859-1
 if has('mac')
-set noimdisableactivate
-"set guifont=Osaka-Mono:h14
-set guifont=Ricty:h14
-set antialias
-augroup Transparency
-  autocmd!
-  if has('mac')
+  set noimdisableactivate
+  "set guifont=Osaka-Mono:h14
+  set guifont=Ricty:h14
+  set antialias
+  augroup Transparency
+    autocmd!
     autocmd FocusGained * set transparency=10
     autocmd FocusLost * set transparency=50
+  augroup END
+  if exists('&ambiwidth')
+    set ambiwidth=double
   endif
-augroup END
-if exists('&ambiwidth')
-  set ambiwidth=double
-endif
-elseif has('win32')
-"set guifont=MS_Gothic:h12:cSHIFTJIS
-set guifont=Ricty:h12
-if has('kaoriya')
-  set ambiwidth=auto
-endif
+  elseif has('win32')
+  "set guifont=MS_Gothic:h12:cSHIFTJIS
+  set guifont=Ricty:h12
+  if has('kaoriya')
+    set ambiwidth=auto
+  endif
 else
-set guifont=Ricty\ 11
+  set guifont=Ricty\ 11
 endif
 
 " Save the setting of window.
@@ -60,8 +58,12 @@ if filereadable(g:save_window_file)
 endif
 
 if has('win32')
-gui
-set transparency=240
+  gui
+  augroup Transparency
+    autocmd!
+    autocmd FocusGained * set transparency=240
+    autocmd FocusLost * set transparency=120
+  augroup END
 endif
 
 " Setting of colorscheme.
