@@ -20,6 +20,15 @@ set nocompatible
 
 let s:is_windows = has('win32') || has('win64')
 
+" Use English interface.
+if s:is_windows
+  " For Windows.
+  language message en
+else
+  " For Linux.
+  language mes C
+endif
+
 if s:is_windows
   " Exchange path separator.
   set shellslash
@@ -48,7 +57,6 @@ NeoBundle 'anyakichi/vim-surround.git'
 NeoBundle 'gregsexton/gitv.git'
 NeoBundle 'h1mesuke/vim-alignta.git'
 NeoBundle 'kana/vim-smartchr.git'
-NeoBundle 'mileszs/ack.vim.git'
 NeoBundle 'mrtazz/DoxygenToolkit.vim.git'
 NeoBundle 'Rip-Rip/clang_complete.git'
 NeoBundle 'Shougo/neocomplcache.git'
@@ -383,7 +391,7 @@ let g:neocomplcache_dictionary_filetype_lists = {
 if !exists('g:neocomplcache_keyword_patterns')
   let g:neocomplcache_keyword_patterns = {}
 endif
-let g:neocomplcache_keyword_patterns['default'] = '\h\w*'
+let g:neocomplcache_keyword_patterns.default = '\h\w*'
 
 " Plugin key-mappings.
 imap <C-k> <Plug>(neocomplcache_snippets_expand)
@@ -434,31 +442,26 @@ nnoremap <silent> [unite]b :<C-u>Unite bookmark<CR>
 nnoremap <silent> [unite]f :<C-u>UniteWithBufferDir -buffer-name=files file<CR>
 nnoremap <expr><silent> [unite]m <SID>unite_build()
 function! s:unite_build()
-  return ":\<C-u>Unite -buffer-name=build". tabpagenr() ." -no-quit build\<CR>"
+  return ":\<C-u>Unite -buffer-name=build" . tabpagenr() . " -no-quit build\<CR>"
 endfunction
 nnoremap <silent> [unite]r :<C-u>Unite -buffer-name=register register history/yank<CR>
-nnoremap <silent> [unite]r <ESC>:<C-u>Unite -buffer-name=register register history/yank<CR>
 nnoremap <silent> [unite]u :<C-u>Unite buffer file_mru<CR>
 
-"nnoremap <silent> [unite]g :<C-u>Unite grep:. -buffer-name=search -no-quit<CR>
-"inoremap <silent> [unite]g <ESC>:<C-u>Unite grep:. -buffer-name=search -no-quit<CR>
-nnoremap [unite]g :<C-u>Ack<Space>
-inoremap [unite]g <ESC>:<C-u>Ack<Space>
-nnoremap [unite]G :call Ack_Tab()<CR>
-inoremap [unite]G <ESC>:call Ack_Tab()<CR>
-vmap     [unite]G :call VAck_Tab()<CR>
-function! Ack_Tab()
-  let w = expand("<cword>")
+nnoremap <silent> [unite]g :<C-u>Unite grep:. -buffer-name=search -no-quit<CR>
+nnoremap <silent> [unite]G :call Cursor_Grep()<CR>
+vmap     <silent> [unite]G :call Visual_Grep()<CR>
+function! Cursor_Grep()
+  let w = expand('<cword>')
   execute ":tabnew"
-  execute ":Ack " . w
+  execute ":Unite grep:.::" . w . " -buffer-name=search -no-quit<CR>"
 endfunction
-function! VAck_Tab()
+function! Visual_Grep()
   let tmp = @@
   silent normal gvy
   let selected = @@
   let @@ = tmp
   execute ":tabnew"
-  execute ":Ack \'" . selected . "\'"
+  execute ":Unite grep:.::" . selected . " -buffer-name=search -no-quit<CR>"
 endfunction
 nnoremap <silent> [Space]b :<C-u>UniteBookmarkAdd<CR>
 
@@ -477,14 +480,14 @@ endfunction"}}}
 nnoremap [Tag] <Nop>
 nmap t [Tag]
 " Jump.
-nnoremap [Tag]t <C-]>
-"nnoremap <silent><expr> [Tag]t  &filetype == 'help' ?  "\<C-]>" :
-      \ ":\<C-u>UniteWithCursorWord -buffer-name=tag tag/include\<CR>"
+"nnoremap [Tag]t <C-]>
+nnoremap <silent><expr> [Tag]t  &filetype == 'help' ?  "\<C-]>" :
+      \ ":\<C-u>UniteWithCursorWord -buffer-name=tag tag tag/include\<CR>"
 " Jump next.
 nnoremap <silent> [Tag]n :<C-u>tag<CR>
 " Jump previous.
-nnoremap <silent> [Tag]p :<C-u>pop<CR>
-"nnoremap <silent><expr> [Tag]p  &filetype == 'help' ?
+"nnoremap <silent> [Tag]p :<C-u>pop<CR>
+nnoremap <silent><expr> [Tag]p  &filetype == 'help' ?
       \ ":\<C-u>pop\<CR>" : ":\<C-u>Unite jump\<CR>"
 "}}}
 
@@ -493,14 +496,15 @@ nnoremap <C-h> :<C-u>UniteWithInput help<CR>
 " Execute help by cursor keyword.
 nnoremap <silent> g<C-h> :<C-u>UniteWithCursorWord help<CR>
 
-let g:unite_kind_file_cd_command = 'TabpageCD'
-let g:unite_kind_file_lcd_command = 'TabpageCD'
+"let g:unite_kind_file_cd_command = 'TabpageCD'
+"let g:unite_kind_file_lcd_command = 'TabpageCD'
 
 let g:unite_source_history_yank_enable = 1
 
 " Start insert.
 let g:unite_enable_start_insert = 1
 let g:unite_source_grep_default_opts = '-n --include=\*.c --include=\*.cpp --include=\*.h'
+let g:unite_source_grep_max_candidates = 500
 
 " For ack.
 if executable('ack-grep')
