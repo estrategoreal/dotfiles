@@ -430,16 +430,15 @@ nmap f [unite]
 xmap f [unite]
 
 " Keymap to call in both insert and normal mode.
-nnoremap <expr><silent> [unite]b <SID>unite_build()
+nnoremap <silent> [unite]b :<C-u>Unite bookmark<CR>
+nnoremap <silent> [unite]f :<C-u>UniteWithBufferDir -buffer-name=files file<CR>
+nnoremap <expr><silent> [unite]m <SID>unite_build()
 function! s:unite_build()
   return ":\<C-u>Unite -buffer-name=build". tabpagenr() ." -no-quit build\<CR>"
 endfunction
-nnoremap <silent> [unite]f :<C-u>UniteWithBufferDir -buffer-name=files file<CR>
-inoremap <silent> [unite]f <ESC>:<C-u>UniteWithBufferDir -buffer-name=files file<CR>
 nnoremap <silent> [unite]r :<C-u>Unite -buffer-name=register register history/yank<CR>
 nnoremap <silent> [unite]r <ESC>:<C-u>Unite -buffer-name=register register history/yank<CR>
 nnoremap <silent> [unite]u :<C-u>Unite buffer file_mru<CR>
-inoremap <silent> [unite]u <ESC>:<C-u>Unite buffer file_mru<CR>
 
 "nnoremap <silent> [unite]g :<C-u>Unite grep:. -buffer-name=search -no-quit<CR>
 "inoremap <silent> [unite]g <ESC>:<C-u>Unite grep:. -buffer-name=search -no-quit<CR>
@@ -461,6 +460,7 @@ function! VAck_Tab()
   execute ":tabnew"
   execute ":Ack \'" . selected . "\'"
 endfunction
+nnoremap <silent> [Space]b :<C-u>UniteBookmarkAdd<CR>
 
 " Keymapping in unite.vim.
 autocmd FileType unite call s:unite_my_settings()
