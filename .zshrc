@@ -118,7 +118,7 @@ elif is_cygwin ; then
   alias gvim='cyg-wrapper.sh gvim --binary-opt=-c,--cmd,-T,-t,--servername,--remote-send,--remote-expr --fork=1'
 fi
 alias vf='gvim +"VimFiler -buffer-name=explorer -simple -toggle"'
-alias ide='gvim +"set columns=173" +"VimFiler -buffer-name=explorer -simple -toggle ~/work" +tabnew +TlistOpen +"VimFiler -buffer-name=explorer -split -simple -winwidth=45 -toggle -no-quit"'
+alias ide='gvim +"set columns=176" +"VimFiler -buffer-name=explorer -simple -toggle ~/work" +tabnew +TlistOpen +"VimFiler -buffer-name=explorer -split -simple -winwidth=45 -toggle -no-quit"'
 alias formc='find . -iregex ".+\.\(c\|h\)$" -type f -print0 | xargs -0 uncrustify -c ~/.uncrustify4c.cfg --no-backup'
 alias formcpp='find . -iregex ".+\.\(c\|cpp\|h\)$" -type f -print0 | xargs -0 uncrustify -c ~/.uncrustify4cpp.cfg --no-backup'
 

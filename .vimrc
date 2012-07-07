@@ -55,8 +55,10 @@ NeoBundle 'Shougo/neobundle.vim'
 " My Bundles here:
 NeoBundle 'anyakichi/vim-surround.git'
 NeoBundle 'gregsexton/gitv.git'
+NeoBundle 'h1mesuke/unite-outline.git'
 NeoBundle 'h1mesuke/vim-alignta.git'
 NeoBundle 'kana/vim-smartchr.git'
+NeoBundle 'LeafCage/foldCC.git'
 NeoBundle 'mrtazz/DoxygenToolkit.vim.git'
 NeoBundle 'Rip-Rip/clang_complete.git'
 NeoBundle 'Shougo/neocomplcache.git'
@@ -236,6 +238,8 @@ set smartcase
 "---------------------------------------------------------------------------
 " Edit:"{{{
 "
+" Smart insert tab setting.
+set smarttab
 " Exchange tab to spaces.
 set expandtab
 " Substitute <Tab> with blanks.
@@ -247,11 +251,40 @@ set shiftwidth=4
 " Round indent by shiftwidth.
 set shiftround
 
+" Enable modeline.
+set modeline
+
+" Use clipboard register.
+set clipboard& clipboard+=unnamed
+
+" Enable backspace delete indent and newline.
+set backspace=indent,eol,start
+
 " Highlight parenthesis.
 set showmatch
 
 " Display another buffer even if current buffer isn't saved.
 set hidden
+
+" Ignore case on insert completion.
+set infercase
+
+" Enable folding.
+set foldenable
+set foldmethod=marker
+" Show folding level.
+set foldcolumn=3
+set fillchars=vert:\|
+set commentstring=%s
+
+if exists('*FoldCCtext')
+  " Use FoldCCtext().
+  set foldtext=FoldCCtext()
+  autocmd FileType *
+        \   if &filetype !=# 'help'
+        \ |   setlocal foldtext=FoldCCtext()
+        \ | endif
+endif
 
 " Set tags file.
 " Don't search tags file in current directory. And search upward.
@@ -303,6 +336,8 @@ set complete=.
 " Enable smart indent.
 set smartindent
 
+autocmd FileType c setlocal foldmethod=syntax
+
 " Enable omni completion.
 autocmd FileType c setlocal omnifunc=ccomplete#Complete
 "autocmd FileType ruby setlocal omnifunc=rubycomplete#Complete
@@ -348,7 +383,7 @@ autocmd FileType vim inoremap <buffer> <expr> . smartchr#loop('.', ' . ', '..', 
 "}}}
 
 " DoxygenToolkit.vim"{{{
-nnoremap <silent> [Space]d :<C-u>Dox<CR>
+nnoremap <silent> [Space]x :<C-u>Dox<CR>
 let g:load_doxygen_syntax = 1
 "}}}
 
@@ -444,6 +479,7 @@ nnoremap <expr><silent> [unite]m <SID>unite_build()
 function! s:unite_build()
   return ":\<C-u>Unite -buffer-name=build" . tabpagenr() . " -no-quit build\<CR>"
 endfunction
+nnoremap <silent> [unite]o :<C-u>Unite outline -start-insert<CR>
 nnoremap <silent> [unite]r :<C-u>Unite -buffer-name=register register history/yank<CR>
 nnoremap <silent> [unite]u :<C-u>Unite buffer file_mru<CR>
 
@@ -691,6 +727,23 @@ nnoremap <silent> [Tabbed]<C-t> :<C-u>Unite tab<CR>
 
 " Clear highlight.
 nnoremap <silent> <ESC><ESC> :nohlsearch<CR>
+
+" Folding."{{{
+noremap [Space]n ]z
+noremap [Space]p [z
+noremap [Space]j zj
+noremap [Space]k zk
+noremap [Space]h zc
+noremap [Space]l zo
+noremap [Space]a za
+noremap [Space]m zM
+noremap [Space]i zMzv
+noremap [Space]r zR
+noremap [Space]f zf
+noremap [Space]d zd
+noremap [Space]u :<C-u>Unite outline:foldings<CR>
+noremap [Space]gg :<C-u>echo FoldCCnavi()<CR>
+"}}}
 "}}}
 
 "---------------------------------------------------------------------------

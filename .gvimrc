@@ -39,7 +39,7 @@ else
 endif
 
 " Save the setting of window.
-set columns=86
+set columns=89
 let g:save_window_file = expand('~/.vimwinpos')
 augroup SaveWindow
   autocmd!
@@ -68,6 +68,10 @@ endif
 
 " Setting of colorscheme.
 colorscheme macvim
+
+" Hide toolbar and menus.
+set guioptions-=T
+set guioptions-=m
 
 set ch=2		" Make command line two lines high
 
