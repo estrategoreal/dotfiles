@@ -336,11 +336,13 @@ set complete=.
 " Enable smart indent.
 set smartindent
 
-autocmd FileType c setlocal foldmethod=syntax
+autocmd FileType c,cpp setlocal foldmethod=syntax
 
 " Enable omni completion.
 autocmd FileType c setlocal omnifunc=ccomplete#Complete
 "autocmd FileType ruby setlocal omnifunc=rubycomplete#Complete
+
+autocmd FileType ruby setlocal foldmethod=indent
 "}}}
 
 "---------------------------------------------------------------------------
@@ -532,10 +534,30 @@ nnoremap <C-h> :<C-u>UniteWithInput help<CR>
 " Execute help by cursor keyword.
 nnoremap <silent> g<C-h> :<C-u>UniteWithCursorWord help<CR>
 
+" Search.
+nnoremap <expr> /  <SID>smart_search_expr('/',
+      \ ":\<C-u>Unite -buffer-name=search -start-insert line\<CR>")
+nnoremap <expr> g/  <SID>smart_search_expr('g/',
+      \ ":\<C-u>Unite -buffer-name=search -start-insert line_migemo\<CR>")
+nnoremap <silent><expr> ? <SID>smart_search_expr('?',
+      \ ":\<C-u>Unite mapping\<CR>")
+nnoremap <silent><expr> * <SID>smart_search_expr('*',
+      \ ":\<C-u>UniteWithCursorWord -input="
+      \ . expand('<cword>') . " -buffer-name=search line\<CR>")
+
+function! s:smart_search_expr(expr1, expr2)
+  return line('$') > 4000 ?  a:expr1 : a:expr2
+endfunction
+
 "let g:unite_kind_file_cd_command = 'TabpageCD'
 "let g:unite_kind_file_lcd_command = 'TabpageCD'
 
 let g:unite_source_history_yank_enable = 1
+
+" migemo.
+let g:unite_source_alias_aliases = {}
+call unite#custom_filters('line_migemo',
+      \ ['matcher_migemo', 'sorter_default', 'converter_default'])
 
 " Start insert.
 let g:unite_enable_start_insert = 1
@@ -548,6 +570,11 @@ if executable('ack-grep')
   "let g:unite_source_grep_default_opts = '--no-heading --no-color'
   "let g:unite_source_grep_recursive_opt = ''
 endif
+
+" For unite-alias.
+let g:unite_source_alias_aliases.line_migemo = {
+      \ 'source' : 'line',
+      \ }
 "}}}
 
 " vimfiler.vim"{{{
@@ -568,6 +595,19 @@ else
   let g:vimfiler_file_icon = '-'
   let g:vimfiler_marked_file_icon = '*'
 endif
+
+autocmd FileType vimfiler call s:vimfiler_my_settings()
+function! s:vimfiler_my_settings()"{{{
+  " Overwrite settings.
+  nnoremap <silent><buffer> J
+        \ <C-u>:Unite -buffer-name=files -default-action=lcd directory_mru<CR>
+
+  " Migemo search.
+  if !empty(unite#get_filters('matcher_migemo'))
+    nnoremap <silent><buffer><expr> /  line('$') > 10000 ?  'g/' :
+          \ ":\<C-u>Unite -buffer-name=search -start-insert line_migemo\<CR>"
+  endif
+endfunction"}}}
 "}}}
 
 " vimshell.vim"{{{
@@ -735,7 +775,7 @@ noremap [Space]j zj
 noremap [Space]k zk
 noremap [Space]h zc
 noremap [Space]l zo
-noremap [Space]a za
+noremap [Space]a zA
 noremap [Space]m zM
 noremap [Space]i zMzv
 noremap [Space]r zR
