@@ -474,16 +474,19 @@ xnoremap [unite] <Nop>
 nmap f [unite]
 xmap f [unite]
 
-" Keymap to call in both insert and normal mode.
-nnoremap <silent> [unite]b :<C-u>Unite bookmark<CR>
-nnoremap <silent> [unite]f :<C-u>UniteWithBufferDir -buffer-name=files file<CR>
-nnoremap <expr><silent> [unite]m <SID>unite_build()
+nnoremap <expr><silent> [unite]b <SID>unite_build()
 function! s:unite_build()
   return ":\<C-u>Unite -buffer-name=build" . tabpagenr() . " -no-quit build\<CR>"
 endfunction
+nnoremap <silent> [unite]c :<C-u>Unite change<CR>
+nnoremap <silent> [unite]d :<C-u>Unite -buffer-name=files -default-action=lcd directory_mru<CR>
+nnoremap <silent> [unite]f :<C-u>UniteWithBufferDir -buffer-name=files file<CR>
+nnoremap <silent> [unite]j :<C-u>Unite jump<CR>
+nnoremap <silent> [unite]m :<C-u>Unite mapping<CR>
 nnoremap <silent> [unite]o :<C-u>Unite outline -start-insert<CR>
 nnoremap <silent> [unite]r :<C-u>Unite -buffer-name=register register history/yank<CR>
-nnoremap <silent> [unite]u :<C-u>Unite buffer file_mru<CR>
+nnoremap <silent> [unite]s :<C-u>Unite source<CR>
+nnoremap <silent> [unite]u :<C-u>Unite buffer file_mru bookmark<CR>
 
 nnoremap <silent> [unite]g :<C-u>Unite grep:. -buffer-name=search -no-quit<CR>
 nnoremap <silent> [unite]G :call Cursor_Grep()<CR>
@@ -549,8 +552,11 @@ function! s:smart_search_expr(expr1, expr2)
   return line('$') > 4000 ?  a:expr1 : a:expr2
 endfunction
 
-"let g:unite_kind_file_cd_command = 'TabpageCD'
-"let g:unite_kind_file_lcd_command = 'TabpageCD'
+nnoremap <expr><silent> N  <SID>smart_search_expr('N',
+      \ ":\<C-u>Unite -buffer-name=search -input=" . @/
+      \  . " -no-start-insert line\<CR>")
+nnoremap <silent><expr> n  <SID>smart_search_expr('n',
+      \ ":\<C-u>UniteResume search -no-start-insert\<CR>")
 
 let g:unite_source_history_yank_enable = 1
 
@@ -617,7 +623,6 @@ let g:vimshell_user_prompt = 'fnamemodify(getcwd(), ":~")'
 let g:vimshell_right_prompt = 'vcs#info("(%s)-[%b]%p", "(%s)-[%b|%a]%p")'
 let g:vimshell_prompt = '% '
 let g:vimshell_popup_height = 50
-"let g:vimshell_cd_command = 'TabpageCD'
 
 if !s:is_windows
   " Use zsh history.
@@ -691,8 +696,6 @@ if has('gui_running')
   let Tlist_Use_Right_Window = 1
   let Tlist_WinWidth = 40
 endif
-
-nnoremap <silent> <C-i> :<C-u>TlistToggle<CR>
 "}}}
 
 " w3m.vim"{{{
