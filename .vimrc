@@ -768,6 +768,9 @@ nnoremap <silent> [Tabbed]L :<C-u>tablast<CR>
 nnoremap <silent> [Tabbed]<C-t> :<C-u>Unite tab<CR>
 "}}}
 
+" Auto escape / substitute.
+xnoremap s y:%s/<C-r>=substitute(@0, '/', '\\/', 'g')<Return>//g<Left><Left>
+
 " Clear highlight.
 nnoremap <silent> <ESC><ESC> :nohlsearch<CR>
 
