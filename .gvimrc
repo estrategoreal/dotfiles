@@ -57,6 +57,10 @@ if filereadable(g:save_window_file)
   execute 'source' g:save_window_file
 endif
 
+" Hide toolbar and menus.
+set guioptions-=T
+set guioptions-=m
+
 if has('win32')
   gui
   augroup Transparency
@@ -68,10 +72,6 @@ endif
 
 " Setting of colorscheme.
 colorscheme macvim
-
-" Hide toolbar and menus.
-set guioptions-=T
-set guioptions-=m
 
 set ch=2		" Make command line two lines high
 

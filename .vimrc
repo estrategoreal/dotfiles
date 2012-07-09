@@ -73,6 +73,7 @@ NeoBundle 'Shougo/vimproc.git'
 NeoBundle 'Shougo/vimshell.git'
 NeoBundle 'Shougo/vinarise.git'
 NeoBundle 'thinca/vim-quickrun.git'
+NeoBundle 'thinca/vim-ref.git'
 NeoBundle 'tpope/vim-fugitive.git'
 NeoBundle 'tsukkee/unite-help.git'
 NeoBundle 'tsukkee/unite-tag.git'
@@ -336,6 +337,12 @@ set complete=.
 " Enable smart indent.
 set smartindent
 
+" Close help and git window by pressing q.
+autocmd FileType help,quickrun,ref
+      \ nnoremap <buffer><silent> q :<C-u>call <sid>smart_close()<CR>
+autocmd FileType * if (&readonly || !&modifiable) && !hasmapto('q', 'n')
+      \ | nnoremap <buffer><silent> q :<C-u>call <sid>smart_close()<CR>| endif
+
 autocmd FileType c,cpp setlocal foldmethod=syntax
 
 " Enable omni completion.
@@ -368,7 +375,7 @@ endfunction
 "}}}
 
 " alignta.vim"{{{
-vmap <silent> <C-a> :Alignta = /* */<CR>
+xnoremap <silent> <C-a> :Alignta = /* */<CR>
 "}}}
 
 " smartchr.vim"{{{
@@ -490,7 +497,7 @@ nnoremap <silent> [unite]u :<C-u>Unite buffer file_mru bookmark<CR>
 
 nnoremap <silent> [unite]g :<C-u>Unite grep:. -buffer-name=search -no-quit<CR>
 nnoremap <silent> [unite]G :call Cursor_Grep()<CR>
-vmap     <silent> [unite]G :call Visual_Grep()<CR>
+xnoremap <silent> [unite]G :call Visual_Grep()<CR>
 function! Cursor_Grep()
   let w = expand('<cword>')
   execute ":tabnew"
@@ -521,14 +528,14 @@ endfunction"}}}
 nnoremap [Tag] <Nop>
 nmap t [Tag]
 " Jump.
-"nnoremap [Tag]t <C-]>
-nnoremap <silent><expr> [Tag]t  &filetype == 'help' ?  "\<C-]>" :
+nnoremap [Tag]t <C-]>
+"nnoremap <silent><expr> [Tag]t  &filetype == 'help' ?  "\<C-]>" :
       \ ":\<C-u>UniteWithCursorWord -buffer-name=tag tag tag/include\<CR>"
 " Jump next.
 nnoremap <silent> [Tag]n :<C-u>tag<CR>
 " Jump previous.
-"nnoremap <silent> [Tag]p :<C-u>pop<CR>
-nnoremap <silent><expr> [Tag]p  &filetype == 'help' ?
+nnoremap <silent> [Tag]p :<C-u>pop<CR>
+"nnoremap <silent><expr> [Tag]p  &filetype == 'help' ?
       \ ":\<C-u>pop\<CR>" : ":\<C-u>Unite jump\<CR>"
 "}}}
 
@@ -650,6 +657,15 @@ function! s:vimshell_my_settings()"{{{
 endfunction"}}}
 "}}}
 
+" ref.vim"{{{
+autocmd FileType ref call s:ref_my_settings()
+function! s:ref_my_settings()"{{{
+  " Overwrite settings.
+  nmap <buffer> [Tag]t  <Plug>(ref-keyword)
+  nmap <buffer> [Tag]p  <Plug>(ref-back)
+endfunction"}}}
+"}}}
+
 " gitv.vim"{{{
 nnoremap <silent> [Space]gv :<C-u>Gitv<CR>
 nnoremap <silent> [Space]gf :<C-u>Gitv!<CR>
@@ -749,6 +765,12 @@ nnoremap <silent> [Space]t2 :<C-u>setl shiftwidth=2 softtabstop=2<CR>
 nnoremap <silent> [Space]t4 :<C-u>setl shiftwidth=4 softtabstop=4<CR>
 "}}}
 "}}}
+
+function! s:smart_close()
+  if winnr('$') != 1
+    close
+  endif
+endfunction
 
 " <C-t>: Tab pages"{{{
 "
