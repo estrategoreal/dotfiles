@@ -528,13 +528,13 @@ endfunction"}}}
 nnoremap [Tag] <Nop>
 nmap t [Tag]
 " Jump.
-nnoremap [Tag]t <C-]>
+nnoremap [Tag]t  <C-]>
 "nnoremap <silent><expr> [Tag]t  &filetype == 'help' ?  "\<C-]>" :
       \ ":\<C-u>UniteWithCursorWord -buffer-name=tag tag tag/include\<CR>"
 " Jump next.
 nnoremap <silent> [Tag]n :<C-u>tag<CR>
 " Jump previous.
-nnoremap <silent> [Tag]p :<C-u>pop<CR>
+nnoremap <silent> [Tag]p  :<C-u>pop<CR>
 "nnoremap <silent><expr> [Tag]p  &filetype == 'help' ?
       \ ":\<C-u>pop\<CR>" : ":\<C-u>Unite jump\<CR>"
 "}}}
@@ -543,27 +543,6 @@ nnoremap <silent> [Tag]p :<C-u>pop<CR>
 nnoremap <C-h> :<C-u>UniteWithInput help<CR>
 " Execute help by cursor keyword.
 nnoremap <silent> g<C-h> :<C-u>UniteWithCursorWord help<CR>
-
-" Search.
-nnoremap <expr> /  <SID>smart_search_expr('/',
-      \ ":\<C-u>Unite -buffer-name=search -start-insert line\<CR>")
-nnoremap <expr> g/  <SID>smart_search_expr('g/',
-      \ ":\<C-u>Unite -buffer-name=search -start-insert line_migemo\<CR>")
-nnoremap <silent><expr> ? <SID>smart_search_expr('?',
-      \ ":\<C-u>Unite mapping\<CR>")
-nnoremap <silent><expr> * <SID>smart_search_expr('*',
-      \ ":\<C-u>UniteWithCursorWord -input="
-      \ . expand('<cword>') . " -buffer-name=search line\<CR>")
-
-function! s:smart_search_expr(expr1, expr2)
-  return line('$') > 4000 ?  a:expr1 : a:expr2
-endfunction
-
-nnoremap <expr><silent> N  <SID>smart_search_expr('N',
-      \ ":\<C-u>Unite -buffer-name=search -input=" . @/
-      \  . " -no-start-insert line\<CR>")
-nnoremap <silent><expr> n  <SID>smart_search_expr('n',
-      \ ":\<C-u>UniteResume search -no-start-insert\<CR>")
 
 let g:unite_source_history_yank_enable = 1
 
@@ -710,7 +689,7 @@ if has('gui_running')
   let Tlist_GainFocus_On_ToggleOpen = 1
   let Tlist_Show_One_File = 1
   let Tlist_Use_Right_Window = 1
-  let Tlist_WinWidth = 40
+  let Tlist_WinWidth = 42
 endif
 "}}}
 
