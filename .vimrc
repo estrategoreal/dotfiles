@@ -347,9 +347,10 @@ autocmd FileType c,cpp setlocal foldmethod=syntax
 
 " Enable omni completion.
 autocmd FileType c setlocal omnifunc=ccomplete#Complete
+autocmd FileType python setlocal omnifunc=pythoncomplete#Complete
 "autocmd FileType ruby setlocal omnifunc=rubycomplete#Complete
 
-autocmd FileType ruby setlocal foldmethod=indent
+autocmd FileType python,ruby setlocal foldmethod=indent
 "}}}
 
 "---------------------------------------------------------------------------
@@ -462,6 +463,7 @@ inoremap <expr><C-e> neocomplcache#cancel_popup()
 let g:neocomplcache_enable_auto_select = 1
 
 let g:neocomplcache_omni_functions = {
+    \ 'python' : 'pythoncomplete#Complete',
     \ 'ruby' : 'rubycomplete#Complete',
     \ }
 
@@ -551,8 +553,7 @@ let g:unite_source_alias_aliases = {}
 call unite#custom_filters('line_migemo',
       \ ['matcher_migemo', 'sorter_default', 'converter_default'])
 
-" Start insert.
-let g:unite_enable_start_insert = 1
+let g:unite_enable_start_insert = 0
 let g:unite_source_grep_default_opts = '-n --include=\*.c --include=\*.cpp --include=\*.h'
 let g:unite_source_grep_max_candidates = 500
 
@@ -573,6 +574,7 @@ let g:unite_source_alias_aliases.line_migemo = {
 nnoremap <silent> <C-g> :<C-u>VimFiler -buffer-name=explorer -simple -toggle<CR>
 
 let g:vimfiler_as_default_explorer = 1
+let g:vimfiler_safe_mode_by_default = 0
 
 " Edit file by tabedit.
 "let g:vimfiler_edit_action = 'tabopen'
@@ -618,6 +620,7 @@ endif
 " Initialize execute file list.
 let g:vimshell_execute_file_list = {}
 call vimshell#set_execute_file('txt,vim,c,h,cpp', 'vim')
+let g:vimshell_execute_file_list['py'] = 'python'
 let g:vimshell_execute_file_list['rb'] = 'ruby'
 
 autocmd FileType vimshell call s:vimshell_my_settings()
