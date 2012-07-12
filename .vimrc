@@ -639,6 +639,10 @@ function! s:vimshell_my_settings()"{{{
 endfunction"}}}
 "}}}
 
+" vinarise.vim"{{{
+let g:vinarise_enable_auto_detect = 1
+"}}}
+
 " ref.vim"{{{
 autocmd FileType ref call s:ref_my_settings()
 function! s:ref_my_settings()"{{{

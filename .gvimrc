@@ -28,7 +28,7 @@ if has('mac')
   if exists('&ambiwidth')
     set ambiwidth=double
   endif
-  elseif has('win32')
+elseif has('win32')
   "set guifont=MS_Gothic:h12:cSHIFTJIS
   set guifont=Ricty:h12
   if has('kaoriya')
