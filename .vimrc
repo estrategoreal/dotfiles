@@ -258,9 +258,6 @@ set modeline
 " Use clipboard register.
 set clipboard& clipboard+=unnamed
 
-" Enable backspace delete indent and newline.
-set backspace=indent,eol,start
-
 " Highlight parenthesis.
 set showmatch
 
@@ -447,7 +444,7 @@ inoremap <expr><C-l> neocomplcache#complete_common_string()
 " SuperTab like snippets behavior.
 "imap <expr><TAB> neocomplcache#sources#snippets_complete#expandable() ? "\<Plug>(neocomplcache_snippets_expand)" : pumvisible() ? "\<C-n>" : "\<TAB>"
 
-let g:neocomplcache_snippets_dir = '~/.vim/snippets'
+let g:neocomplcache_snippets_dir = $HOME . '/.vim/snippets'
 
 " <CR>: close popup and save indent.
 inoremap <expr><CR> neocomplcache#close_popup() . "\<CR>"
@@ -495,17 +492,20 @@ nnoremap <silent> [unite]m :<C-u>Unite mapping<CR>
 nnoremap <silent> [unite]o :<C-u>Unite outline -start-insert<CR>
 nnoremap <silent> [unite]r :<C-u>Unite -buffer-name=register register history/yank<CR>
 nnoremap <silent> [unite]s :<C-u>Unite source<CR>
+nnoremap <silent> [unite]t :<C-u>Unite -buffer-name=files tab<CR>
 nnoremap <silent> [unite]u :<C-u>Unite buffer file_mru bookmark<CR>
+nnoremap <silent> [unite]v :<C-u>Unite -buffer-name=files file_rec/async:! -no-split<CR>
+nnoremap <silent> [unite]w :<C-u>Unite window<CR>
 
 nnoremap <silent> [unite]g :<C-u>Unite grep:. -buffer-name=search -no-quit<CR>
-nnoremap <silent> [unite]G :call Cursor_Grep()<CR>
-xnoremap <silent> [unite]G :call Visual_Grep()<CR>
-function! Cursor_Grep()
+nnoremap <silent> [unite]G :call <SID>Cursor_Grep()<CR>
+xnoremap <silent> [unite]G :call <SID>Visual_Grep()<CR>
+function! s:Cursor_Grep()
   let w = expand('<cword>')
   execute ":tabnew"
   execute ":Unite grep:.::" . w . " -buffer-name=search -no-quit<CR>"
 endfunction
-function! Visual_Grep()
+function! s:Visual_Grep()
   let tmp = @@
   silent normal gvy
   let selected = @@
@@ -532,7 +532,7 @@ nmap t [Tag]
 " Jump.
 nnoremap [Tag]t  <C-]>
 "nnoremap <silent><expr> [Tag]t  &filetype == 'help' ?  "\<C-]>" :
-      \ ":\<C-u>UniteWithCursorWord -buffer-name=tag tag tag/include\<CR>"
+      \ ":\<C-u>UniteWithCursorWord -buffer-name=tag -immediately tag tag/include\<CR>"
 " Jump next.
 nnoremap <silent> [Tag]n :<C-u>tag<CR>
 " Jump previous.
@@ -658,15 +658,15 @@ nnoremap <silent> [Space]gf :<C-u>Gitv!<CR>
 "}}}
 
 " fugitive.vim"{{{
-nnoremap <silent> [Space]gd :call Fugitive_Tab("Gdiff")<CR>
+nnoremap <silent> [Space]gd :call <SID>Fugitive_Tab("Gdiff")<CR>
 nnoremap <silent> [Space]gs :<C-u>Gstatus<CR>
-nnoremap <silent> [Space]gl :call Fugitive_Tab("Glog")<CR>
+nnoremap <silent> [Space]gl :call <SID>Fugitive_Tab("Glog")<CR>
 nnoremap <silent> [Space]ga :<C-u>Gwrite<CR>
 nnoremap <silent> [Space]gA :<C-u>Gwrite <cfile><CR>
 nnoremap <silent> [Space]gc :<C-u>Gcommit<CR>
 nnoremap <silent> [Space]gC :<C-u>Gcommit --amend<CR>
-nnoremap <silent> [Space]gb :call Fugitive_Tab("Gblame")<CR>
-function! Fugitive_Tab(cmd)
+nnoremap <silent> [Space]gb :call <SID>Fugitive_Tab("Gblame")<CR>
+function! s:Fugitive_Tab(cmd)
   execute ":tabnew " . expand("%:p")
   execute a:cmd
 endfunction
