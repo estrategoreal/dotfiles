@@ -34,6 +34,11 @@ if s:is_windows
   set shellslash
 endif
 
+" Set augroup.
+augroup MyAutoCmd
+  autocmd!
+augroup END
+
 filetype plugin indent off
 
 if has('vim_starting')
@@ -166,7 +171,7 @@ function! AU_ReCheck_FENC() "{{{
   endif
 endfunction"}}}
 
-autocmd BufReadPost * call AU_ReCheck_FENC()
+autocmd MyAutoCmd BufReadPost * call AU_ReCheck_FENC()
 
 " Default fileformat.
 set fileformat=unix
@@ -278,7 +283,7 @@ set commentstring=%s
 if exists('*FoldCCtext')
   " Use FoldCCtext().
   set foldtext=FoldCCtext()
-  autocmd FileType *
+  autocmd MyAutoCmd FileType *
         \   if &filetype !=# 'help'
         \ |   setlocal foldtext=FoldCCtext()
         \ | endif
@@ -334,20 +339,22 @@ set complete=.
 " Enable smart indent.
 set smartindent
 
-" Close help and git window by pressing q.
-autocmd FileType help,quickrun,ref
-      \ nnoremap <buffer><silent> q :<C-u>call <sid>smart_close()<CR>
-autocmd FileType * if (&readonly || !&modifiable) && !hasmapto('q', 'n')
-      \ | nnoremap <buffer><silent> q :<C-u>call <sid>smart_close()<CR>| endif
-
-autocmd FileType c,cpp setlocal foldmethod=syntax
-
-" Enable omni completion.
-autocmd FileType c setlocal omnifunc=ccomplete#Complete
-autocmd FileType python setlocal omnifunc=pythoncomplete#Complete
-"autocmd FileType ruby setlocal omnifunc=rubycomplete#Complete
-
-autocmd FileType python,ruby setlocal foldmethod=indent
+augroup MyAutoCmd
+  " Close help and git window by pressing q.
+  autocmd FileType help,quickrun,ref
+        \ nnoremap <buffer><silent> q :<C-u>call <sid>smart_close()<CR>
+  autocmd FileType * if (&readonly || !&modifiable) && !hasmapto('q', 'n')
+        \ | nnoremap <buffer><silent> q :<C-u>call <sid>smart_close()<CR>| endif
+  
+  autocmd FileType c,cpp setlocal foldmethod=syntax
+  
+  " Enable omni completion.
+  autocmd FileType c setlocal omnifunc=ccomplete#Complete
+  autocmd FileType python setlocal omnifunc=pythoncomplete#Complete
+  "autocmd FileType ruby setlocal omnifunc=rubycomplete#Complete
+  
+  autocmd FileType python,ruby setlocal foldmethod=indent
+augroup END
 "}}}
 
 "---------------------------------------------------------------------------
@@ -355,7 +362,7 @@ autocmd FileType python,ruby setlocal foldmethod=indent
 "
 " surround.vim"{{{
 let g:surround_no_mappings = 1
-autocmd FileType * call s:define_surround_keymappings()
+autocmd MyAutoCmd FileType * call s:define_surround_keymappings()
 
 function! s:define_surround_keymappings()
   if !&modifiable
@@ -384,9 +391,11 @@ inoremap <expr> ? smartchr#one_of(' ? ', '?')
 inoremap <expr> = search('\(&\<bar><bar>\<bar>+\<bar>-\<bar>/\<bar>>\<bar><\) \%#', 'bcn')? '<bs>= '
       \ : search('\(*\<bar>!\)\%#', 'bcn') ? '= '
       \ : smartchr#one_of(' = ', '=', ' == ')
-" Substitute .. into -> .
-autocmd FileType c,cpp inoremap <buffer> <expr> . smartchr#loop('.', '->', '...')
-autocmd FileType vim inoremap <buffer> <expr> . smartchr#loop('.', ' . ', '..', '...')
+augroup MyAutoCmd
+  " Substitute .. into -> .
+  autocmd FileType c,cpp inoremap <buffer> <expr> . smartchr#loop('.', '->', '...')
+  autocmd FileType vim inoremap <buffer> <expr> . smartchr#loop('.', ' . ', '..', '...')
+augroup END
 "}}}
 
 " DoxygenToolkit.vim"{{{
@@ -516,7 +525,7 @@ endfunction
 nnoremap <silent> [Space]b :<C-u>UniteBookmarkAdd<CR>
 
 " Keymapping in unite.vim.
-autocmd FileType unite call s:unite_my_settings()
+autocmd MyAutoCmd FileType unite call s:unite_my_settings()
 function! s:unite_my_settings()"{{{
   " Delete a path upward.
   imap <buffer> <C-w> <Plug>(unite_delete_backward_path)
@@ -590,7 +599,7 @@ else
   let g:vimfiler_marked_file_icon = '*'
 endif
 
-autocmd FileType vimfiler call s:vimfiler_my_settings()
+autocmd MyAutoCmd FileType vimfiler call s:vimfiler_my_settings()
 function! s:vimfiler_my_settings()"{{{
   " Overwrite settings.
   nnoremap <silent><buffer> J
@@ -623,7 +632,7 @@ call vimshell#set_execute_file('txt,vim,c,h,cpp', 'vim')
 let g:vimshell_execute_file_list['py'] = 'python'
 let g:vimshell_execute_file_list['rb'] = 'ruby'
 
-autocmd FileType vimshell call s:vimshell_my_settings()
+autocmd MyAutoCmd FileType vimshell call s:vimshell_my_settings()
 function! s:vimshell_my_settings()"{{{
   " Hide the window in hitting ESC key twice.
   nmap <silent><buffer> <ESC><ESC> q
@@ -644,7 +653,7 @@ let g:vinarise_enable_auto_detect = 1
 "}}}
 
 " ref.vim"{{{
-autocmd FileType ref call s:ref_my_settings()
+autocmd MyAutoCmd FileType ref call s:ref_my_settings()
 function! s:ref_my_settings()"{{{
   " Overwrite settings.
   nmap <buffer> [Tag]t  <Plug>(ref-keyword)
@@ -712,7 +721,7 @@ else
 endif
 let g:w3m#search_engine = 
     \ 'https://www.google.co.jp/search?aq=f&ix=seb&sourceid=chrome&ie=' . &encoding . '&q='
-autocmd FileType w3m call s:w3m_settings()
+autocmd MyAutoCmd FileType w3m call s:w3m_settings()
 function! s:w3m_settings()
   nnoremap <buffer> H :<C-u>call w3m#Back()<CR>
   nnoremap <buffer> L :<C-u>call w3m#Forward()<CR>
@@ -776,11 +785,11 @@ nnoremap <silent> [Tabbed]L :<C-u>tablast<CR>
 nnoremap <silent> [Tabbed]<C-t> :<C-u>Unite tab<CR>
 "}}}
 
-" Auto escape / substitute.
-xnoremap s y:%s/<C-r>=substitute(@0, '/', '\\/', 'g')<Return>//g<Left><Left>
-
-" Clear highlight.
-nnoremap <silent> <ESC><ESC> :nohlsearch<CR>
+" Like gv, but select the last changed text.
+nnoremap gc `[v`]
+" Specify the last changed text as {motion}.
+vnoremap <silent> gc :<C-u>normal gc<CR>
+onoremap <silent> gc :<C-u>normal gc<CR>
 
 " Folding."{{{
 noremap [Space]n ]z
@@ -798,6 +807,12 @@ noremap [Space]d zd
 noremap [Space]u :<C-u>Unite outline:foldings<CR>
 noremap [Space]gg :<C-u>echo FoldCCnavi()<CR>
 "}}}
+
+" Auto escape / substitute.
+xnoremap s y:%s/<C-r>=substitute(@0, '/', '\\/', 'g')<Return>//g<Left><Left>
+
+" Clear highlight.
+nnoremap <silent> <ESC><ESC> :nohlsearch<CR>
 "}}}
 
 "---------------------------------------------------------------------------
