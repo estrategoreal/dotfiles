@@ -105,11 +105,11 @@ set encoding=utf-8
 " Setting of terminal encoding."{{{
 if !has('gui_running')
   if &term == 'win32' || &term == 'win64'
-    " Setting when use the non-GUI Japanese console.
+    " Setting to use the non-GUI Japanese console.
 
-    " Garbled unless set this.
+    " Garbled unless this is set.
     set termencoding=cp932
-    " Japanese input changes itself unless set this.
+    " Japanese input changes itself unless this is set.
     " Be careful because the automatic recognition of the character code is not possible!
     set encoding=japan
   else
@@ -165,68 +165,21 @@ if has('kaoriya')
   "set fileencodings=guess
 endif
 
-" When do not include Japanese, use encoding for fileencoding.
-function! AU_ReCheck_FENC() "{{{
+" When any Japanese character is not included, use encoding for fileencoding.
+function! AU_ReCheck_FENC()"{{{
   if &fileencoding =~# 'iso-2022-jp' && search("[^\x01-\x7e]", 'n') == 0
-    let &fileencoding=&encoding
+    let &fileencoding = &encoding
   endif
 endfunction"}}}
 
 autocmd MyAutoCmd BufReadPost * call AU_ReCheck_FENC()
 
-" Default fileformat.
+" The default fileformat.
 set fileformat=unix
 " Automatic recognition of a new line cord.
 set fileformats=unix,dos,mac
-" A fullwidth character is displayed in vim properly.
+" Display fullwidth characters in vim properly.
 set ambiwidth=double
-
-" Command group opening with a specific character code again."{{{
-" In particular effective when I am garbled in a terminal.
-" Open in UTF-8 again.
-command! -bang -bar -complete=file -nargs=? Utf8 edit<bang> ++enc=utf-8 <args>
-" Open in iso-2022-jp again.
-command! -bang -bar -complete=file -nargs=? Iso2022jp edit<bang> ++enc=iso-2022-jp <args>
-" Open in Shift_JIS again.
-command! -bang -bar -complete=file -nargs=? Cp932 edit<bang> ++enc=cp932 <args>
-" Open in EUC-jp again.
-command! -bang -bar -complete=file -nargs=? Euc edit<bang> ++enc=euc-jp <args>
-" Open in UTF-16 again.
-command! -bang -bar -complete=file -nargs=? Utf16 edit<bang> ++enc=ucs-2le <args>
-" Open in UTF-16BE again.
-command! -bang -bar -complete=file -nargs=? Utf16be edit<bang> ++enc=ucs-2 <args>
-
-" Aliases.
-command! -bang -bar -complete=file -nargs=? Jis  Iso2022jp<bang> <args>
-command! -bang -bar -complete=file -nargs=? Sjis  Cp932<bang> <args>
-command! -bang -bar -complete=file -nargs=? Unicode Utf16<bang> <args>
-"}}}
-
-" Tried to make a file note version."{{{
-" Don't save it because dangerous.
-command! WUtf8 setlocal fenc=utf-8
-command! WIso2022jp setlocal fenc=iso-2022-jp
-command! WCp932 setlocal fenc=cp932
-command! WEuc setlocal fenc=euc-jp
-command! WUtf16 setlocal fenc=ucs-2le
-command! WUtf16be setlocal fenc=ucs-2
-" Aliases.
-command! WJis  WIso2022jp
-command! WSjis  WCp932
-command! WUnicode WUtf16
-"}}}
-
-" Handle it in nkf and open.
-command! Nkf !nkf -g %
-
-" Appoint a line feed."{{{
-command! -bang -bar -complete=file -nargs=? Unix edit<bang> ++fileformat=unix <args>
-command! -bang -bar -complete=file -nargs=? Mac edit<bang> ++fileformat=mac <args>
-command! -bang -bar -complete=file -nargs=? Dos edit<bang> ++fileformat=dos <args>
-command! -bang -complete=file -nargs=? WUnix write<bang> ++fileformat=unix <args> | edit <args>
-command! -bang -complete=file -nargs=? WMac write<bang> ++fileformat=mac <args> | edit <args>
-command! -bang -complete=file -nargs=? WDos write<bang> ++fileformat=dos <args> | edit <args>
-"}}}
 
 if has('multi_byte_ime')
   set iminsert=0 imsearch=0
@@ -341,7 +294,7 @@ set complete=.
 set smartindent
 
 augroup MyAutoCmd
-  " Close help and git window by pressing q.
+  " Close help and reference window by pressing q.
   autocmd FileType help,quickrun,ref
         \ nnoremap <buffer><silent> q :<C-u>call <sid>smart_close()<CR>
   autocmd FileType * if (&readonly || !&modifiable) && !hasmapto('q', 'n')
@@ -591,7 +544,7 @@ nnoremap <silent> <C-g> :<C-u>VimFiler -buffer-name=explorer -simple -toggle<CR>
 let g:vimfiler_as_default_explorer = 1
 let g:vimfiler_safe_mode_by_default = 0
 
-" Edit file by tabedit.
+" Edit a file by tabedit.
 "let g:vimfiler_edit_action = 'tabopen'
 if s:is_windows
   " Use trashbox.
@@ -746,7 +699,7 @@ nnoremap <C-p> :<C-u>cp<CR>
 
 " [Space]: Other useful commands "{{{
 " Smart space mapping.
-" Notice: when starting other <Space> mappings in noremap, disappeared [Space].
+" Notice: when starting other <Space> mappings in noremap, disappear [Space].
 nmap <Space> [Space]
 xmap <Space> [Space]
 nnoremap [Space] <Nop>
@@ -778,7 +731,7 @@ endfunction
 " The prefix key.
 nmap <C-t> [Tabbed]
 nnoremap [Tabbed] <Nop>
-" Create tab page.
+" Create a tab page.
 "nnoremap <silent> [Tabbed]c :<C-u>tabnew<CR>
 nnoremap <silent> [Tabbed]c :<C-u>VimFilerTab -buffer-name=explorer -simple -toggle<CR>
 nnoremap <silent> [Tabbed]C :<C-u>tabnew %<CR>
