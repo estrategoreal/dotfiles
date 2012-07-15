@@ -64,6 +64,7 @@ NeoBundle 'h1mesuke/unite-outline.git'
 NeoBundle 'h1mesuke/vim-alignta.git'
 NeoBundle 'kana/vim-smartchr.git'
 NeoBundle 'LeafCage/foldCC.git'
+NeoBundle 'Lokaltog/vim-easymotion.git'
 NeoBundle 'mrtazz/DoxygenToolkit.vim.git'
 NeoBundle 'Rip-Rip/clang_complete.git'
 NeoBundle 'Shougo/neocomplcache.git'
@@ -396,6 +397,11 @@ augroup MyAutoCmd
   autocmd FileType c,cpp inoremap <buffer> <expr> . smartchr#loop('.', '->', '...')
   autocmd FileType vim inoremap <buffer> <expr> . smartchr#loop('.', ' . ', '..', '...')
 augroup END
+"}}}
+
+" EasyMotion.vim"{{{
+let g:EasyMotion_leader_key = '<Space><Space>'
+let g:EasyMotion_keys = 'fjdkslaureiwoqpvncm'
 "}}}
 
 " DoxygenToolkit.vim"{{{
