@@ -428,7 +428,6 @@ inoremap <expr><C-e> neocomplcache#cancel_popup()
 let g:neocomplcache_enable_auto_select = 1
 
 let g:neocomplcache_omni_functions = {
-    \ 'python' : 'pythoncomplete#Complete',
     \ 'ruby' : 'rubycomplete#Complete',
     \ }
 
@@ -691,7 +690,7 @@ endfunction
 "}}}
 
 "---------------------------------------------------------------------------
-" Key-mappings: "{{{
+" Key-mappings:"{{{
 "
 " Item select mappings
 nnoremap <C-n> :<C-u>cn<CR>
@@ -705,13 +704,12 @@ xmap <Space> [Space]
 nnoremap [Space] <Nop>
 xnoremap [Space] <Nop>
 
-" Useful save mappings."{{{
+" Useful save mappings. "{{{
 nnoremap <silent> [Space]w  :<C-u>update<CR>
 nnoremap <silent> [Space]fw :<C-u>write!<CR>
 nnoremap <silent> [Space]q  :<C-u>quit<CR>
 nnoremap <silent> [Space]aq :<C-u>quitall<CR>
 nnoremap <silent> [Space]fq :<C-u>quitall!<CR>
-nnoremap <Leader><Leader>   :<C-u>update<CR>
 "}}}
 
 " Change tab width. "{{{
@@ -726,7 +724,7 @@ function! s:smart_close()
   endif
 endfunction
 
-" <C-t>: Tab pages"{{{
+" <C-t>: Tab pages "{{{
 "
 " The prefix key.
 nmap <C-t> [Tabbed]
@@ -744,13 +742,72 @@ nnoremap <silent> [Tabbed]L :<C-u>tablast<CR>
 nnoremap <silent> [Tabbed]<C-t> :<C-u>Unite tab<CR>
 "}}}
 
+" q: Quickfix "{{{
+"
+" The prefix key.
+nnoremap [Quickfix] <Nop>
+nmap q  [Quickfix]
+" Disable Ex-mode.
+nnoremap Q q
+
+" For quickfix list "{{{
+nnoremap <silent> [Quickfix]n  :<C-u>cnext<CR>
+nnoremap <silent> [Quickfix]p  :<C-u>cprevious<CR>
+nnoremap <silent> [Quickfix]r  :<C-u>crewind<CR>
+nnoremap <silent> [Quickfix]N  :<C-u>cfirst<CR>
+nnoremap <silent> [Quickfix]P  :<C-u>clast<CR>
+nnoremap <silent> [Quickfix]fn :<C-u>cnfile<CR>
+nnoremap <silent> [Quickfix]fp :<C-u>cpfile<CR>
+nnoremap <silent> [Quickfix]l  :<C-u>clist<CR>
+nnoremap <silent> [Quickfix]q  :<C-u>cc<CR>
+nnoremap <silent> [Quickfix]o  :<C-u>copen<CR>
+nnoremap <silent> [Quickfix]c  :<C-u>cclose<CR>
+nnoremap <silent> [Quickfix]en :<C-u>cnewer<CR>
+nnoremap <silent> [Quickfix]ep :<C-u>colder<CR>
+nnoremap <silent> [Quickfix]m  :<C-u>make<CR>
+nnoremap [Quickfix]M q:make<Space>
+nnoremap [Quickfix]g q:grep<Space>
+" Toggle quickfix window.
+nnoremap <silent> [Quickfix]<Space> :<C-u>call <SID>toggle_quickfix_window()<CR>
+function! s:toggle_quickfix_window()
+  let _ = winnr('$')
+  cclose
+  if _ == winnr('$')
+    copen
+    setlocal nowrap
+    setlocal whichwrap=b,s
+  endif
+endfunction
+"}}}
+
+" For location list (mnemonic: Quickfix list for the current Window) "{{{
+nnoremap <silent> [Quickfix]wn  :<C-u>lnext<CR>
+nnoremap <silent> [Quickfix]wp  :<C-u>lprevious<CR>
+nnoremap <silent> [Quickfix]wr  :<C-u>lrewind<CR>
+nnoremap <silent> [Quickfix]wP  :<C-u>lfirst<CR>
+nnoremap <silent> [Quickfix]wN  :<C-u>llast<CR>
+nnoremap <silent> [Quickfix]wfn :<C-u>lnfile<CR>
+nnoremap <silent> [Quickfix]wfp :<C-u>lpfile<CR>
+nnoremap <silent> [Quickfix]wl  :<C-u>llist<CR>
+nnoremap <silent> [Quickfix]wq  :<C-u>ll<CR>
+nnoremap <silent> [Quickfix]wo  :<C-u>lopen<CR>
+nnoremap <silent> [Quickfix]wc  :<C-u>lclose<CR>
+nnoremap <silent> [Quickfix]wep :<C-u>lolder<CR>
+nnoremap <silent> [Quickfix]wen :<C-u>lnewer<CR>
+nnoremap <silent> [Quickfix]wm  :<C-u>lmake<CR>
+nnoremap [Quickfix]wM q:lmake<Space>
+nnoremap [Quickfix]w<Space> q:lmake<Space>
+nnoremap [Quickfix]wg q:lgrep<Space>
+"}}}
+"}}}
+
 " Like gv, but select the last changed text.
 nnoremap gc `[v`]
 " Specify the last changed text as {motion}.
 vnoremap <silent> gc :<C-u>normal gc<CR>
 onoremap <silent> gc :<C-u>normal gc<CR>
 
-" Folding."{{{
+" Folding. "{{{
 noremap [Space]n ]z
 noremap [Space]p [z
 noremap [Space]j zj
