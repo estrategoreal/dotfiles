@@ -59,6 +59,7 @@ NeoBundle 'Shougo/neobundle.vim'
 
 " My Bundles here:
 NeoBundle 'anyakichi/vim-surround.git'
+NeoBundle 'chrisbra/SudoEdit.vim.git'
 NeoBundle 'gregsexton/gitv.git'
 NeoBundle 'h1mesuke/unite-outline.git'
 NeoBundle 'h1mesuke/vim-alignta.git'
@@ -88,11 +89,10 @@ NeoBundle 'tyru/open-browser.vim.git'
 NeoBundle 'ujihisa/vimshell-ssh.git'
 NeoBundle 'othree/eregex.vim.git'
 NeoBundle 'vim-ruby/vim-ruby.git'
+NeoBundle 'vim-scripts/errormarker.vim.git'
 NeoBundle 'vim-scripts/gtags.vim.git'
 NeoBundle 'vim-scripts/taglist.vim.git'
 NeoBundle 'yuratomo/w3m.vim'
-" From vim.org
-NeoBundle 'SudoEdit.vim'
 
 "---------------------------------------------------------------------------
 " Encoding:"{{{
@@ -244,6 +244,9 @@ if exists('*FoldCCtext')
         \ | endif
 endif
 
+" Use grep.
+set grepprg=grep\ -nH
+
 " Set tags file.
 " Don't search tags file in current directory. And search upward.
 set tags& tags-=tags tags+=./tags;
@@ -394,9 +397,9 @@ endif
 
 " Define dictionary.
 let g:neocomplcache_dictionary_filetype_lists = {
-    \ 'default' : '',
-    \ 'vimshell' : $HOME.'/.vimshell/command-history'
-    \ }
+      \ 'default' : '',
+      \ 'vimshell' : $HOME.'/.vimshell/command-history'
+      \ }
 
 " Define keyword.
 if !exists('g:neocomplcache_keyword_patterns')
@@ -429,8 +432,8 @@ inoremap <expr><C-e> neocomplcache#cancel_popup()
 let g:neocomplcache_enable_auto_select = 1
 
 let g:neocomplcache_omni_functions = {
-    \ 'ruby' : 'rubycomplete#Complete',
-    \ }
+      \ 'ruby' : 'rubycomplete#Complete',
+      \ }
 
 " Enable heavy omni completion.
 if !exists('g:neocomplcache_omni_patterns')
@@ -647,9 +650,20 @@ nmap gx <Plug>(openbrowser-smart-search)
 vmap gx <Plug>(openbrowser-smart-search)
 "}}}
 
+" errormarker.vim"{{{
+let errormarker_errortext      = '!!'
+let errormarker_warningtext    = '??'
+let g:errormarker_errorgroup   = 'Error'
+let g:errormarker_warninggroup = 'Todo'
+let g:errormarker_erroricon    = expand('~/.vim') . '/signs/err.'
+      \ . (s:is_windows ? 'bmp' : 'png')
+let g:errormarker_warningicon  = expand('~/.vim') . '/signs/warn.'
+      \ . (s:is_windows ? 'bmp' : 'png')
+"}}}
+
 " gtags.vim"{{{
 nnoremap <C-j> :<C-u>GtagsCursor<CR>
-nnoremap <C-s> :<C-u>Gtags -r
+nnoremap <C-s> :<C-u>Gtags -r<Space>
 "}}}
 
 " taglist.vim"{{{
@@ -694,10 +708,6 @@ endfunction
 "---------------------------------------------------------------------------
 " Key-mappings:"{{{
 "
-" Item select mappings
-nnoremap <C-n> :<C-u>cn<CR>
-nnoremap <C-p> :<C-u>cp<CR>
-
 " [Space]: Other useful commands "{{{
 " Smart space mapping.
 " Notice: when starting other <Space> mappings in noremap, disappear [Space].
