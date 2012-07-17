@@ -78,6 +78,7 @@ NeoBundle 'Shougo/vimfiler.git'
 NeoBundle 'Shougo/vimproc.git'
 NeoBundle 'Shougo/vimshell.git'
 NeoBundle 'Shougo/vinarise.git'
+NeoBundle 'soh335/unite-qflist.git'
 NeoBundle 'thinca/vim-quickrun.git'
 NeoBundle 'thinca/vim-ref.git'
 NeoBundle 'tpope/vim-fugitive.git'
@@ -295,18 +296,18 @@ set smartindent
 
 augroup MyAutoCmd
   " Close help and reference window by pressing q.
-  autocmd FileType help,quickrun,ref
-        \ nnoremap <buffer><silent> q :<C-u>call <sid>smart_close()<CR>
+  autocmd FileType help,qf,quickrun,ref
+        \ nnoremap <buffer><silent> q :<C-u>call <SID>smart_close()<CR>
   autocmd FileType * if (&readonly || !&modifiable) && !hasmapto('q', 'n')
-        \ | nnoremap <buffer><silent> q :<C-u>call <sid>smart_close()<CR>| endif
-  
+        \ | nnoremap <buffer><silent> q :<C-u>call <SID>smart_close()<CR>| endif
+
   autocmd FileType c,cpp setlocal foldmethod=syntax
-  
+
   " Enable omni completion.
   autocmd FileType c setlocal omnifunc=ccomplete#Complete
   autocmd FileType python setlocal omnifunc=pythoncomplete#Complete
   "autocmd FileType ruby setlocal omnifunc=rubycomplete#Complete
-  
+
   autocmd FileType python,ruby setlocal foldmethod=indent
 augroup END
 "}}}
@@ -457,6 +458,7 @@ nnoremap <silent> [unite]f :<C-u>UniteWithBufferDir -buffer-name=files file<CR>
 nnoremap <silent> [unite]j :<C-u>Unite jump<CR>
 nnoremap <silent> [unite]m :<C-u>Unite mapping<CR>
 nnoremap <silent> [unite]o :<C-u>Unite outline -start-insert<CR>
+nnoremap <silent> [unite]q :<C-u>Unite qflist -no-quit<CR>
 nnoremap <silent> [unite]r :<C-u>Unite -buffer-name=register register history/yank<CR>
 nnoremap <silent> [unite]s :<C-u>Unite source<CR>
 nnoremap <silent> [unite]t :<C-u>Unite -buffer-name=files tab<CR>
@@ -465,14 +467,14 @@ nnoremap <silent> [unite]v :<C-u>Unite -buffer-name=files file_rec/async:! -no-s
 nnoremap <silent> [unite]w :<C-u>Unite window<CR>
 
 nnoremap <silent> [unite]g :<C-u>Unite grep:. -buffer-name=search -no-quit<CR>
-nnoremap <silent> [unite]G :call <SID>Cursor_Grep()<CR>
-xnoremap <silent> [unite]G :call <SID>Visual_Grep()<CR>
-function! s:Cursor_Grep()
+nnoremap <silent> [unite]G :<C-u>call <SID>cursor_grep()<CR>
+xnoremap <silent> [unite]G :<C-u>call <SID>visual_grep()<CR>
+function! s:cursor_grep()
   let w = expand('<cword>')
   execute ":tabnew"
   execute ":Unite grep:.::" . w . " -buffer-name=search -no-quit<CR>"
 endfunction
-function! s:Visual_Grep()
+function! s:visual_grep()
   let tmp = @@
   silent normal gvy
   let selected = @@
@@ -625,15 +627,15 @@ nnoremap <silent> [Space]gf :<C-u>Gitv!<CR>
 "}}}
 
 " fugitive.vim"{{{
-nnoremap <silent> [Space]gd :call <SID>Fugitive_Tab("Gdiff")<CR>
+nnoremap <silent> [Space]gd :<C-u>call <SID>fugitive_tab("Gdiff")<CR>
 nnoremap <silent> [Space]gs :<C-u>Gstatus<CR>
-nnoremap <silent> [Space]gl :call <SID>Fugitive_Tab("Glog")<CR>
+nnoremap <silent> [Space]gl :<C-u>call <SID>fugitive_tab("Glog")<CR>
 nnoremap <silent> [Space]ga :<C-u>Gwrite<CR>
 nnoremap <silent> [Space]gA :<C-u>Gwrite <cfile><CR>
 nnoremap <silent> [Space]gc :<C-u>Gcommit<CR>
 nnoremap <silent> [Space]gC :<C-u>Gcommit --amend<CR>
-nnoremap <silent> [Space]gb :call <SID>Fugitive_Tab("Gblame")<CR>
-function! s:Fugitive_Tab(cmd)
+nnoremap <silent> [Space]gb :<C-u>call <SID>fugitive_tab("Gblame")<CR>
+function! s:fugitive_tab(cmd)
   execute ":tabnew " . expand("%:p")
   execute a:cmd
 endfunction
@@ -713,8 +715,8 @@ nnoremap <silent> [Space]fq :<C-u>quitall!<CR>
 "}}}
 
 " Change tab width. "{{{
-nnoremap <silent> [Space]t2 :<C-u>setl shiftwidth=2 softtabstop=2<CR>
-nnoremap <silent> [Space]t4 :<C-u>setl shiftwidth=4 softtabstop=4<CR>
+nnoremap <silent> [Space]t2 :<C-u>setlocal shiftwidth=2 softtabstop=2<CR>
+nnoremap <silent> [Space]t4 :<C-u>setlocal shiftwidth=4 softtabstop=4<CR>
 "}}}
 "}}}
 
@@ -746,16 +748,18 @@ nnoremap <silent> [Tabbed]<C-t> :<C-u>Unite tab<CR>
 "
 " The prefix key.
 nnoremap [Quickfix] <Nop>
-nmap q  [Quickfix]
-" Disable Ex-mode.
-nnoremap Q q
+nmap q [Quickfix]
+
+" Open the quickfix window automatically if it's not empty
+autocmd QuickFixCmdPost [^l]* cwindow
+autocmd QuickFixCmdPost l* lwindow
 
 " For quickfix list "{{{
 nnoremap <silent> [Quickfix]n  :<C-u>cnext<CR>
 nnoremap <silent> [Quickfix]p  :<C-u>cprevious<CR>
 nnoremap <silent> [Quickfix]r  :<C-u>crewind<CR>
-nnoremap <silent> [Quickfix]N  :<C-u>cfirst<CR>
-nnoremap <silent> [Quickfix]P  :<C-u>clast<CR>
+nnoremap <silent> [Quickfix]N  :<C-u>clast<CR>
+nnoremap <silent> [Quickfix]P  :<C-u>cfirst<CR>
 nnoremap <silent> [Quickfix]fn :<C-u>cnfile<CR>
 nnoremap <silent> [Quickfix]fp :<C-u>cpfile<CR>
 nnoremap <silent> [Quickfix]l  :<C-u>clist<CR>
@@ -768,12 +772,12 @@ nnoremap <silent> [Quickfix]m  :<C-u>make<CR>
 nnoremap [Quickfix]M q:make<Space>
 nnoremap [Quickfix]g q:grep<Space>
 " Toggle quickfix window.
-nnoremap <silent> [Quickfix]<Space> :<C-u>call <SID>toggle_quickfix_window()<CR>
-function! s:toggle_quickfix_window()
+nnoremap <silent> [Quickfix]<Space> :<C-u>call <SID>toggle_quickfix_window('c')<CR>
+function! s:toggle_quickfix_window(type)
   let _ = winnr('$')
-  cclose
+  execute a:type == 'c' ? 'cclose' : 'lclose'
   if _ == winnr('$')
-    copen
+    execute a:type == 'c' ? 'copen' : 'lopen'
     setlocal nowrap
     setlocal whichwrap=b,s
   endif
@@ -784,20 +788,21 @@ endfunction
 nnoremap <silent> [Quickfix]wn  :<C-u>lnext<CR>
 nnoremap <silent> [Quickfix]wp  :<C-u>lprevious<CR>
 nnoremap <silent> [Quickfix]wr  :<C-u>lrewind<CR>
-nnoremap <silent> [Quickfix]wP  :<C-u>lfirst<CR>
 nnoremap <silent> [Quickfix]wN  :<C-u>llast<CR>
+nnoremap <silent> [Quickfix]wP  :<C-u>lfirst<CR>
 nnoremap <silent> [Quickfix]wfn :<C-u>lnfile<CR>
 nnoremap <silent> [Quickfix]wfp :<C-u>lpfile<CR>
 nnoremap <silent> [Quickfix]wl  :<C-u>llist<CR>
 nnoremap <silent> [Quickfix]wq  :<C-u>ll<CR>
 nnoremap <silent> [Quickfix]wo  :<C-u>lopen<CR>
 nnoremap <silent> [Quickfix]wc  :<C-u>lclose<CR>
-nnoremap <silent> [Quickfix]wep :<C-u>lolder<CR>
 nnoremap <silent> [Quickfix]wen :<C-u>lnewer<CR>
+nnoremap <silent> [Quickfix]wep :<C-u>lolder<CR>
 nnoremap <silent> [Quickfix]wm  :<C-u>lmake<CR>
 nnoremap [Quickfix]wM q:lmake<Space>
-nnoremap [Quickfix]w<Space> q:lmake<Space>
 nnoremap [Quickfix]wg q:lgrep<Space>
+" Toggle quickfix window.
+nnoremap <silent> [Quickfix]w<Space> :<C-u>call <SID>toggle_quickfix_window('l')<CR>
 "}}}
 "}}}
 
