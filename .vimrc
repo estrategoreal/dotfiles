@@ -582,7 +582,6 @@ nmap <silent> <C-@> :VimShellPop<CR>
 let g:vimshell_user_prompt = 'fnamemodify(getcwd(), ":~")'
 let g:vimshell_right_prompt = 'vcs#info("(%s)-[%b]%p", "(%s)-[%b|%a]%p")'
 let g:vimshell_prompt = '% '
-let g:vimshell_popup_height = 50
 
 if !s:is_windows
   " Use zsh history.
@@ -761,7 +760,7 @@ nnoremap [Quickfix] <Nop>
 nmap q [Quickfix]
 
 " Open the quickfix window automatically if it's not empty
-autocmd QuickFixCmdPost [^l]* cwindow
+autocmd QuickFixCmdPost [^l]* botright cwindow
 autocmd QuickFixCmdPost l* lwindow
 
 " For quickfix list "{{{
