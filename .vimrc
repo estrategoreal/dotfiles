@@ -310,8 +310,6 @@ augroup MyAutoCmd
   autocmd FileType c setlocal omnifunc=ccomplete#Complete
   autocmd FileType python setlocal omnifunc=pythoncomplete#Complete
   "autocmd FileType ruby setlocal omnifunc=rubycomplete#Complete
-
-  autocmd FileType python,ruby setlocal foldmethod=indent
 augroup END
 "}}}
 
@@ -455,23 +453,24 @@ nnoremap <expr><silent> [unite]b <SID>unite_build()
 function! s:unite_build()
   return ":\<C-u>Unite -buffer-name=build" . tabpagenr() . " -no-quit build\<CR>"
 endfunction
-nnoremap <silent> [unite]c :<C-u>Unite change<CR>
-nnoremap <silent> [unite]d :<C-u>Unite -buffer-name=files -default-action=lcd directory_mru<CR>
-nnoremap <silent> [unite]f :<C-u>UniteWithBufferDir -buffer-name=files file<CR>
-nnoremap <silent> [unite]j :<C-u>Unite jump<CR>
-nnoremap <silent> [unite]m :<C-u>Unite mapping<CR>
-nnoremap <silent> [unite]o :<C-u>Unite outline -start-insert<CR>
-nnoremap <silent> [unite]q :<C-u>Unite qflist -no-quit<CR>
-nnoremap <silent> [unite]r :<C-u>Unite -buffer-name=register register history/yank<CR>
-nnoremap <silent> [unite]s :<C-u>Unite source<CR>
-nnoremap <silent> [unite]t :<C-u>Unite -buffer-name=files tab<CR>
-nnoremap <silent> [unite]u :<C-u>Unite buffer file_mru bookmark<CR>
-nnoremap <silent> [unite]v :<C-u>Unite -buffer-name=files file_rec/async:! -no-split<CR>
-nnoremap <silent> [unite]w :<C-u>Unite window<CR>
+nnoremap <silent> [unite]c  :<C-u>Unite change<CR>
+nnoremap <silent> [unite]d  :<C-u>Unite -buffer-name=files -default-action=lcd directory_mru<CR>
+nnoremap <silent> [unite]f  :<C-u>UniteWithBufferDir -buffer-name=files file<CR>
+nnoremap <silent> [unite]j  :<C-u>Unite jump<CR>
+nnoremap <silent> [unite]ma :<C-u>Unite mapping<CR>
+nnoremap <silent> [unite]me :<C-u>Unite output:message<CR>
+nnoremap <silent> [unite]o  :<C-u>Unite outline -start-insert<CR>
+nnoremap <silent> [unite]q  :<C-u>Unite qflist -no-quit<CR>
+nnoremap <silent> [unite]r  :<C-u>Unite -buffer-name=register register history/yank<CR>
+nnoremap <silent> [unite]s  :<C-u>Unite source<CR>
+nnoremap <silent> [unite]t  :<C-u>Unite -buffer-name=files tab<CR>
+nnoremap <silent> [unite]u  :<C-u>Unite buffer file_mru bookmark<CR>
+nnoremap <silent> [unite]v  :<C-u>Unite -buffer-name=files file_rec/async:! -no-split<CR>
+nnoremap <silent> [unite]w  :<C-u>Unite window<CR>
 
-nnoremap <silent> [unite]g :<C-u>Unite grep:. -buffer-name=search -no-quit<CR>
-nnoremap <silent> [unite]G :<C-u>call <SID>cursor_grep()<CR>
-xnoremap <silent> [unite]G :<C-u>call <SID>visual_grep()<CR>
+nnoremap <silent> [unite]g  :<C-u>Unite grep:. -buffer-name=search -no-quit<CR>
+nnoremap <silent> [unite]G  :<C-u>call <SID>cursor_grep()<CR>
+xnoremap <silent> [unite]G  :<C-u>call <SID>visual_grep()<CR>
 function! s:cursor_grep()
   let w = expand('<cword>')
   execute ":tabnew"
@@ -540,6 +539,16 @@ endif
 let g:unite_source_alias_aliases.line_migemo = {
       \ 'source' : 'line',
       \ }
+
+let g:unite_build_error_icon   = expand('~/.vim') . '/signs/err.'
+      \ . (s:is_windows ? 'bmp' : 'png')
+let g:unite_build_warning_icon = expand('~/.vim') . '/signs/warn.'
+      \ . (s:is_windows ? 'bmp' : 'png')
+
+" For unite-session.
+" Save session automatically.
+let g:unite_source_session_enable_auto_save = 1
+"autocmd MyAutoCmd VimEnter * UniteSessionLoad
 "}}}
 
 " vimfiler.vim"{{{
@@ -786,9 +795,7 @@ function! s:toggle_quickfix_window(type)
   let _ = winnr('$')
   execute a:type == 'c' ? 'cclose' : 'lclose'
   if _ == winnr('$')
-    execute a:type == 'c' ? 'copen' : 'lopen'
-    setlocal nowrap
-    setlocal whichwrap=b,s
+    execute a:type == 'c' ? 'botright copen' : 'lopen'
   endif
 endfunction
 "}}}
