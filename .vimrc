@@ -304,8 +304,6 @@ augroup MyAutoCmd
   autocmd FileType * if (&readonly || !&modifiable) && !hasmapto('q', 'n')
         \ | nnoremap <buffer><silent> q :<C-u>call <SID>smart_close()<CR>| endif
 
-  autocmd FileType c,cpp setlocal foldmethod=syntax
-
   " Enable omni completion.
   autocmd FileType c setlocal omnifunc=ccomplete#Complete
   autocmd FileType python setlocal omnifunc=pythoncomplete#Complete
