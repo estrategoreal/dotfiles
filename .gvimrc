@@ -17,8 +17,7 @@
 " set guifont=-misc-fixed-medium-r-normal--14-130-75-75-c-70-iso8859-1
 if has('mac')
   set noimdisableactivate
-  "set guifont=Osaka-Mono:h14
-  set guifont=Ricty:h14
+  set guifont=Ricty:h14,Osaka-Mono:h14
   set antialias
   augroup Transparency
     autocmd!
@@ -29,8 +28,7 @@ if has('mac')
     set ambiwidth=double
   endif
 elseif has('win32')
-  "set guifont=MS_Gothic:h12:cSHIFTJIS
-  set guifont=Ricty:h12
+  set guifont=Ricty:h12,MS_Gothic:h12:cSHIFTJIS
   if has('kaoriya')
     set ambiwidth=auto
   endif
@@ -60,6 +58,8 @@ endif
 " Hide toolbar and menus.
 set guioptions-=T
 set guioptions-=m
+" Scrollbar is always off.
+set guioptions-=rL
 
 if has('win32')
   gui
