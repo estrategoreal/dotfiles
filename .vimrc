@@ -275,7 +275,7 @@ set whichwrap+=h,l,<,>,[,],b,s,~
 " Always display statusline.
 set laststatus=2
 " Set statusline.
-set statusline=%<%m%r%h%w%y%{'['.(&fenc!=''?&fenc:&enc).':'.&ff.']'}\ %f%=%{fugitive#statusline()}\ \ %l/%L,%c%V%5P
+set statusline=%<%m%r%h%w%y%{'['.(&fenc!=''?&fenc:&enc).':'.&ff.']'}\ %1.40f%=%{fugitive#statusline()}\ \ %l/%L,%c%V%5P
 " Set tabline.
 set showtabline=2
 " Set visualbell.
@@ -394,7 +394,7 @@ endif
 " Define dictionary.
 let g:neocomplcache_dictionary_filetype_lists = {
       \ 'default' : '',
-      \ 'vimshell' : $HOME.'/.vimshell/command-history'
+      \ 'vimshell' : $HOME .'/.vimshell/command-history'
       \ }
 
 " Define keyword.
