@@ -230,6 +230,7 @@ set infercase
 " Enable folding.
 set foldenable
 set foldmethod=marker
+set foldopen=hor,quickfix,search,tag
 " Show folding level.
 set foldcolumn=3
 set fillchars=vert:\|
