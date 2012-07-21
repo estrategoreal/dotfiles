@@ -414,6 +414,8 @@ inoremap <expr><C-l> neocomplcache#complete_common_string()
 
 let g:neocomplcache_snippets_dir = $HOME . '/.vim/snippets'
 
+imap <C-s> <Plug>(neocomplcache_start_unite_snippet)
+
 " <CR>: close popup and save indent.
 inoremap <expr><CR> neocomplcache#close_popup() . "\<CR>"
 " <TAB>: completion.
