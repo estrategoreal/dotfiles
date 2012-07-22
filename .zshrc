@@ -109,7 +109,7 @@ if is_darwin ; then
   alias gvim='/Applications/MacVim.app/Contents/MacOS/Vim -g "$@"'
 
   alias fbsd='/Applications/VirtualBox.app/Contents/MacOS/VBoxManage startvm FreeBSD --type gui'
-  alias mint='/Applications/VirtualBox.app/Contents/MacOS/VBoxManage startvm Mint12 --type gui'
+  alias mint='/Applications/VirtualBox.app/Contents/MacOS/VBoxManage startvm Mint13 --type gui'
   alias lmde='/Applications/VirtualBox.app/Contents/MacOS/VBoxManage startvm LMDE --type gui'
   alias rmds='sudo find ~ -name .DS_Store -print -exec rm {} ";"'
 elif is_cygwin ; then
