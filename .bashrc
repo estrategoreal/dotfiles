@@ -27,9 +27,8 @@ function is_msys() {
   return 1
 }
 
-if [ -f ~/.git-completion.sh ]; then
-  source ~/.git-completion.sh
-fi
+[ -f ~/git-completion.sh ] && source ~/git-completion.sh
+[ -f ~/.zsh.d/z.sh ] && source ~/.zsh.d/z.sh
 
 # User specific aliases and functions
 
@@ -104,9 +103,7 @@ fi
 
 # Source global definitions
 
-if [ -f /etc/bashrc ]; then
-  source /etc/bashrc
-fi
+[ -f /etc/bashrc ] && source /etc/bashrc
 
 if is_darwin ; then
   export PS1="\n\[\e[34m\]\u@\h \[\e[35m\]\w$(__git_ps1)\n\[\e[00;37;44m\]How may I serve you, Master?\[\e[00m\]\n$ "

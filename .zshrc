@@ -83,7 +83,13 @@ bindkey "^N" history-beginning-search-forward-end
 #  zstyle ':auto-fu:var' postdisplay $''
 #fi
 
-#[ -f ~/.zsh.d/git-completion.sh ] && source ~/.zsh.d/git-completion.sh
+if [ -f ~/.zsh.d/z.sh ]; then
+  _Z_CMD=j
+  source ~/.zsh.d/z.sh
+  function precmd () {
+    _z --add "$(pwd -P)"
+  }
+fi
 
 # User specific aliases and functions
 
