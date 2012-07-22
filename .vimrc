@@ -410,15 +410,15 @@ smap <C-k> <Plug>(neocomplcache_snippets_expand)
 inoremap <expr><C-g> neocomplcache#undo_completion()
 inoremap <expr><C-l> neocomplcache#complete_common_string()
 
-" SuperTab like snippets behavior.
-"imap <expr><TAB> neocomplcache#sources#snippets_complete#expandable() ? "\<Plug>(neocomplcache_snippets_expand)" : pumvisible() ? "\<C-n>" : "\<TAB>"
-
 let g:neocomplcache_snippets_dir = $HOME . '/.vim/snippets'
 
 imap <C-s> <Plug>(neocomplcache_start_unite_snippet)
 
 " <CR>: close popup and save indent.
-inoremap <expr><CR> neocomplcache#close_popup() . "\<CR>"
+inoremap <expr><silent> <CR> <SID>my_cr_function()
+function! s:my_cr_function()
+  return pumvisible() ? neocomplcache#close_popup() . "\<CR>" : "\<CR>"
+endfunction
 " <TAB>: completion.
 inoremap <expr><TAB> pumvisible() ? "\<C-n>" : "\<TAB>"
 " <C-h>, <BS>: close popup and delete backword char.
