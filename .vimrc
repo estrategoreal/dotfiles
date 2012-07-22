@@ -424,8 +424,10 @@ inoremap <expr><TAB> pumvisible() ? "\<C-n>" : "\<TAB>"
 " <C-h>, <BS>: close popup and delete backword char.
 inoremap <expr><C-h> neocomplcache#smart_close_popup()."\<C-h>"
 inoremap <expr><BS>  neocomplcache#smart_close_popup()."\<C-h>"
-inoremap <expr><C-y> neocomplcache#close_popup()
-inoremap <expr><C-e> neocomplcache#cancel_popup()
+" <C-y>: paste.
+inoremap <expr><C-y> pumvisible() ? neocomplcache#close_popup() : "\<C-r>\""
+" <C-e>: close popup.
+inoremap <expr><C-e> pumvisible() ? neocomplcache#cancel_popup() : "\<End>"
 
 " AutoComplPop like behavior.
 let g:neocomplcache_enable_auto_select = 1
@@ -717,6 +719,35 @@ endfunction
 "---------------------------------------------------------------------------
 " Key-mappings:"{{{
 "
+" Command-line mode keymappings:"{{{
+" <C-a>, A: move to head.
+cnoremap <C-a> <Home>
+" <C-b>: previous char.
+cnoremap <C-b> <Left>
+" <C-d>: delete char.
+cnoremap <C-d> <Del>
+" <C-e>, E: move to end.
+cnoremap <C-e> <End>
+" <C-f>: next char.
+cnoremap <C-f> <Right>
+" <C-n>: next history.
+cnoremap <C-n> <Down>
+" <C-p>: previous history.
+cnoremap <C-p> <Up>
+" <C-k>, K: delete to end.
+cnoremap <C-k> <C-\>e getcmdpos() == 1 ? '' : getcmdline()[:getcmdpos()-2]<CR>
+" <C-y>: paste.
+cnoremap <C-y> <C-r>*
+" <C-s>: view history.
+cnoremap <C-s> <C-f>
+" <C-l>: view completion list.
+cnoremap <C-l> <C-d>
+" <A-b>, W: move to previous word.
+cnoremap <A-b> <S-Left>
+" <A-f>, B: move to next word.
+cnoremap <A-f> <S-Right>
+"}}}
+
 " [Space]: Other useful commands "{{{
 " Smart space mapping.
 " Notice: when starting other <Space> mappings in noremap, disappear [Space].
