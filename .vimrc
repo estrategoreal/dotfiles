@@ -230,7 +230,6 @@ set infercase
 " Enable folding.
 set foldenable
 set foldmethod=marker
-set foldopen=hor,quickfix,search,tag
 " Show folding level.
 set foldcolumn=3
 set fillchars=vert:\|
@@ -805,8 +804,8 @@ autocmd QuickFixCmdPost [^l]* botright cwindow
 autocmd QuickFixCmdPost l* lwindow
 
 " For quickfix list "{{{
-nnoremap <silent> [Quickfix]n  :<C-u>cnext<CR>
-nnoremap <silent> [Quickfix]p  :<C-u>cprevious<CR>
+nnoremap <silent> [Quickfix]n  :<C-u>cnext<CR> zv
+nnoremap <silent> [Quickfix]p  :<C-u>cprevious<CR> zv
 nnoremap <silent> [Quickfix]r  :<C-u>crewind<CR>
 nnoremap <silent> [Quickfix]N  :<C-u>clast<CR>
 nnoremap <silent> [Quickfix]P  :<C-u>cfirst<CR>
@@ -833,8 +832,8 @@ endfunction
 "}}}
 
 " For location list (mnemonic: Quickfix list for the current Window) "{{{
-nnoremap <silent> [Quickfix]wn  :<C-u>lnext<CR>
-nnoremap <silent> [Quickfix]wp  :<C-u>lprevious<CR>
+nnoremap <silent> [Quickfix]wn  :<C-u>lnext<CR> zv
+nnoremap <silent> [Quickfix]wp  :<C-u>lprevious<CR> zv
 nnoremap <silent> [Quickfix]wr  :<C-u>lrewind<CR>
 nnoremap <silent> [Quickfix]wN  :<C-u>llast<CR>
 nnoremap <silent> [Quickfix]wP  :<C-u>lfirst<CR>

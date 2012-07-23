@@ -27,8 +27,14 @@ function is_msys() {
   return 1
 }
 
-[ -f ~/git-completion.sh ] && source ~/git-completion.sh
-[ -f ~/.zsh.d/z.sh ] && source ~/.zsh.d/z.sh
+[ -f ~/.bash.d/git-completion.sh ] && source ~/.bash.d/git-completion.sh
+if [ -f ~/.bash.d/z.sh ]; then
+  _Z_CMD=j
+  source ~/.bash.d/z.sh
+  function precmd () {
+    _z --add "$(pwd -P)"
+  }
+fi
 
 # User specific aliases and functions
 
