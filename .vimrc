@@ -503,7 +503,7 @@ endfunction"}}}
 nnoremap [Tag] <Nop>
 nmap t [Tag]
 " Jump.
-nnoremap [Tag]t  <C-]>
+nnoremap [Tag]t  <C-]> zv
 "nnoremap <silent><expr> [Tag]t  &filetype == 'help' ?  "\<C-]>" :
       \ ":\<C-u>UniteWithCursorWord -buffer-name=tag -immediately tag tag/include\<CR>"
 " Jump next.
