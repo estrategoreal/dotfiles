@@ -493,9 +493,6 @@ autocmd MyAutoCmd FileType unite call s:unite_my_settings()
 function! s:unite_my_settings()"{{{
   " Delete a path upward.
   imap <buffer> <C-w> <Plug>(unite_delete_backward_path)
-  " Hide the window in hitting ESC key twice.
-  nmap <silent><buffer> <ESC><ESC> q
-  imap <silent><buffer> <ESC><ESC> <ESC>q
 endfunction"}}}
 
 " t: tags-and-searches "{{{
