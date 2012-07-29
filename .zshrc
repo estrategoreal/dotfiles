@@ -162,9 +162,9 @@ export PROMPT="%F{magenta}%~
 export RPROMPT="%1(v|%F{green}%1v%f|)"
 
 if is_darwin ; then
-  export PATH=$PATH:/usr/local/sbin
+  export PATH=/usr/local/bin:/usr/local/sbin:$PATH
 elif is_freebsd ; then
-  export PATH=$PATH:/sbin:/usr/sbin:/usr/local/sbin
+  export PATH=/sbin:/usr/sbin:/usr/local/sbin:$PATH
 elif is_linux ; then
   PATH=$PATH:$HOME/.rvm/bin # Add RVM to PATH for scripting
 elif is_cygwin ; then

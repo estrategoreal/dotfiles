@@ -113,9 +113,9 @@ fi
 
 if is_darwin ; then
   export PS1="\n\[\e[34m\]\u@\h \[\e[35m\]\w$(__git_ps1)\n\[\e[00;37;44m\]How may I serve you, Master?\[\e[00m\]\n$ "
-  export PATH=$PATH:/usr/local/sbin
+  export PATH=/usr/local/bin:/usr/local/sbin:$PATH
 elif is_freebsd ; then
-  export PATH=$PATH:/sbin:/usr/sbin:/usr/local/sbin
+  export PATH=/sbin:/usr/sbin:/usr/local/sbin:$PATH
 elif is_linux ; then
   export PS1="\n\[\e[36m\]\u@\h \[\e[35m\]\w$(__git_ps1)\n\[\e[00;37;44m\]How may I serve you, Master?\[\e[00m\]\n$ "
   PATH=$PATH:$HOME/.rvm/bin # Add RVM to PATH for scripting
@@ -129,6 +129,6 @@ elif is_cygwin ; then
 elif is_msys ; then
   export LC_MESSAGES=C
   export PS1="\n\[\e[36m\]\u@\h \[\e[35m\]\w$(__git_ps1)\n\[\e[00;37;44m\]How may I serve you, Master?\[\e[00m\]\n$ "
-  export PATH=$PATH:/usr/local/share/vim:/usr/local/share/git-svn-clone-externals:/c/git/bin:/c/Python27:/c/Ruby19/bin
+  export PATH=/usr/local/share/vim:/usr/local/share/git-svn-clone-externals:/c/git/bin:/c/Python27:/c/Ruby19/bin:$PATH
 fi
 
