@@ -235,14 +235,12 @@ set foldcolumn=3
 set fillchars=vert:\|
 set commentstring=%s
 
-if exists('*FoldCCtext')
-  " Use FoldCCtext().
-  set foldtext=FoldCCtext()
-  autocmd MyAutoCmd FileType *
-        \   if &filetype !=# 'help'
-        \ |   setlocal foldtext=FoldCCtext()
-        \ | endif
-endif
+" Use FoldCCtext().
+set foldtext=FoldCCtext()
+autocmd MyAutoCmd FileType *
+      \   if &filetype !=# 'help'
+      \ |   setlocal foldtext=FoldCCtext()
+      \ | endif
 
 " Use grep.
 set grepprg=grep\ -nH
