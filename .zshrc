@@ -110,7 +110,6 @@ alias mv='mv -i'
 alias ack='ack --asm --cc --cpp'
 
 if is_darwin ; then
-  alias ctags='/Applications/MacVim.app/Contents/MacOS/ctags "$@"'
   alias vim='/Applications/MacVim.app/Contents/MacOS/Vim "$@"'
   alias gvim='/Applications/MacVim.app/Contents/MacOS/Vim -g "$@"'
 
@@ -164,13 +163,13 @@ export RPROMPT="%1(v|%F{green}%1v%f|)"
 if is_darwin ; then
   export PATH=/usr/local/bin:/usr/local/sbin:$PATH
 elif is_freebsd ; then
-  export PATH=/sbin:/usr/sbin:/usr/local/sbin:$PATH
+  export PATH=$PATH:/sbin:/usr/sbin:/usr/local/sbin
 elif is_linux ; then
   PATH=$PATH:$HOME/.rvm/bin # Add RVM to PATH for scripting
 elif is_cygwin ; then
   export LC_MESSAGES=C
   export CYGWIN=nodosfilewarning
-  export PATH=/usr/local/share/vim:/usr/local/share/git-svn-clone-externals:$PATH
+  export PATH=$PATH:/usr/local/share/vim:/usr/local/share/git-svn-clone-externals
   export LIBRARY_PATH=/lib:/lib/w32api:/usr/local/lib
   export TCL_LIBRARY=/usr/share/tcl8.4
   PATH=$PATH:$HOME/.rvm/bin # Add RVM to PATH for scripting

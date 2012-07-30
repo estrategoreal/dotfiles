@@ -58,7 +58,6 @@ alias ack='ack --asm --cc --cpp'
 
 if is_darwin ; then
   alias ls='ls -G'
-  alias ctags='Applications/MacVim.app/Contents/MacOS/ctags "$@"'
   alias vim='/Applications/MacVim.app/Contents/MacOS/Vim "$@"'
   alias gvim='/Applications/MacVim.app/Contents/MacOS/Vim -g "$@"'
 
@@ -115,20 +114,20 @@ if is_darwin ; then
   export PS1="\n\[\e[34m\]\u@\h \[\e[35m\]\w$(__git_ps1)\n\[\e[00;37;44m\]How may I serve you, Master?\[\e[00m\]\n$ "
   export PATH=/usr/local/bin:/usr/local/sbin:$PATH
 elif is_freebsd ; then
-  export PATH=/sbin:/usr/sbin:/usr/local/sbin:$PATH
+  export PATH=$PATH:/sbin:/usr/sbin:/usr/local/sbin
 elif is_linux ; then
   export PS1="\n\[\e[36m\]\u@\h \[\e[35m\]\w$(__git_ps1)\n\[\e[00;37;44m\]How may I serve you, Master?\[\e[00m\]\n$ "
   PATH=$PATH:$HOME/.rvm/bin # Add RVM to PATH for scripting
 elif is_cygwin ; then
   export PS1="\n\[\e[36m\]\u@\h \[\e[35m\]\w$(__git_ps1)\n\[\e[00;37;44m\]How may I serve you, Master?\[\e[00m\]\n$ "
   export LC_MESSAGES=C
-  export PATH=/usr/local/share/vim:/usr/local/share/git-svn-clone-externals:$PATH
+  export PATH=$PATH:/usr/local/share/vim:/usr/local/share/git-svn-clone-externals
   export LIBRARY_PATH=/lib:/lib/w32api:/usr/local/lib
   export TCL_LIBRARY=/usr/share/tcl8.4
   PATH=$PATH:$HOME/.rvm/bin # Add RVM to PATH for scripting
 elif is_msys ; then
   export LC_MESSAGES=C
   export PS1="\n\[\e[36m\]\u@\h \[\e[35m\]\w$(__git_ps1)\n\[\e[00;37;44m\]How may I serve you, Master?\[\e[00m\]\n$ "
-  export PATH=/usr/local/share/vim:/usr/local/share/git-svn-clone-externals:/c/git/bin:/c/Python27:/c/Ruby19/bin:$PATH
+  export PATH=$PATH:/usr/local/share/vim:/usr/local/share/git-svn-clone-externals:/c/git/bin:/c/Python27:/c/Ruby19/bin
 fi
 
