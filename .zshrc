@@ -127,10 +127,17 @@ alias ide='gvim +"set columns=179" +"VimFiler -buffer-name=explorer -simple -tog
 alias formc='find . -iregex ".+\.\(c\|h\)$" -type f -print0 | xargs -0 uncrustify -c ~/.uncrustify4c.cfg --no-backup'
 alias formcpp='find . -iregex ".+\.\(c\|cpp\|h\)$" -type f -print0 | xargs -0 uncrustify -c ~/.uncrustify4cpp.cfg --no-backup'
 
+function gitarc() {
+  if [[ $# -lt 1 ]] ; then
+    return
+  fi
+  git archive --format=tar --prefix=$1/ HEAD | bzip2 > $1.tbz
+}
+
 function udtags() {
   currpath=$(pwd)
   if [[ $# -eq 1 ]] ; then
-    cd $1 || exit 1
+    cd $1 || return
   fi
   for t in tags GPATH GRTAGS GSYMS GTAGS
   do
