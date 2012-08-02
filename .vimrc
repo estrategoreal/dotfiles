@@ -59,7 +59,6 @@ NeoBundle 'Shougo/neobundle.vim'
 
 " My Bundles here:
 NeoBundle 'anyakichi/vim-surround.git'
-NeoBundle 'chrisbra/SudoEdit.vim.git'
 NeoBundle 'gregsexton/gitv.git'
 NeoBundle 'h1mesuke/unite-outline.git'
 NeoBundle 'h1mesuke/vim-alignta.git'
@@ -93,6 +92,10 @@ NeoBundle 'vim-scripts/errormarker.vim.git'
 NeoBundle 'vim-scripts/gtags.vim.git'
 NeoBundle 'vim-scripts/taglist.vim.git'
 NeoBundle 'yuratomo/w3m.vim'
+
+" From vim.org
+NeoBundle 'sudo.vim'
+NeoBundle 'autofmt'
 
 "---------------------------------------------------------------------------
 " Encoding:"{{{
@@ -255,6 +258,9 @@ set cindent
 " Set backupdir.
 set backupdir=~/.vim/tmp
 let &directory = &backupdir
+
+" Use autofmt.
+set formatexpr=autofmt#japanese#formatexpr()
 "}}}
 
 "---------------------------------------------------------------------------
