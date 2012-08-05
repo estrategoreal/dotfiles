@@ -27,6 +27,8 @@ function is_msys() {
   return 1
 }
 
+export LANG=ja_JP.UTF-8
+
 [ -f ~/.bash.d/git-completion.sh ] && source ~/.bash.d/git-completion.sh
 if [ -f ~/.bash.d/z.sh ]; then
   _Z_CMD=j

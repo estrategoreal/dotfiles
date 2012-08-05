@@ -22,6 +22,8 @@ function is_cygwin() {
   return 1
 }
 
+export LANG=ja_JP.UTF-8
+
 # setopt histignorealldups sharehistory
 
 # Use emacs keybindings even if our EDITOR is set to vi
