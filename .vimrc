@@ -471,7 +471,7 @@ nnoremap <silent> [unite]r  :<C-u>Unite -buffer-name=register register history/y
 nnoremap <silent> [unite]s  :<C-u>Unite source<CR>
 nnoremap <silent> [unite]t  :<C-u>Unite -buffer-name=files tab<CR>
 nnoremap <silent> [unite]u  :<C-u>Unite buffer file_mru bookmark<CR>
-nnoremap <silent> [unite]v  :<C-u>Unite -buffer-name=files file_rec/async:! -no-split<CR>
+nnoremap <silent> [unite]v  :<C-u>Unite -buffer-name=files -no-split file_rec/async:!<CR>
 nnoremap <silent> [unite]w  :<C-u>Unite window<CR>
 
 nnoremap <silent> [unite]g  :<C-u>Unite grep:. -buffer-name=search -no-quit<CR>
@@ -508,7 +508,7 @@ nnoremap [Tag]t  <C-]> zv
 "nnoremap <silent><expr> [Tag]t  &filetype == 'help' ?  "\<C-]>" :
       \ ":\<C-u>UniteWithCursorWord -buffer-name=tag -immediately tag tag/include\<CR>"
 " Jump next.
-nnoremap <silent> [Tag]n :<C-u>tag<CR>
+nnoremap <silent> [Tag]n :<C-u>tnext<CR>
 " Jump previous.
 nnoremap <silent> [Tag]p  :<C-u>pop<CR>
 "nnoremap <silent><expr> [Tag]p  &filetype == 'help' ?
@@ -678,10 +678,10 @@ nnoremap <C-s> :<C-u>Gtags -r<Space>
 "}}}
 
 " taglist.vim"{{{
-if has('mac')
-  let Tlist_Ctags_Cmd = '/Applications/MacVim.app/Contents/MacOS/ctags'
-elseif s:is_windows
+if has('mac') || s:is_windows
   let Tlist_Ctags_Cmd = '/usr/local/bin/ctags'
+elseif system('uname') == "FreeBSD\n"
+  let Tlist_Ctags_Cmd = '/usr/local/bin/exctags'
 else
   let Tlist_Ctags_Cmd = '/usr/bin/ctags'
 endif
