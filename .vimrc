@@ -39,7 +39,7 @@ augroup MyAutoCmd
   autocmd!
 augroup END
 
-filetype plugin indent off
+filetype off
 
 if has('vim_starting')
   if s:is_windows
@@ -54,7 +54,7 @@ if has('vim_starting')
   call neobundle#rc(expand('~/.vim/bundle/'))
 endif
 
-" let NeoBundle manage NeoBundle
+" Let NeoBundle manage NeoBundle
 NeoBundle 'Shougo/neobundle.vim'
 
 " My Bundles here:
@@ -96,6 +96,14 @@ NeoBundle 'yuratomo/w3m.vim'
 " From vim.org
 NeoBundle 'sudo.vim'
 NeoBundle 'autofmt'
+
+" Installation check.
+if neobundle#exists_not_installed_bundles()
+  echomsg 'Not installed bundles : ' .
+      \ string(neobundle#get_not_installed_bundle_names())
+  echomsg 'Please execute ":NeoBundleInstall" command.'
+  finish
+endif
 
 "---------------------------------------------------------------------------
 " Encoding:"{{{
