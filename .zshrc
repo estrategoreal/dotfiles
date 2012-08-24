@@ -115,9 +115,9 @@ if is_darwin ; then
   alias vim='/Applications/MacVim.app/Contents/MacOS/Vim "$@"'
   alias gvim='/Applications/MacVim.app/Contents/MacOS/Vim -g "$@"'
 
+  alias debian='/Applications/VirtualBox.app/Contents/MacOS/VBoxManage startvm Debian --type gui'
   alias fbsd='/Applications/VirtualBox.app/Contents/MacOS/VBoxManage startvm FreeBSD --type gui'
   alias mint='/Applications/VirtualBox.app/Contents/MacOS/VBoxManage startvm Mint13 --type gui'
-  alias lmde='/Applications/VirtualBox.app/Contents/MacOS/VBoxManage startvm LMDE --type gui'
   alias rmds='sudo find ~ -name .DS_Store -print -exec rm {} ";"'
 elif is_cygwin ; then
   alias open='cygstart'
