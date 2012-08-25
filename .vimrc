@@ -241,7 +241,6 @@ if has('unnamedplus')
 else
   set clipboard& clipboard+=unnamed
 endif
-set clipboard& clipboard+=unnamed
 
 " Highlight parenthesis.
 set showmatch
