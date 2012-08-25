@@ -59,6 +59,8 @@ NeoBundle 'Shougo/neobundle.vim'
 
 " My Bundles here:
 NeoBundle 'anyakichi/vim-surround.git'
+NeoBundle 'basyura/TweetVim.git'
+NeoBundle 'basyura/twibill.vim.git'
 NeoBundle 'gregsexton/gitv.git'
 NeoBundle 'h1mesuke/unite-outline.git'
 NeoBundle 'h1mesuke/vim-alignta.git'
@@ -66,6 +68,7 @@ NeoBundle 'kana/vim-smartchr.git'
 NeoBundle 'LeafCage/foldCC.git'
 NeoBundle 'Lokaltog/vim-easymotion.git'
 NeoBundle 'mrtazz/DoxygenToolkit.vim.git'
+NeoBundle 'osyo-manga/unite-quickfix'
 NeoBundle 'Rip-Rip/clang_complete.git'
 NeoBundle 'Shougo/neocomplcache.git'
 NeoBundle 'Shougo/neocomplcache-clang_complete'
@@ -75,10 +78,16 @@ NeoBundle 'Shougo/unite.vim.git'
 NeoBundle 'Shougo/unite-ssh.git'
 NeoBundle 'Shougo/vim-vcs.git'
 NeoBundle 'Shougo/vimfiler.git'
-NeoBundle 'Shougo/vimproc.git'
+NeoBundle 'Shougo/vimproc', {
+      \ 'build' : {
+      \     'windows' : 'echo "Sorry, cannot update vimproc binary file in Windows."',
+      \     'cygwin' : 'make -f make_cygwin.mak',
+      \     'mac' : 'make -f make_mac.mak',
+      \     'unix' : 'make -f make_unix.mak',
+      \    },
+      \ }
 NeoBundle 'Shougo/vimshell.git'
 NeoBundle 'Shougo/vinarise.git'
-NeoBundle 'soh335/unite-qflist.git'
 NeoBundle 'thinca/vim-quickrun.git'
 NeoBundle 'thinca/vim-ref.git'
 NeoBundle 'tpope/vim-fugitive.git'
@@ -227,6 +236,11 @@ set shiftround
 set modeline
 
 " Use clipboard register.
+if has('unnamedplus')
+  set clipboard& clipboard+=unnamedplus
+else
+  set clipboard& clipboard+=unnamed
+endif
 set clipboard& clipboard+=unnamed
 
 " Highlight parenthesis.
@@ -343,6 +357,24 @@ function! s:define_surround_keymappings()
   nmap <buffer> ySs <Plug>YSsurround
   nmap <buffer> ySS <Plug>YSsurround
 endfunction
+"}}}
+
+" TweetVim{{{
+" Start TweetVim.
+nnoremap <silent> [unite]e :<C-u>Unite tweetvim<CR>
+autocmd MyAutoCmd FileType tweetvim call s:tweetvim_my_settings()
+function! s:tweetvim_my_settings()"{{{
+  " Open say buffer.
+  nnoremap <silent><buffer> s :TweetVimSay<CR>
+  nnoremap <silent><buffer> q :close<CR>
+endfunction"}}}
+
+" Complete by neocomplcache.
+if !exists('g:neocomplcache_dictionary_filetype_lists')
+  let g:neocomplcache_dictionary_filetype_lists = {}
+endif
+let g:neocomplcache_dictionary_filetype_lists.tweetvim_say =
+      \ expand('~/.tweetvim/screen_name')
 "}}}
 
 " alignta.vim"{{{
@@ -473,7 +505,7 @@ nnoremap <silent> [unite]j  :<C-u>Unite change jump<CR>
 nnoremap <silent> [unite]ma :<C-u>Unite mapping<CR>
 nnoremap <silent> [unite]me :<C-u>Unite output:message<CR>
 nnoremap <silent> [unite]o  :<C-u>Unite outline -start-insert<CR>
-nnoremap <silent> [unite]q  :<C-u>Unite qflist -no-quit<CR>
+nnoremap <silent> [unite]q  :<C-u>Unite quickfix -no-quit<CR>
 nnoremap <silent> [unite]r  :<C-u>Unite -buffer-name=register register history/yank<CR>
 nnoremap <silent> [unite]s  :<C-u>Unite source<CR>
 nnoremap <silent> [unite]t  :<C-u>UniteWithCursorWord -buffer-name=tag tag tag/include<CR>
