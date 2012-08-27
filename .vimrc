@@ -19,6 +19,7 @@ endif
 set nocompatible
 
 let s:is_windows = has('win32') || has('win64')
+let s:is_freebsd = system('uname') == "FreeBSD\n"
 
 " Use English interface.
 if s:is_windows
@@ -93,6 +94,7 @@ NeoBundle 'thinca/vim-ref.git'
 NeoBundle 'tpope/vim-fugitive.git'
 NeoBundle 'tsukkee/unite-help.git'
 NeoBundle 'tsukkee/unite-tag.git'
+NeoBundle 'tyru/caw.vim.git'
 NeoBundle 'tyru/open-browser.vim.git'
 NeoBundle 'ujihisa/vimshell-ssh.git'
 NeoBundle 'othree/eregex.vim.git'
@@ -542,13 +544,13 @@ endfunction"}}}
 nnoremap [Tag] <Nop>
 nmap t [Tag]
 " Jump.
-nnoremap [Tag]t  <C-]> zv
+nnoremap [Tag]t <C-]> zv
 "nnoremap <silent><expr> [Tag]t  &filetype == 'help' ?  "\<C-]>" :
       \ ":\<C-u>UniteWithCursorWord -buffer-name=tag -immediately tag tag/include\<CR>"
 " Jump next.
 nnoremap <silent> [Tag]n :<C-u>tnext<CR>
 " Jump previous.
-nnoremap <silent> [Tag]p  :<C-u>pop<CR>
+nnoremap <silent> [Tag]p :<C-u>pop<CR>
 "nnoremap <silent><expr> [Tag]p  &filetype == 'help' ?
       \ ":\<C-u>pop\<CR>" : ":\<C-u>Unite jump\<CR>"
 "}}}
@@ -627,7 +629,7 @@ endfunction"}}}
 "}}}
 
 " vimshell.vim"{{{
-nmap <silent> <C-@> :VimShellPop<CR>
+nnoremap <silent> <C-@> :<C-u>VimShellPop<CR>
 
 let g:vimshell_user_prompt = 'fnamemodify(getcwd(), ":~")'
 let g:vimshell_right_prompt = 'vcs#info("(%s)-[%b]%p", "(%s)-[%b|%a]%p")'
@@ -693,6 +695,11 @@ function! s:fugitive_tab(cmd)
 endfunction
 "}}}
 
+" caw.vim"{{{
+nmap gcc <Plug>(caw:i:toggle)
+xmap gcc <Plug>(caw:i:toggle)
+"}}}
+
 " open-browser.vim"{{{
 let g:netrw_nogx = 1 " disable netrw's gx mapping.
 nmap gx <Plug>(openbrowser-smart-search)
@@ -718,7 +725,7 @@ nnoremap <C-s> :<C-u>Gtags -r<Space>
 " taglist.vim"{{{
 if has('mac') || s:is_windows
   let Tlist_Ctags_Cmd = '/usr/local/bin/ctags'
-elseif system('uname') == "FreeBSD\n"
+elseif s:is_freebsd
   let Tlist_Ctags_Cmd = '/usr/local/bin/exctags'
 else
   let Tlist_Ctags_Cmd = '/usr/bin/ctags'
@@ -739,8 +746,10 @@ if has('mac')
 elseif s:is_windows
   let g:w3m#command = 'c:/MinGW/msys/1.0/local/bin/w3m.exe'
   let g:w3m#external_browser = '"'.$USERPROFILE.'/Local Settings/Application Data/Google/Chrome/Application/chrome.exe'.'"'
-else
+elseif s:is_freebsd
   let g:w3m#external_browser = 'chrome'
+else
+  let g:w3m#external_browser = 'chromium'
 endif
 let g:w3m#search_engine = 
     \ 'https://www.google.co.jp/search?aq=f&ix=seb&sourceid=chrome&ie=' . &encoding . '&q='
@@ -758,13 +767,13 @@ endfunction
 " Key-mappings:"{{{
 "
 " Command-line mode keymappings:"{{{
-" <C-a>, A: move to head.
+" <C-a>: move to head.
 cnoremap <C-a> <Home>
 " <C-b>: previous char.
 cnoremap <C-b> <Left>
 " <C-d>: delete char.
 cnoremap <C-d> <Del>
-" <C-e>, E: move to end.
+" <C-e>: move to end.
 cnoremap <C-e> <End>
 " <C-f>: next char.
 cnoremap <C-f> <Right>
@@ -772,7 +781,7 @@ cnoremap <C-f> <Right>
 cnoremap <C-n> <Down>
 " <C-p>: previous history.
 cnoremap <C-p> <Up>
-" <C-k>, K: delete to end.
+" <C-k>: delete to end.
 cnoremap <C-k> <C-\>e getcmdpos() == 1 ? '' : getcmdline()[:getcmdpos()-2]<CR>
 " <C-y>: paste.
 cnoremap <C-y> <C-r>*
@@ -780,9 +789,9 @@ cnoremap <C-y> <C-r>*
 cnoremap <C-s> <C-f>
 " <C-l>: view completion list.
 cnoremap <C-l> <C-d>
-" <A-b>, W: move to previous word.
+" <A-b>: move to previous word.
 cnoremap <A-b> <S-Left>
-" <A-f>, B: move to next word.
+" <A-f>: move to next word.
 cnoremap <A-f> <S-Right>
 "}}}
 
