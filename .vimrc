@@ -71,14 +71,15 @@ NeoBundle 'Lokaltog/vim-easymotion.git'
 NeoBundle 'mrtazz/DoxygenToolkit.vim.git'
 NeoBundle 'osyo-manga/unite-quickfix'
 NeoBundle 'Rip-Rip/clang_complete.git'
-NeoBundle 'Shougo/neocomplcache.git'
+NeoBundle 'Shougo/neocomplcache.git',
+      \ { 'depends' : 'Shougo/neocomplcache-snippets-complete.git' }
 NeoBundle 'Shougo/neocomplcache-clang_complete'
-NeoBundle 'Shougo/neocomplcache-snippets-complete.git'
 NeoBundle 'Shougo/unite-build.git'
-NeoBundle 'Shougo/unite.vim.git'
+NeoBundleDepends 'Shougo/unite.vim.git'
 NeoBundle 'Shougo/unite-ssh.git'
 NeoBundle 'Shougo/vim-vcs.git'
-NeoBundle 'Shougo/vimfiler.git'
+NeoBundle 'Shougo/vimfiler.git',
+      \ { 'depends' : 'Shougo/unite.vim.git' }
 NeoBundle 'Shougo/vimproc', {
       \ 'build' : {
       \     'windows' : 'echo "Sorry, cannot update vimproc binary file in Windows."',
@@ -360,14 +361,14 @@ function! s:define_surround_keymappings()
 endfunction
 "}}}
 
-" TweetVim{{{
+" TweetVim"{{{
 " Start TweetVim.
 nnoremap <silent> [unite]e :<C-u>Unite tweetvim<CR>
 autocmd MyAutoCmd FileType tweetvim call s:tweetvim_my_settings()
 function! s:tweetvim_my_settings()"{{{
   " Open say buffer.
-  nnoremap <silent><buffer> s :TweetVimSay<CR>
-  nnoremap <silent><buffer> q :close<CR>
+  nnoremap <silent><buffer> s :<C-u>TweetVimSay<CR>
+  nnoremap <silent><buffer> q :<C-u>close<CR>
 endfunction"}}}
 
 " Complete by neocomplcache.
@@ -507,7 +508,7 @@ nnoremap <silent> [unite]ma :<C-u>Unite mapping<CR>
 nnoremap <silent> [unite]me :<C-u>Unite output:message<CR>
 nnoremap <silent> [unite]o  :<C-u>Unite outline -start-insert<CR>
 nnoremap <silent> [unite]q  :<C-u>Unite quickfix -no-quit<CR>
-nnoremap <silent> [unite]r  :<C-u>Unite -buffer-name=register register history/yank<CR>
+xnoremap <silent> [unite]r  d:<C-u>Unite -buffer-name=register register history/yank<CR>
 nnoremap <silent> [unite]s  :<C-u>Unite source<CR>
 nnoremap <silent> [unite]t  :<C-u>UniteWithCursorWord -buffer-name=tag tag tag/include<CR>
 nnoremap <silent> [unite]u  :<C-u>Unite buffer file_mru bookmark<CR>
@@ -622,7 +623,7 @@ function! s:vimfiler_my_settings()"{{{
 
   " Migemo search.
   if !empty(unite#get_filters('matcher_migemo'))
-    nnoremap <silent><buffer><expr> /  line('$') > 10000 ?  'g/' :
+    nnoremap <silent><buffer><expr> / line('$') > 10000 ? 'g/' :
           \ ":\<C-u>Unite -buffer-name=search -start-insert line_migemo\<CR>"
   endif
 endfunction"}}}
@@ -670,8 +671,8 @@ let g:vinarise_enable_auto_detect = 1
 autocmd MyAutoCmd FileType ref call s:ref_my_settings()
 function! s:ref_my_settings()"{{{
   " Overwrite settings.
-  nmap <buffer> [Tag]t  <Plug>(ref-keyword)
-  nmap <buffer> [Tag]p  <Plug>(ref-back)
+  nmap <buffer> [Tag]t <Plug>(ref-keyword)
+  nmap <buffer> [Tag]p <Plug>(ref-back)
 endfunction"}}}
 "}}}
 
@@ -751,8 +752,8 @@ elseif s:is_freebsd
 else
   let g:w3m#external_browser = 'chromium'
 endif
-let g:w3m#search_engine = 
-    \ 'https://www.google.co.jp/search?aq=f&ix=seb&sourceid=chrome&ie=' . &encoding . '&q='
+let g:w3m#search_engine =
+      \ 'https://www.google.co.jp/search?aq=f&ix=seb&sourceid=chrome&ie=' . &encoding . '&q='
 autocmd MyAutoCmd FileType w3m call s:w3m_settings()
 function! s:w3m_settings()
   nnoremap <buffer> H :<C-u>call w3m#Back()<CR>
@@ -927,8 +928,12 @@ noremap [Space]gg :<C-u>echo FoldCCnavi()<CR>
 " Auto escape / substitute.
 xnoremap s y:%s/<C-r>=substitute(@0, '/', '\\/', 'g')<Return>//g<Left><Left>
 
+" Capitalize a word.
+nnoremap gu <ESC>gUiw`]
+inoremap <C-q> <ESC>gUiw`]a
+
 " Clear highlight.
-nnoremap <silent> <ESC><ESC> :nohlsearch<CR>
+nnoremap <silent> <ESC><ESC> :<C-u>nohlsearch<CR>
 "}}}
 
 "---------------------------------------------------------------------------

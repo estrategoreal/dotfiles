@@ -59,7 +59,6 @@ alias mv='mv -i'
 alias ack='ack --asm --cc --cpp'
 
 if is_darwin ; then
-  alias ls='ls -G'
   alias vim='/Applications/MacVim.app/Contents/MacOS/Vim "$@"'
   alias gvim='/Applications/MacVim.app/Contents/MacOS/Vim -g "$@"'
 

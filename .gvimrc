@@ -27,8 +27,20 @@ if has('mac')
   if exists('&ambiwidth')
     set ambiwidth=double
   endif
-elseif has('win32')
-  set guifont=Ricty:h12,MS_Gothic:h12:cSHIFTJIS
+elseif has('win32') || has('win64')
+  set guifont=Ricty:h12,MeiryoKe_Gothic:h11,MS_Gothic:h11:cSHIFTJIS
+
+  " Toggle font setting.
+  function! FontToggle()
+    if &guifont =~ '^Ricty:'
+      set guifont=MeiryoKe_Gothic:h11,MS_Gothic:h11:cSHIFTJIS
+    else
+      set guifont=Ricty:h12
+    endif
+  endfunction
+
+  nnoremap TF :<C-u>call FontToggle()<CR>
+
   if has('kaoriya')
     set ambiwidth=auto
   endif
@@ -61,7 +73,7 @@ set guioptions-=m
 " Scrollbar is always off.
 set guioptions-=rL
 
-if has('win32')
+if has('win32') || has('win64')
   gui
   augroup Transparency
     autocmd!
