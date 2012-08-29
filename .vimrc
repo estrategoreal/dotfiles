@@ -112,7 +112,7 @@ NeoBundle 'autofmt'
 " Installation check.
 if neobundle#exists_not_installed_bundles()
   echomsg 'Not installed bundles : ' .
-      \ string(neobundle#get_not_installed_bundle_names())
+        \ string(neobundle#get_not_installed_bundle_names())
   echomsg 'Please execute ":NeoBundleInstall" command.'
   finish
 endif
@@ -752,8 +752,7 @@ elseif s:is_freebsd
 else
   let g:w3m#external_browser = 'chromium'
 endif
-let g:w3m#search_engine =
-      \ 'https://www.google.co.jp/search?aq=f&ix=seb&sourceid=chrome&ie=' . &encoding . '&q='
+let g:w3m#search_engine = 'http://www.google.co.jp/search?ie=' . &encoding . '&q='
 autocmd MyAutoCmd FileType w3m call s:w3m_settings()
 function! s:w3m_settings()
   nnoremap <buffer> H :<C-u>call w3m#Back()<CR>

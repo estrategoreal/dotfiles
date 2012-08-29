@@ -95,9 +95,9 @@ fi
 
 # User specific aliases and functions
 
-if is_darwin ; then
+if is_darwin || is_freebsd ; then
   alias ls='ls -G'
-elif is_linux || is_cygwin ; then
+else
   alias ls='ls --color=auto'
 fi
 alias ll='ls -l'
