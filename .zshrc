@@ -159,6 +159,15 @@ if is_darwin ; then
   function tarbz2() {
     COPYFILE_DISABLE=true tar cjvf $1.tbz --exclude .DS_Store $1
   }
+elif is_freebsd ; then
+  function udpkg() {
+    sudo portsnap fetch update
+    sudo pkg_replaece -V
+    sudo pkg_replaece -aPR -m "BATCH=yes"
+    sudo pkg_replaece -V
+    sudo freebsd-update fetch
+    sudo freebsd-update install
+  }
 fi
 
 [ -f ~/.zshrc.local ] && source ~/.zshrc.local
