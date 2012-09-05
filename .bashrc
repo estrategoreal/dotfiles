@@ -113,7 +113,7 @@ elif is_freebsd ; then
   function udpkg() {
     sudo portsnap fetch update
     sudo pkg_replaece -V
-    sudo pkg_replaece -aPR
+    sudo pkg_replaece -aR -m "BATCH=yes"
     sudo pkg_replaece -V
     sudo freebsd-update fetch
     sudo freebsd-update install
