@@ -75,7 +75,7 @@ NeoBundle 'Shougo/neocomplcache.git',
       \ { 'depends' : 'Shougo/neocomplcache-snippets-complete.git' }
 NeoBundle 'Shougo/neocomplcache-clang_complete'
 NeoBundle 'Shougo/unite-build.git'
-NeoBundleDepends 'Shougo/unite.vim.git'
+NeoBundle 'Shougo/unite.vim.git'
 NeoBundle 'Shougo/unite-ssh.git'
 NeoBundle 'Shougo/vim-vcs.git'
 NeoBundle 'Shougo/vimfiler.git',
@@ -90,6 +90,7 @@ NeoBundle 'Shougo/vimproc', {
       \ }
 NeoBundle 'Shougo/vimshell.git'
 NeoBundle 'Shougo/vinarise.git'
+NeoBundle 'thinca/vim-qfreplace.git'
 NeoBundle 'thinca/vim-quickrun.git'
 NeoBundle 'thinca/vim-ref.git'
 NeoBundle 'tpope/vim-fugitive.git'
@@ -317,6 +318,14 @@ set completeopt=menuone
 " Completion setting.
 " Don't complete from other buffer.
 set complete=.
+
+" Enable multibyte format.
+set formatoptions+=mM
+
+if has('conceal')
+  " For conceal
+  set conceallevel=2 concealcursor=iv
+endif
 "}}}
 
 "---------------------------------------------------------------------------
@@ -327,7 +336,7 @@ set smartindent
 
 augroup MyAutoCmd
   " Close help and reference window by pressing q.
-  autocmd FileType help,qf,quickrun,ref
+  autocmd FileType help,qf,qfreplace,quickrun,ref
         \ nnoremap <buffer><silent> q :<C-u>call <SID>smart_close()<CR>
   autocmd FileType * if (&readonly || !&modifiable) && !hasmapto('q', 'n')
         \ | nnoremap <buffer><silent> q :<C-u>call <SID>smart_close()<CR>| endif
@@ -436,6 +445,11 @@ let g:clang_auto_select = 1
 if s:is_windows
   let g:clang_library_path = 'c:/MinGW/msys/1.0/lib'
 endif
+if !exists('g:neocomplcache_force_omni_patterns')
+  let g:neocomplcache_force_omni_patterns = {}
+endif
+"let g:neocomplcache_force_omni_patterns.c = '[^.[:digit:] *\t]\%(\.\|->\)'
+"let g:neocomplcache_force_omni_patterns.cpp = '[^.[:digit:] *\t]\%(\.\|->\)\|\h\w*::'
 
 " Define dictionary.
 let g:neocomplcache_dictionary_filetype_lists = {
@@ -447,17 +461,16 @@ let g:neocomplcache_dictionary_filetype_lists = {
 if !exists('g:neocomplcache_keyword_patterns')
   let g:neocomplcache_keyword_patterns = {}
 endif
-let g:neocomplcache_keyword_patterns.default = '\h\w*'
+let g:neocomplcache_keyword_patterns['default'] = '\h\w*'
 
 " Plugin key-mappings.
-imap <C-k> <Plug>(neocomplcache_snippets_expand)
-smap <C-k> <Plug>(neocomplcache_snippets_expand)
 inoremap <expr><C-g> neocomplcache#undo_completion()
 inoremap <expr><C-l> neocomplcache#complete_common_string()
+imap <C-k> <Plug>(neocomplcache_snippets_expand)
+smap <C-k> <Plug>(neocomplcache_snippets_jump)
+imap <C-s> <Plug>(neocomplcache_start_unite_snippet)
 
 let g:neocomplcache_snippets_dir = $HOME . '/.vim/snippets'
-
-imap <C-s> <Plug>(neocomplcache_start_unite_snippet)
 
 " <CR>: close popup and save indent.
 inoremap <expr><silent> <CR> <SID>my_cr_function()
@@ -485,9 +498,10 @@ let g:neocomplcache_omni_functions = {
 if !exists('g:neocomplcache_omni_patterns')
   let g:neocomplcache_omni_patterns = {}
 endif
-let g:neocomplcache_omni_patterns.ruby = '[^. *\t]\.\w*\|\h\w*::'
-let g:neocomplcache_omni_patterns.c = '\%(\.\|->\)\h\w*'
-let g:neocomplcache_omni_patterns.cpp = '\h\w*\%(\.\|->\)\h\w*\|\h\w*::'
+let g:neocomplcache_omni_patterns.ruby = '[^. *\t]\.\h\w*\|\h\w*::'
+let g:neocomplcache_force_omni_patterns.ruby = '[^. *\t]\.\w*\|\h\w*::'
+let g:neocomplcache_omni_patterns.c = '[^.[:digit:] *\t]\%(\.\|->\)'
+let g:neocomplcache_omni_patterns.cpp = '[^.[:digit:] *\t]\%(\.\|->\)\|\h\w*::'
 "}}}
 
 " unite.vim"{{{
@@ -598,11 +612,14 @@ let g:unite_source_session_enable_auto_save = 1
 " vimfiler.vim"{{{
 nnoremap <silent> <C-g> :<C-u>VimFiler -buffer-name=explorer -simple -toggle<CR>
 
+" Edit file by tabedit.
+"let g:vimfiler_edit_action = 'tabopen'
+
 let g:vimfiler_as_default_explorer = 1
+
+" Enable file operation commands.
 let g:vimfiler_safe_mode_by_default = 0
 
-" Edit a file by tabedit.
-"let g:vimfiler_edit_action = 'tabopen'
 if s:is_windows
   " Use trashbox.
   let g:unite_kind_file_use_trashbox = 1
@@ -617,6 +634,8 @@ endif
 
 autocmd MyAutoCmd FileType vimfiler call s:vimfiler_my_settings()
 function! s:vimfiler_my_settings()"{{{
+  setlocal nobuflisted
+
   " Overwrite settings.
   nnoremap <silent><buffer> J
         \ <C-u>:Unite -buffer-name=files -default-action=lcd directory_mru<CR>
@@ -653,6 +672,9 @@ function! s:vimshell_my_settings()"{{{
   nmap <silent><buffer> <ESC><ESC> q
   imap <silent><buffer> <ESC><ESC> <ESC>q
 
+  nnoremap <silent><buffer> J
+        \ <C-u>:Unite -buffer-name=files -default-action=lcd directory_mru<CR>
+
   call vimshell#set_alias('ll', 'ls -l --encoding=utf-8')
   call vimshell#set_alias('la', 'ls -alF --encoding=utf-8')
   call vimshell#set_alias('l', 'ls -CF')
@@ -665,6 +687,10 @@ endfunction"}}}
 
 " vinarise.vim"{{{
 let g:vinarise_enable_auto_detect = 1
+"}}}
+
+" qfreplace.vim"{{{
+autocmd MyAutoCmd FileType qf nnoremap <buffer> r :<C-u>Qfreplace<CR>
 "}}}
 
 " ref.vim"{{{
