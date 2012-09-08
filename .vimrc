@@ -649,7 +649,7 @@ endfunction"}}}
 "}}}
 
 " vimshell.vim"{{{
-nnoremap <silent> <C-@> :<C-u>VimShellPop<CR>
+nmap <silent> <C-@> <Plug>(vimshell_switch)
 
 let g:vimshell_user_prompt = 'fnamemodify(getcwd(), ":~")'
 let g:vimshell_right_prompt = 'vcs#info("(%s)-[%b]%p", "(%s)-[%b|%a]%p")'
@@ -669,10 +669,8 @@ let g:vimshell_execute_file_list['rb'] = 'ruby'
 autocmd MyAutoCmd FileType vimshell call s:vimshell_my_settings()
 function! s:vimshell_my_settings()"{{{
   " Hide the window in hitting ESC key twice.
-  nmap <silent><buffer> <ESC><ESC> q
-  imap <silent><buffer> <ESC><ESC> <ESC>q
-  imap <buffer><BS>  <Plug>(vimshell_another_delete_backward_char)
-  imap <buffer><C-h> <Plug>(vimshell_another_delete_backward_char)
+  nmap <silent><buffer> <ESC><ESC> <C-^>
+  imap <silent><buffer> <ESC><ESC> <ESC><C-^>
   imap <buffer><C-k> <Plug>(vimshell_zsh_complete)
 
   nnoremap <silent><buffer> J
