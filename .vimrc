@@ -673,7 +673,7 @@ function! s:vimshell_my_settings()"{{{
   imap <silent><buffer> <ESC><ESC> <ESC>q
   imap <buffer><BS>  <Plug>(vimshell_another_delete_backward_char)
   imap <buffer><C-h> <Plug>(vimshell_another_delete_backward_char)
-  imap <buffer><C-k> <Plug>(vishell_zsh_complete)
+  imap <buffer><C-k> <Plug>(vimshell_zsh_complete)
 
   nnoremap <silent><buffer> J
         \ <C-u>:Unite -buffer-name=files -default-action=lcd directory_mru<CR>
