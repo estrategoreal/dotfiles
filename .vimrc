@@ -502,6 +502,20 @@ let g:neocomplcache_omni_patterns.ruby = '[^. *\t]\.\h\w*\|\h\w*::'
 let g:neocomplcache_force_omni_patterns.ruby = '[^. *\t]\.\w*\|\h\w*::'
 let g:neocomplcache_omni_patterns.c = '[^.[:digit:] *\t]\%(\.\|->\)'
 let g:neocomplcache_omni_patterns.cpp = '[^.[:digit:] *\t]\%(\.\|->\)\|\h\w*::'
+
+let g:neocomplcache_vim_completefuncs = {
+      \ 'Ref' : 'ref#complete',
+      \ 'Unite' : 'unite#complete_source',
+      \ 'VimShellExecute' :
+      \      'vimshell#vimshell_execute_complete',
+      \ 'VimShellInteractive' :
+      \      'vimshell#vimshell_execute_complete',
+      \ 'VimShellTerminal' :
+      \      'vimshell#vimshell_execute_complete',
+      \ 'VimShell' : 'vimshell#complete',
+      \ 'VimFiler' : 'vimfiler#complete',
+      \ 'Vinarise' : 'vinarise#complete',
+      \}
 "}}}
 
 " unite.vim"{{{
@@ -671,6 +685,9 @@ function! s:vimshell_my_settings()"{{{
   " Hide the window in hitting ESC key twice.
   nmap <silent><buffer> <ESC><ESC> q
   imap <silent><buffer> <ESC><ESC> <ESC>q
+  imap <buffer><BS>  <Plug>(vimshell_another_delete_backward_char)
+  imap <buffer><C-h> <Plug>(vimshell_another_delete_backward_char)
+  imap <buffer><C-k> <Plug>(vishell_zsh_complete)
 
   nnoremap <silent><buffer> J
         \ <C-u>:Unite -buffer-name=files -default-action=lcd directory_mru<CR>
@@ -966,6 +983,8 @@ nnoremap <silent> <ESC><ESC> :<C-u>nohlsearch<CR>
 "
 if s:is_windows
   set shell=c:/MinGW/msys/1.0/bin/bash
+else
+  set shell=zsh
 endif
 "}}}
 
