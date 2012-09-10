@@ -75,9 +75,16 @@ elif is_msys ; then
   alias mingw-search='mingw-get list | grep Package: | grep'
 fi
 alias vf='gvim +"VimFiler -buffer-name=explorer -simple -toggle"'
-alias ide='gvim +"set columns=179" +"VimFiler -buffer-name=explorer -simple -toggle ~/work" +tabnew +TlistOpen +"VimFiler -buffer-name=explorer -split -simple -winwidth=46 -toggle -no-quit"'
 alias formc='find . -iregex ".+\.\(c\|h\)$" -type f -print0 | xargs -0 uncrustify -c ~/.uncrustify4c.cfg --no-backup'
 alias formcpp='find . -iregex ".+\.\(c\|cpp\|h\)$" -type f -print0 | xargs -0 uncrustify -c ~/.uncrustify4cpp.cfg --no-backup'
+
+function ide() {
+  if [[ $# -ge 1 ]] ; then
+    gvim +"set columns=179" +"VimFiler -buffer-name=explorer -simple -toggle ~/work" +"tabedit $1" +TlistOpen +"VimFilerExplorer -winwidth=46" +"wincmd l"
+  else
+    gvim +"set columns=179" +"VimFiler -buffer-name=explorer -simple -toggle ~/work" +tabnew +TlistOpen +"VimFilerExplorer -winwidth=46"
+  fi
+}
 
 function gitarc() {
   if [[ $# -lt 1 ]] ; then

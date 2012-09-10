@@ -218,6 +218,9 @@ endif
 set ignorecase
 " If the search pattern contains upper case characters, override ignorecase option.
 set smartcase
+
+" Searches wrap around the end of the file.
+set wrapscan
 "}}}
 
 "---------------------------------------------------------------------------
@@ -318,6 +321,8 @@ set completeopt=menuone
 " Completion setting.
 " Don't complete from other buffer.
 set complete=.
+" Set popup menu max height.
+set pumheight=20
 
 " Enable multibyte format.
 set formatoptions+=mM
@@ -534,7 +539,7 @@ nnoremap <silent> [unite]G  :<C-u>call <SID>cursor_grep()<CR>
 xnoremap <silent> [unite]G  :<C-u>call <SID>visual_grep()<CR>
 function! s:cursor_grep()
   let w = expand('<cword>')
-  execute ":tabnew"
+  call s:my_tabnew()
   execute ":Unite grep:.::" . w . " -buffer-name=search -no-quit<CR>"
 endfunction
 function! s:visual_grep()
@@ -542,7 +547,7 @@ function! s:visual_grep()
   silent normal gvy
   let selected = @@
   let @@ = tmp
-  execute ":tabnew"
+  call s:my_tabnew()
   execute ":Unite grep:.::" . selected . " -buffer-name=search -no-quit<CR>"
 endfunction
 nnoremap <silent> [Space]b :<C-u>UniteBookmarkAdd<CR>
@@ -856,8 +861,7 @@ endfunction
 nmap <C-t> [Tabbed]
 nnoremap [Tabbed] <Nop>
 " Create a tab page.
-"nnoremap <silent> [Tabbed]c :<C-u>tabnew<CR>
-nnoremap <silent> [Tabbed]c :<C-u>VimFilerTab -buffer-name=explorer -simple -toggle<CR>
+nnoremap <silent> [Tabbed]c :<C-u>call <SID>my_tabnew()<CR>
 nnoremap <silent> [Tabbed]C :<C-u>tabnew %<CR>
 nnoremap <silent> [Tabbed]d :<C-u>tabclose<CR>
 " Move to other tab page.
@@ -866,6 +870,12 @@ nnoremap <silent> [Tabbed]h :<C-u>tabprevious<CR>
 nnoremap <silent> [Tabbed]H :<C-u>tabfirst<CR>
 nnoremap <silent> [Tabbed]L :<C-u>tablast<CR>
 nnoremap <silent> [Tabbed]<C-t> :<C-u>Unite tab<CR>
+
+function! s:my_tabnew()
+  tabnew
+  vsplit
+  VimFiler -buffer-name=explorer -simple -toggle
+endfunction
 "}}}
 
 " q: Quickfix "{{{
