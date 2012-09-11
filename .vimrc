@@ -518,7 +518,7 @@ xmap f [unite]
 
 nnoremap <expr><silent> [unite]b <SID>unite_build()
 function! s:unite_build()
-  return ":\<C-u>Unite -buffer-name=build" . tabpagenr() . " -no-quit build\<CR>"
+  return ':\<C-u>Unite -buffer-name=build' . tabpagenr() . ' -no-quit build\<CR>'
 endfunction
 nnoremap <silent> [unite]d  :<C-u>Unite -buffer-name=files -default-action=lcd directory_mru<CR>
 nnoremap <silent> [unite]f  :<C-u>UniteWithBufferDir -buffer-name=files file file/new<CR>
@@ -539,16 +539,16 @@ nnoremap <silent> [unite]G  :<C-u>call <SID>cursor_grep()<CR>
 xnoremap <silent> [unite]G  :<C-u>call <SID>visual_grep()<CR>
 function! s:cursor_grep()
   let w = expand('<cword>')
-  call s:my_tabnew()
-  execute ":Unite grep:.::" . w . " -buffer-name=search -no-quit<CR>"
+  call s:my_idenew()
+  execute ':Unite grep:.::' . w . ' -buffer-name=search -no-quit<CR>'
 endfunction
 function! s:visual_grep()
   let tmp = @@
   silent normal gvy
   let selected = @@
   let @@ = tmp
-  call s:my_tabnew()
-  execute ":Unite grep:.::" . selected . " -buffer-name=search -no-quit<CR>"
+  call s:my_idenew()
+  execute ':Unite grep:.::' . selected . ' -buffer-name=search -no-quit<CR>'
 endfunction
 nnoremap <silent> [Space]b :<C-u>UniteBookmarkAdd<CR>
 
@@ -659,6 +659,7 @@ nmap <silent> <C-@> <Plug>(vimshell_switch)
 let g:vimshell_user_prompt = 'fnamemodify(getcwd(), ":~")'
 let g:vimshell_right_prompt = 'vcs#info("(%s)-[%b]%p", "(%s)-[%b|%a]%p")'
 let g:vimshell_prompt = '% '
+let g:vimshell_split_command = ''
 
 if !s:is_windows
   " Use zsh history.
@@ -714,16 +715,16 @@ nnoremap <silent> [Space]gf :<C-u>Gitv!<CR>
 "}}}
 
 " fugitive.vim"{{{
-nnoremap <silent> [Space]gd :<C-u>call <SID>fugitive_tab("Gdiff")<CR>
+nnoremap <silent> [Space]gd :<C-u>call <SID>fugitive_tab('Gdiff')<CR>
 nnoremap <silent> [Space]gs :<C-u>Gstatus<CR>
-nnoremap <silent> [Space]gl :<C-u>call <SID>fugitive_tab("Glog")<CR>
+nnoremap <silent> [Space]gl :<C-u>call <SID>fugitive_tab('Glog')<CR>
 nnoremap <silent> [Space]ga :<C-u>Gwrite<CR>
-nnoremap <silent> [Space]gA :<C-u>Gwrite <cfile><CR>
+nnoremap <silent> [Space]gA :<C-u>Gwrite %<CR>
 nnoremap <silent> [Space]gc :<C-u>Gcommit<CR>
 nnoremap <silent> [Space]gC :<C-u>Gcommit --amend<CR>
-nnoremap <silent> [Space]gb :<C-u>call <SID>fugitive_tab("Gblame")<CR>
+nnoremap <silent> [Space]gb :<C-u>call <SID>fugitive_tab('Gblame')<CR>
 function! s:fugitive_tab(cmd)
-  execute ":tabnew " . expand("%:p")
+  execute 'tabedit ' . expand('%')
   execute a:cmd
 endfunction
 "}}}
@@ -861,8 +862,9 @@ endfunction
 nmap <C-t> [Tabbed]
 nnoremap [Tabbed] <Nop>
 " Create a tab page.
-nnoremap <silent> [Tabbed]c :<C-u>call <SID>my_tabnew()<CR>
-nnoremap <silent> [Tabbed]C :<C-u>tabnew %<CR>
+nnoremap <silent> [Tabbed]c :<C-u>call <SID>my_tabnew('')<CR>
+nnoremap <silent> [Tabbed]C :<C-u>call <SID>my_tabnew('%')<CR>
+nnoremap <silent> [Tabbed]i :<C-u>call <SID>my_idenew()<CR>
 nnoremap <silent> [Tabbed]d :<C-u>tabclose<CR>
 " Move to other tab page.
 nnoremap <silent> [Tabbed]l :<C-u>tabnext<CR>
@@ -871,10 +873,24 @@ nnoremap <silent> [Tabbed]H :<C-u>tabfirst<CR>
 nnoremap <silent> [Tabbed]L :<C-u>tablast<CR>
 nnoremap <silent> [Tabbed]<C-t> :<C-u>Unite tab<CR>
 
-function! s:my_tabnew()
+function! s:my_tabnew(file)
+  if empty(a:file)
+    tabnew
+    vsplit
+    VimFiler -buffer-name=explorer -simple -toggle
+  else
+    execute 'tabedit ' . a:file
+    vsplit
+    wincmd l
+    VimFiler -buffer-name=explorer -simple -toggle
+  endif
+endfunction
+
+function! s:my_idenew()
   tabnew
-  vsplit
-  VimFiler -buffer-name=explorer -simple -toggle
+  TlistOpen
+  VimFilerExplorer -winwidth=46
+  wincmd l
 endfunction
 "}}}
 
