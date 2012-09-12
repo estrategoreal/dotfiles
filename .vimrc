@@ -368,10 +368,10 @@ function! s:define_surround_keymappings()
   nmap <buffer> ds  <Plug>Dsurround
   nmap <buffer> cs  <Plug>Csurround
   nmap <buffer> ys  <Plug>Ysurround
-  nmap <buffer> yS  <Plug>YSurround
+  nmap <buffer> yS  <Plug>Ygsurround
   nmap <buffer> yss <Plug>Yssurround
-  nmap <buffer> ySs <Plug>YSsurround
-  nmap <buffer> ySS <Plug>YSsurround
+  nmap <buffer> ySs <Plug>Ygssurround
+  nmap <buffer> ySS <Plug>Ygssurround
 endfunction
 "}}}
 
@@ -394,7 +394,18 @@ let g:neocomplcache_dictionary_filetype_lists.tweetvim_say =
 "}}}
 
 " alignta.vim"{{{
-xnoremap <silent> <C-a> :Alignta = /* */<CR>
+let g:unite_source_alignta_preset_arguments = [
+      \ ["Align at '='", '=>\='],
+      \ ["Align at '/*' & '*/'",   '<-- /* -> */'  ],
+      \ ["Align at '/**<' & '*/'", '<-- /**< -> */'],
+      \ ["Align at ':'", '01 :'],
+      \ ["Align at '|'", '|'   ],
+      \ ["Align at ')'", '0 )' ],
+      \ ["Align at ']'", '0 ]' ],
+      \ ["Align at '}'", '}'   ],
+      \]
+
+xnoremap <silent> [unite]a :<C-u>Unite alignta:arguments<CR>
 "}}}
 
 " smartchr.vim"{{{
@@ -414,7 +425,7 @@ augroup END
 
 " EasyMotion.vim"{{{
 let g:EasyMotion_leader_key = '<Space><Space>'
-let g:EasyMotion_keys = 'fjdkslaureiwoqpvncm'
+let g:EasyMotion_keys = 'fdsaghjklwertyuiovbcnm'
 "}}}
 
 " DoxygenToolkit.vim"{{{
@@ -520,7 +531,7 @@ nnoremap <expr><silent> [unite]b <SID>unite_build()
 function! s:unite_build()
   return ':\<C-u>Unite -buffer-name=build' . tabpagenr() . ' -no-quit build\<CR>'
 endfunction
-nnoremap <silent> [unite]d  :<C-u>Unite -buffer-name=files -default-action=lcd directory_mru<CR>
+nnoremap <silent> [unite]d  :<C-u>Unite -buffer-name=files -default-action=lcd bookmark directory_mru<CR>
 nnoremap <silent> [unite]f  :<C-u>UniteWithBufferDir -buffer-name=files file file/new<CR>
 nnoremap <silent> [unite]j  :<C-u>Unite change jump<CR>
 nnoremap <silent> [unite]ma :<C-u>Unite mapping<CR>
@@ -588,7 +599,6 @@ call unite#custom_filters('line_migemo',
       \ ['matcher_migemo', 'sorter_default', 'converter_default'])
 
 let g:unite_enable_start_insert = 0
-let g:unite_source_grep_default_opts = '-n --include=\*.c --include=\*.cpp --include=\*.h'
 let g:unite_source_grep_max_candidates = 500
 
 " For ack.
@@ -607,18 +617,10 @@ let g:unite_build_error_icon   = expand('~/.vim') . '/signs/err.'
       \ . (s:is_windows ? 'bmp' : 'png')
 let g:unite_build_warning_icon = expand('~/.vim') . '/signs/warn.'
       \ . (s:is_windows ? 'bmp' : 'png')
-
-" For unite-session.
-" Save session automatically.
-let g:unite_source_session_enable_auto_save = 1
-"autocmd MyAutoCmd VimEnter * UniteSessionLoad
 "}}}
 
 " vimfiler.vim"{{{
 nnoremap <silent> <C-g> :<C-u>VimFiler -buffer-name=explorer -simple -toggle<CR>
-
-" Edit file by tabedit.
-"let g:vimfiler_edit_action = 'tabopen'
 
 let g:vimfiler_as_default_explorer = 1
 
@@ -682,8 +684,8 @@ function! s:vimshell_my_settings()"{{{
   nnoremap <silent><buffer> J
         \ <C-u>:Unite -buffer-name=files -default-action=lcd directory_mru<CR>
 
-  call vimshell#set_alias('ll', 'ls -l --encoding=utf-8')
-  call vimshell#set_alias('la', 'ls -alF --encoding=utf-8')
+  call vimshell#set_alias('ll', 'ls -l')
+  call vimshell#set_alias('la', 'ls -alF')
   call vimshell#set_alias('l', 'ls -CF')
   call vimshell#set_alias('l.', 'ls -d .*')
   call vimshell#set_alias('cp', 'cp -i')
