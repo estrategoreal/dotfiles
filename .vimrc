@@ -118,7 +118,7 @@ if neobundle#exists_not_installed_bundles()
   finish
 endif
 
-"---------------------------------------------------------------------------
+"-----------------------------------------------------------------------------
 " Encoding:"{{{
 "
 " The automatic recognition of the character code.
@@ -201,9 +201,9 @@ autocmd MyAutoCmd BufReadPost * call AU_ReCheck_FENC()
 
 " The default fileformat.
 set fileformat=unix
-" Automatic recognition of a new line cord.
+" Automatic detection of the end-of-line.
 set fileformats=unix,dos,mac
-" Display fullwidth characters in vim properly.
+" Use twice the width of ASCII characters.
 set ambiwidth=double
 
 if has('multi_byte_ime')
@@ -211,57 +211,57 @@ if has('multi_byte_ime')
 endif
 "}}}
 
-"---------------------------------------------------------------------------
+"-----------------------------------------------------------------------------
 " Search:"{{{
 "
-" Ignore the case of normal letters.
+" Ignore case in search patterns.
 set ignorecase
-" If the search pattern contains upper case characters, override ignorecase option.
+" Override ignorecase option if the search pattern contains upper case characters.
 set smartcase
 
 " Searches wrap around the end of the file.
 set wrapscan
 "}}}
 
-"---------------------------------------------------------------------------
+"-----------------------------------------------------------------------------
 " Edit:"{{{
 "
 " Smart insert tab setting.
 set smarttab
-" Exchange tab to spaces.
+" Convert tabs to spaces.
 set expandtab
-" Substitute <Tab> with blanks.
+" Number of spaces that a <Tab> in the file counts for.
 set tabstop=4
-" Spaces instead <Tab>.
+" Number of spaces that a <Tab> counts for while performing editing.
 set softtabstop=4
-" Autoindent width.
+" Number of spaces to use for each step of (auto)indent.
 set shiftwidth=4
-" Round indent by shiftwidth.
+" Round indent to multiple of 'shiftwidth'.
 set shiftround
 
 " Enable modeline.
 set modeline
 
-" Use clipboard register.
+" Use the clipboard register.
 if has('unnamedplus')
   set clipboard& clipboard^=unnamedplus
 else
   set clipboard& clipboard^=unnamed
 endif
 
-" Highlight parenthesis.
+" Highlight the matching bracket.
 set showmatch
 
-" Display another buffer even if current buffer isn't saved.
+" Display another buffer even if the current buffer isn't saved.
 set hidden
 
-" Ignore case on insert completion.
+" Ignore case in insert completion.
 set infercase
 
 " Enable folding.
 set foldenable
 set foldmethod=marker
-" Show folding level.
+" Show fold level.
 set foldcolumn=3
 set fillchars=vert:\|
 set commentstring=%s
@@ -276,14 +276,14 @@ autocmd MyAutoCmd FileType *
 " Use grep.
 set grepprg=grep\ -nH
 
-" Set tags file.
-" Don't search tags file in current directory. And search upward.
+" Set tags files.
+" Don't search for tags files in the current directory. And search upward.
 set tags& tags-=tags tags+=./tags;
 
-" Set cindent.
+" Enable automatic C program indenting.
 set cindent
 
-" Set backupdir.
+" Set a directory for bhe backup file.
 set backupdir=~/.vim/tmp
 let &directory = &backupdir
 
@@ -291,56 +291,55 @@ let &directory = &backupdir
 set formatexpr=autofmt#japanese#formatexpr()
 "}}}
 
-"---------------------------------------------------------------------------
+"-----------------------------------------------------------------------------
 " View:"{{{
 "
-" Show line number.
+" Print the line number.
 set number
 set numberwidth=6
-" Show <TAB> and <CR>
+" Show tabs and trailing spaces.
 set list
 set listchars=tab:>-,trail:-,extends:>,precedes:<
-" Wrap long line.
+" Wrap long lines.
 set wrap
 " Wrap conditions.
 set whichwrap+=h,l,<,>,[,],b,s,~
-" Always display statusline.
+" Always display a status line.
 set laststatus=2
-" Set statusline.
+" Set the content of the status line.
 set statusline=%<%m%r%h%w%y%{'['.(&fenc!=''?&fenc:&enc).':'.&ff.']'}\ %1.40f%=%{fugitive#statusline()}\ \ %l/%L,%c%V%5P
-" Set tabline.
+" Always display the line with tab page labels.
 set showtabline=2
-" Set visualbell.
+" Use visual bell instead of beeping.
 set visualbell
 
-" Enable spell check.
+" Enable spellchecking.
 set spelllang=en_us
 
-" Completion setting.
+" Set options for Insert mode completion.
 set completeopt=menuone
-" Completion setting.
-" Don't complete from other buffer.
+" Scan only the current buffer to complete.
 set complete=.
-" Set popup menu max height.
+" Set the maximum number of items to show in the popup menu.
 set pumheight=20
 
 " Enable multibyte format.
 set formatoptions+=mM
 
 if has('conceal')
-  " For conceal
+  " Set concealing.
   set conceallevel=2 concealcursor=iv
 endif
 "}}}
 
-"---------------------------------------------------------------------------
+"-----------------------------------------------------------------------------
 " Syntax:"{{{
 "
-" Enable smart indent.
+" Enable smart autoindenting.
 set smartindent
 
 augroup MyAutoCmd
-  " Close help and reference window by pressing q.
+  " Close help, quickfix, quickrun and reference window by pressing q.
   autocmd FileType help,qf,qfreplace,quickrun,ref
         \ nnoremap <buffer><silent> q :<C-u>call <SID>smart_close()<CR>
   autocmd FileType * if (&readonly || !&modifiable) && !hasmapto('q', 'n')
@@ -353,7 +352,7 @@ augroup MyAutoCmd
 augroup END
 "}}}
 
-"---------------------------------------------------------------------------
+"-----------------------------------------------------------------------------
 " Plugin:"{{{
 "
 " surround.vim"{{{
@@ -798,23 +797,23 @@ endfunction
 "}}}
 "}}}
 
-"---------------------------------------------------------------------------
+"-----------------------------------------------------------------------------
 " Key-mappings:"{{{
 "
 " Command-line mode keymappings:"{{{
-" <C-a>: move to head.
+" <C-a>: start of line.
 cnoremap <C-a> <Home>
-" <C-b>: previous char.
+" <C-b>: back one character.
 cnoremap <C-b> <Left>
-" <C-d>: delete char.
+" <C-d>: delete character under cursor.
 cnoremap <C-d> <Del>
-" <C-e>: move to end.
+" <C-e>: end of line.
 cnoremap <C-e> <End>
-" <C-f>: next char.
+" <C-f>: forward one character.
 cnoremap <C-f> <Right>
-" <C-n>: next history.
+" <C-n>: recall newer command-line.
 cnoremap <C-n> <Down>
-" <C-p>: previous history.
+" <C-p>: recall previous (older) command-line.
 cnoremap <C-p> <Up>
 " <C-k>: delete to end.
 cnoremap <C-k> <C-\>e getcmdpos() == 1 ? '' : getcmdline()[:getcmdpos()-2]<CR>
@@ -824,9 +823,9 @@ cnoremap <C-y> <C-r>*
 cnoremap <C-s> <C-f>
 " <C-l>: view completion list.
 cnoremap <C-l> <C-d>
-" <A-b>: move to previous word.
+" <A-b>: back one word.
 cnoremap <A-b> <S-Left>
-" <A-f>: move to next word.
+" <A-f>: forward one word.
 cnoremap <A-f> <S-Right>
 "}}}
 
@@ -902,7 +901,7 @@ endfunction
 nnoremap [Quickfix] <Nop>
 nmap q [Quickfix]
 
-" Open the quickfix window automatically if it's not empty
+" Open the quickfix window automatically if it's not empty.
 autocmd QuickFixCmdPost [^l]* botright cwindow
 autocmd QuickFixCmdPost l* lwindow
 
@@ -990,7 +989,14 @@ inoremap <C-q> <ESC>gUiw`]a
 nnoremap <silent> <ESC><ESC> :<C-u>nohlsearch<CR>
 "}}}
 
-"---------------------------------------------------------------------------
+"-----------------------------------------------------------------------------
+" Commands:"{{{
+"
+" Display diff with the file.
+command! -nargs=1 -complete=file Diff tabedit % | vertical diffsplit <args>
+"}}}
+
+"-----------------------------------------------------------------------------
 " Platform depends:"{{{
 "
 if s:is_windows
@@ -1000,10 +1006,9 @@ else
 endif
 "}}}
 
-"---------------------------------------------------------------------------
+"-----------------------------------------------------------------------------
 " Others:"{{{
 "
-
 " allow backspacing over everything in insert mode
 set backspace=indent,eol,start
 
@@ -1080,4 +1085,8 @@ if !exists(":DiffOrig")
   command DiffOrig vert new | set bt=nofile | r ++edit # | 0d_ | diffthis
 		  \ | wincmd p | diffthis
 endif
+
+"}}}
+
+set secure
 
