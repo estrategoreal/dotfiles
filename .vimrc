@@ -283,7 +283,7 @@ set tags& tags-=tags tags+=./tags;
 " Enable automatic C program indenting.
 set cindent
 
-" Set a directory for bhe backup file.
+" Set a directory for the backup file.
 set backupdir=~/.vim/tmp
 let &directory = &backupdir
 
@@ -640,8 +640,6 @@ endif
 
 autocmd MyAutoCmd FileType vimfiler call s:vimfiler_my_settings()
 function! s:vimfiler_my_settings()"{{{
-  setlocal nobuflisted
-
   " Overwrite settings.
   nnoremap <silent><buffer> J
         \ <C-u>:Unite -buffer-name=files -default-action=lcd directory_mru<CR>
@@ -754,7 +752,6 @@ let g:errormarker_warningicon  = expand('~/.vim') . '/signs/warn.'
 
 " gtags.vim"{{{
 nnoremap <C-j> :<C-u>GtagsCursor<CR>
-nnoremap <C-s> :<C-u>Gtags -r<Space>
 "}}}
 
 " taglist.vim"{{{
