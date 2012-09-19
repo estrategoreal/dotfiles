@@ -996,6 +996,12 @@ command! -nargs=1 -complete=file Diff tabedit % | vertical diffsplit <args>
 "-----------------------------------------------------------------------------
 " Platform depends:"{{{
 "
+" Change colorscheme.
+" Don't override colorscheme.
+if !exists('g:colors_name') && !has('gui_running')
+  colorscheme elflord
+endif
+
 if s:is_windows
   set shell=c:/MinGW/msys/1.0/bin/bash
 else
