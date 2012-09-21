@@ -59,27 +59,27 @@ endif
 NeoBundle 'Shougo/neobundle.vim'
 
 " My Bundles here:
-NeoBundle 'anyakichi/vim-surround.git'
-NeoBundle 'basyura/TweetVim.git'
-NeoBundle 'basyura/twibill.vim.git'
-NeoBundle 'gregsexton/gitv.git'
-NeoBundle 'h1mesuke/unite-outline.git'
-NeoBundle 'h1mesuke/vim-alignta.git'
-NeoBundle 'kana/vim-smartchr.git'
-NeoBundle 'LeafCage/foldCC.git'
-NeoBundle 'Lokaltog/vim-easymotion.git'
-NeoBundle 'mrtazz/DoxygenToolkit.vim.git'
+NeoBundle 'anyakichi/vim-surround'
+NeoBundle 'basyura/TweetVim'
+NeoBundle 'basyura/twibill.vim'
+NeoBundle 'gregsexton/gitv'
+NeoBundle 'h1mesuke/unite-outline'
+NeoBundle 'h1mesuke/vim-alignta'
+NeoBundle 'kana/vim-smartchr'
+NeoBundle 'LeafCage/foldCC'
+NeoBundle 'Lokaltog/vim-easymotion'
+NeoBundle 'mrtazz/DoxygenToolkit.vim'
 NeoBundle 'osyo-manga/unite-quickfix'
-NeoBundle 'Rip-Rip/clang_complete.git'
-NeoBundle 'Shougo/neocomplcache.git',
-      \ { 'depends' : 'Shougo/neocomplcache-snippets-complete.git' }
+NeoBundle 'Rip-Rip/clang_complete'
+NeoBundle 'Shougo/neocomplcache',
+      \ { 'depends' : 'Shougo/neocomplcache-snippets-complete' }
 NeoBundle 'Shougo/neocomplcache-clang_complete'
-NeoBundle 'Shougo/unite-build.git'
-NeoBundle 'Shougo/unite.vim.git'
-NeoBundle 'Shougo/unite-ssh.git'
-NeoBundle 'Shougo/vim-vcs.git'
-NeoBundle 'Shougo/vimfiler.git',
-      \ { 'depends' : 'Shougo/unite.vim.git' }
+NeoBundle 'Shougo/unite-build'
+NeoBundle 'Shougo/unite.vim'
+NeoBundle 'Shougo/unite-ssh'
+NeoBundle 'Shougo/vim-vcs'
+NeoBundle 'Shougo/vimfiler',
+      \ { 'depends' : 'Shougo/unite.vim' }
 NeoBundle 'Shougo/vimproc', {
       \ 'build' : {
       \     'windows' : 'echo "Sorry, cannot update vimproc binary file in Windows."',
@@ -88,22 +88,22 @@ NeoBundle 'Shougo/vimproc', {
       \     'unix' : 'make -f make_unix.mak',
       \    },
       \ }
-NeoBundle 'Shougo/vimshell.git'
-NeoBundle 'Shougo/vinarise.git'
-NeoBundle 'thinca/vim-qfreplace.git'
-NeoBundle 'thinca/vim-quickrun.git'
-NeoBundle 'thinca/vim-ref.git'
-NeoBundle 'tpope/vim-fugitive.git'
-NeoBundle 'tsukkee/unite-help.git'
-NeoBundle 'tsukkee/unite-tag.git'
-NeoBundle 'tyru/caw.vim.git'
-NeoBundle 'tyru/open-browser.vim.git'
-NeoBundle 'ujihisa/vimshell-ssh.git'
-NeoBundle 'othree/eregex.vim.git'
-NeoBundle 'vim-ruby/vim-ruby.git'
-NeoBundle 'vim-scripts/errormarker.vim.git'
-NeoBundle 'vim-scripts/gtags.vim.git'
-NeoBundle 'vim-scripts/taglist.vim.git'
+NeoBundle 'Shougo/vimshell'
+NeoBundle 'Shougo/vinarise'
+NeoBundle 'thinca/vim-qfreplace'
+NeoBundle 'thinca/vim-quickrun'
+NeoBundle 'thinca/vim-ref'
+NeoBundle 'tpope/vim-fugitive'
+NeoBundle 'tsukkee/unite-help'
+NeoBundle 'tsukkee/unite-tag'
+NeoBundle 'tyru/caw.vim'
+NeoBundle 'tyru/open-browser.vim'
+NeoBundle 'ujihisa/vimshell-ssh'
+NeoBundle 'othree/eregex.vim'
+NeoBundle 'vim-ruby/vim-ruby'
+NeoBundle 'vim-scripts/errormarker.vim'
+NeoBundle 'vim-scripts/gtags.vim'
+NeoBundle 'vim-scripts/taglist.vim'
 NeoBundle 'yuratomo/w3m.vim'
 
 " From vim.org
@@ -488,9 +488,9 @@ imap <C-s> <Plug>(neocomplcache_start_unite_snippet)
 let g:neocomplcache_snippets_dir = $HOME . '/.vim/snippets'
 
 " <CR>: close popup and save indent.
-inoremap <expr><silent> <CR> <SID>my_cr_function()
+inoremap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
 function! s:my_cr_function()
-  return pumvisible() ? neocomplcache#close_popup() . "\<CR>" : "\<CR>"
+  return neocomplcache#smart_close_popup() . "\<CR>"
 endfunction
 " <TAB>: completion.
 inoremap <expr><TAB> pumvisible() ? "\<C-n>" : "\<TAB>"
@@ -1004,6 +1004,8 @@ endif
 
 if s:is_windows
   set shell=c:/MinGW/msys/1.0/bin/bash
+elseif has('win32unix')
+  set shell=bash
 else
   set shell=zsh
 endif
