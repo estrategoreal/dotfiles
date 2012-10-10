@@ -70,7 +70,9 @@ NeoBundle 'LeafCage/foldCC'
 NeoBundle 'Lokaltog/vim-easymotion'
 NeoBundle 'mrtazz/DoxygenToolkit.vim'
 NeoBundle 'osyo-manga/unite-quickfix'
+NeoBundle 'othree/eregex.vim'
 NeoBundle 'Rip-Rip/clang_complete'
+NeoBundle 'rhysd/accelerated-jk'
 NeoBundle 'Shougo/neocomplcache',
       \ { 'depends' : 'Shougo/neocomplcache-snippets-complete' }
 NeoBundle 'Shougo/neocomplcache-clang_complete'
@@ -99,7 +101,6 @@ NeoBundle 'tsukkee/unite-tag'
 NeoBundle 'tyru/caw.vim'
 NeoBundle 'tyru/open-browser.vim'
 NeoBundle 'ujihisa/vimshell-ssh'
-NeoBundle 'othree/eregex.vim'
 NeoBundle 'vim-ruby/vim-ruby'
 NeoBundle 'vim-scripts/errormarker.vim'
 NeoBundle 'vim-scripts/gtags.vim'
@@ -432,6 +433,11 @@ nnoremap <silent> [Space]x :<C-u>Dox<CR>
 let g:load_doxygen_syntax = 1
 "}}}
 
+" accelerated-jk"{{{
+nmap <silent>j <Plug>(accelerated_jk_gj)
+nmap <silent>k <Plug>(accelerated_jk_gk)
+"}}}
+
 " neocomplcache.vim"{{{
 " Use neocomplcache.
 let g:neocomplcache_enable_at_startup = 1
@@ -454,9 +460,9 @@ let g:neocomplcache_min_keyword_length = 3
 
 " For clang_complete.
 let g:neocomplcache_force_overwrite_completefunc = 1
-let g:clang_complete_auto = 1
+let g:clang_auto_select = 0
+let g:clang_complete_auto = 0
 let g:clang_use_library = 1
-let g:clang_auto_select = 1
 if s:is_windows
   let g:clang_library_path = 'c:/MinGW/msys/1.0/lib'
 endif
