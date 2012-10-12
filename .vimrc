@@ -92,6 +92,7 @@ NeoBundle 'Shougo/vimproc', {
       \ }
 NeoBundle 'Shougo/vimshell'
 NeoBundle 'Shougo/vinarise'
+NeoBundle 'sjl/gundo.vim'
 NeoBundle 'thinca/vim-qfreplace'
 NeoBundle 'thinca/vim-quickrun'
 NeoBundle 'thinca/vim-ref'
@@ -699,6 +700,10 @@ endfunction"}}}
 
 " vinarise.vim"{{{
 let g:vinarise_enable_auto_detect = 1
+"}}}
+
+" Gundo.vim"{{{
+nnoremap U :<C-u>GundoToggle<CR>
 "}}}
 
 " qfreplace.vim"{{{
