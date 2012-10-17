@@ -74,8 +74,8 @@ NeoBundle 'othree/eregex.vim'
 NeoBundle 'Rip-Rip/clang_complete'
 NeoBundle 'rhysd/accelerated-jk'
 NeoBundle 'Shougo/neocomplcache',
-      \ { 'depends' : 'Shougo/neocomplcache-snippets-complete' }
 NeoBundle 'Shougo/neocomplcache-clang_complete'
+NeoBundle 'Shougo/neocomplcache-snippets-complete'
 NeoBundle 'Shougo/unite-build'
 NeoBundle 'Shougo/unite.vim'
 NeoBundle 'Shougo/unite-ssh'
@@ -278,6 +278,9 @@ autocmd MyAutoCmd FileType *
 " Use grep.
 set grepprg=grep\ -nH
 
+" Keymapping timeout.
+set timeout timeoutlen=3000 ttimeoutlen=100
+
 " Set tags files.
 " Don't search for tags files in the current directory. And search upward.
 set tags& tags-=tags tags+=./tags;
@@ -436,7 +439,9 @@ let g:load_doxygen_syntax = 1
 
 " accelerated-jk"{{{
 nmap <silent>j <Plug>(accelerated_jk_gj)
+nnoremap gj j
 nmap <silent>k <Plug>(accelerated_jk_gk)
+nnoremap gk k
 "}}}
 
 " neocomplcache.vim"{{{
@@ -544,6 +549,7 @@ nnoremap <silent> [unite]ma :<C-u>Unite mapping<CR>
 nnoremap <silent> [unite]me :<C-u>Unite output:message<CR>
 nnoremap <silent> [unite]o  :<C-u>Unite outline -start-insert<CR>
 nnoremap <silent> [unite]q  :<C-u>Unite quickfix -no-quit<CR>
+nnoremap <silent> [unite]r  :<C-u>Unite -buffer-name=register register history/yank<CR>
 xnoremap <silent> [unite]r  d:<C-u>Unite -buffer-name=register register history/yank<CR>
 nnoremap <silent> [unite]s  :<C-u>Unite source<CR>
 nnoremap <silent> [unite]t  :<C-u>UniteWithCursorWord -buffer-name=tag tag tag/include<CR>
@@ -593,9 +599,9 @@ nnoremap <silent> [Tag]p :<C-u>pop<CR>
 "}}}
 
 " Execute help.
-nnoremap <C-h> :<C-u>UniteWithInput help<CR>
+nnoremap <silent> <C-h> :<C-u>Unite -buffer-name=help help<CR>
 " Execute help by cursor keyword.
-nnoremap <silent> g<C-h> :<C-u>UniteWithCursorWord help<CR>
+nnoremap <silent> g<C-h> :<C-u>UniteWithInput help<CR>
 
 let g:unite_source_history_yank_enable = 1
 
