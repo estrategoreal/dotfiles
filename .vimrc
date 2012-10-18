@@ -73,7 +73,7 @@ NeoBundle 'osyo-manga/unite-quickfix'
 NeoBundle 'othree/eregex.vim'
 NeoBundle 'Rip-Rip/clang_complete'
 NeoBundle 'rhysd/accelerated-jk'
-NeoBundle 'Shougo/neocomplcache',
+NeoBundle 'Shougo/neocomplcache'
 NeoBundle 'Shougo/neocomplcache-clang_complete'
 NeoBundle 'Shougo/neocomplcache-snippets-complete'
 NeoBundle 'Shougo/unite-build'
