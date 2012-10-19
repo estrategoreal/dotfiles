@@ -62,6 +62,7 @@ NeoBundle 'Shougo/neobundle.vim'
 NeoBundle 'anyakichi/vim-surround'
 NeoBundle 'basyura/TweetVim'
 NeoBundle 'basyura/twibill.vim'
+NeoBundle 'davidhalter/jedi-vim.git'
 NeoBundle 'gregsexton/gitv'
 NeoBundle 'h1mesuke/unite-outline'
 NeoBundle 'h1mesuke/vim-alignta'
@@ -352,7 +353,7 @@ augroup MyAutoCmd
 
   " Enable omni completion.
   autocmd FileType c setlocal omnifunc=ccomplete#Complete
-  autocmd FileType python setlocal omnifunc=pythoncomplete#Complete
+  "autocmd FileType python setlocal omnifunc=pythoncomplete#Complete
   "autocmd FileType ruby setlocal omnifunc=rubycomplete#Complete
 augroup END
 "}}}
@@ -395,6 +396,14 @@ if !exists('g:neocomplcache_dictionary_filetype_lists')
 endif
 let g:neocomplcache_dictionary_filetype_lists.tweetvim_say =
       \ expand('~/.tweetvim/screen_name')
+"}}}
+
+" 
+" jedi-vim"{{{
+let g:jedi#auto_initialization = 1
+let g:jedi#popup_on_dot = 0
+let g:jedi#rename_command = '<leader>R'
+autocmd MyAutoCmd FileType python let b:did_ftplugin = 1
 "}}}
 
 " alignta.vim"{{{
