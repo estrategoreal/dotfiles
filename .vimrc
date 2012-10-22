@@ -76,7 +76,7 @@ NeoBundle 'Rip-Rip/clang_complete'
 NeoBundle 'rhysd/accelerated-jk'
 NeoBundle 'Shougo/neocomplcache'
 NeoBundle 'Shougo/neocomplcache-clang_complete'
-NeoBundle 'Shougo/neocomplcache-snippets-complete'
+NeoBundle 'Shougo/neosnippet'
 NeoBundle 'Shougo/unite-build'
 NeoBundle 'Shougo/unite.vim'
 NeoBundle 'Shougo/unite-ssh'
@@ -502,11 +502,11 @@ let g:neocomplcache_keyword_patterns['default'] = '\h\w*'
 " Plugin key-mappings.
 inoremap <expr><C-g> neocomplcache#undo_completion()
 inoremap <expr><C-l> neocomplcache#complete_common_string()
-imap <C-k> <Plug>(neocomplcache_snippets_expand)
-smap <C-k> <Plug>(neocomplcache_snippets_jump)
-imap <C-s> <Plug>(neocomplcache_start_unite_snippet)
+imap <C-k> <Plug>(neosnippet_expand_or_jump)
+smap <C-k> <Plug>(neosnippet_expand_or_jump)
+imap <C-s> <Plug>(neosnippet_start_unite_snippet)
 
-let g:neocomplcache_snippets_dir = $HOME . '/.vim/snippets'
+let g:neosnippet#snippets_directory = $HOME . '.vim/snippets'
 
 " <CR>: close popup and save indent.
 inoremap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
@@ -551,24 +551,20 @@ nnoremap <expr><silent> [unite]b <SID>unite_build()
 function! s:unite_build()
   return ':\<C-u>Unite -buffer-name=build' . tabpagenr() . ' -no-quit build\<CR>'
 endfunction
-nnoremap <silent> [unite]d  :<C-u>Unite -buffer-name=files -default-action=lcd bookmark directory_mru<CR>
-nnoremap <silent> [unite]f  :<C-u>UniteWithBufferDir -buffer-name=files file file/new<CR>
-nnoremap <silent> [unite]j  :<C-u>Unite change jump<CR>
-nnoremap <silent> [unite]ma :<C-u>Unite mapping<CR>
-nnoremap <silent> [unite]me :<C-u>Unite output:message<CR>
-nnoremap <silent> [unite]o  :<C-u>Unite outline -start-insert<CR>
-nnoremap <silent> [unite]q  :<C-u>Unite quickfix -no-quit<CR>
-nnoremap <silent> [unite]r  :<C-u>Unite -buffer-name=register register history/yank<CR>
-xnoremap <silent> [unite]r  d:<C-u>Unite -buffer-name=register register history/yank<CR>
-nnoremap <silent> [unite]s  :<C-u>Unite source<CR>
-nnoremap <silent> [unite]t  :<C-u>UniteWithCursorWord -buffer-name=tag tag tag/include<CR>
-nnoremap <silent> [unite]u  :<C-u>Unite buffer file_mru bookmark<CR>
-nnoremap <silent> [unite]v  :<C-u>Unite -buffer-name=files -no-split file_rec/async:!<CR>
-nnoremap <silent> [unite]w  :<C-u>Unite window<CR>
+nnoremap <silent> [unite]d :<C-u>UniteWithBufferDir -buffer-name=files file file/new<CR>
+nnoremap <silent> [unite]f :<C-u>Unite buffer file_mru bookmark<CR>
+nnoremap <silent> [unite]j :<C-u>Unite change jump<CR>
+nnoremap <silent> [unite]o :<C-u>Unite outline -start-insert<CR>
+nnoremap <silent> [unite]r :<C-u>Unite -buffer-name=register register history/yank<CR>
+xnoremap <silent> [unite]r d:<C-u>Unite -buffer-name=register register history/yank<CR>
+nnoremap <silent> [unite]s :<C-u>Unite source<CR>
+nnoremap <silent> [unite]t :<C-u>UniteWithCursorWord -buffer-name=tag tag tag/include<CR>
+nnoremap <silent> [unite]v :<C-u>Unite -buffer-name=files -no-split -multi-line file_rec/async:!<CR>
+nnoremap <silent> [unite]w :<C-u>Unite window<CR>
 
-nnoremap <silent> [unite]g  :<C-u>Unite grep:. -buffer-name=search -no-quit<CR>
-nnoremap <silent> [unite]G  :<C-u>call <SID>cursor_grep()<CR>
-xnoremap <silent> [unite]G  :<C-u>call <SID>visual_grep()<CR>
+nnoremap <silent> [unite]g :<C-u>Unite grep:. -buffer-name=search -no-quit<CR>
+nnoremap <silent> [unite]G :<C-u>call <SID>cursor_grep()<CR>
+xnoremap <silent> [unite]G :<C-u>call <SID>visual_grep()<CR>
 function! s:cursor_grep()
   let w = expand('<cword>')
   call s:my_idenew()
@@ -633,6 +629,23 @@ endif
 let g:unite_source_alias_aliases.line_migemo = {
       \ 'source' : 'line',
       \ }
+
+" For unite-menu.
+let g:unite_source_menu_menus = {}
+
+let g:unite_source_menu_menus.unite = {
+      \     'description' : 'Start unite sources',
+      \ }
+let g:unite_source_menu_menus.unite.command_candidates = {
+      \ 'directory' : 'Unite -buffer-name=files '.
+      \       '-default-action=lcd bookmark directory_mru',
+      \ 'history'   : 'Unite history/command',
+      \ 'mapping'   : 'Unite mapping',
+      \ 'message'   : 'Unite output:message',
+      \ 'quickfix'  : 'Unite qflist -no-quit',
+      \ 'resume'    : 'Unite -buffer-name=resume resume',
+      \ }
+nnoremap <silent> [unite]u :<C-u>Unite menu:unite<CR>
 
 let g:unite_build_error_icon   = expand('~/.vim') . '/signs/err.'
       \ . (s:is_windows ? 'bmp' : 'png')
@@ -890,11 +903,6 @@ nnoremap <silent> [Tabbed]c :<C-u>call <SID>my_tabnew('')<CR>
 nnoremap <silent> [Tabbed]C :<C-u>call <SID>my_tabnew('%')<CR>
 nnoremap <silent> [Tabbed]i :<C-u>call <SID>my_idenew()<CR>
 nnoremap <silent> [Tabbed]d :<C-u>tabclose<CR>
-" Move to other tab page.
-nnoremap <silent> [Tabbed]l :<C-u>tabnext<CR>
-nnoremap <silent> [Tabbed]h :<C-u>tabprevious<CR>
-nnoremap <silent> [Tabbed]H :<C-u>tabfirst<CR>
-nnoremap <silent> [Tabbed]L :<C-u>tablast<CR>
 nnoremap <silent> [Tabbed]<C-t> :<C-u>Unite tab<CR>
 
 function! s:my_tabnew(file)
