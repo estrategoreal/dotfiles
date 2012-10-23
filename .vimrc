@@ -506,7 +506,7 @@ imap <C-k> <Plug>(neosnippet_expand_or_jump)
 smap <C-k> <Plug>(neosnippet_expand_or_jump)
 imap <C-s> <Plug>(neosnippet_start_unite_snippet)
 
-let g:neosnippet#snippets_directory = $HOME . '.vim/snippets'
+let g:neosnippet#snippets_directory = $HOME . '/.vim/snippets'
 
 " <CR>: close popup and save indent.
 inoremap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
