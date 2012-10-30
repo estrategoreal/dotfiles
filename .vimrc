@@ -62,7 +62,7 @@ NeoBundle 'Shougo/neobundle.vim'
 NeoBundle 'anyakichi/vim-surround'
 NeoBundle 'basyura/TweetVim'
 NeoBundle 'basyura/twibill.vim'
-NeoBundle 'davidhalter/jedi-vim.git'
+NeoBundleLazy 'davidhalter/jedi-vim'
 NeoBundle 'gregsexton/gitv'
 NeoBundle 'h1mesuke/unite-outline'
 NeoBundle 'h1mesuke/vim-alignta'
@@ -403,7 +403,7 @@ let g:neocomplcache_dictionary_filetype_lists.tweetvim_say =
 let g:jedi#auto_initialization = 1
 let g:jedi#popup_on_dot = 0
 let g:jedi#rename_command = '<leader>R'
-autocmd MyAutoCmd FileType python let b:did_ftplugin = 1
+autocmd MyAutoCmd FileType python* NeoBundleSource jedi-vim | let b:did_ftplugin = 1
 "}}}
 
 " alignta.vim"{{{
