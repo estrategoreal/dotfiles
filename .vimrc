@@ -60,8 +60,7 @@ NeoBundle 'Shougo/neobundle.vim'
 
 " My Bundles here:
 NeoBundle 'anyakichi/vim-surround'
-NeoBundle 'basyura/TweetVim'
-NeoBundle 'basyura/twibill.vim'
+NeoBundle 'basyura/TweetVim', { 'depends' : 'basyura/twibill.vim' }
 NeoBundleLazy 'davidhalter/jedi-vim'
 NeoBundle 'gregsexton/gitv'
 NeoBundle 'h1mesuke/unite-outline'
@@ -80,12 +79,13 @@ NeoBundle 'Shougo/neosnippet'
 NeoBundle 'Shougo/unite-build'
 NeoBundle 'Shougo/unite.vim'
 NeoBundle 'Shougo/unite-ssh'
+NeoBundle 'Shougo/unite-sudo'
 NeoBundle 'Shougo/vim-vcs'
 NeoBundle 'Shougo/vimfiler',
       \ { 'depends' : 'Shougo/unite.vim' }
 NeoBundle 'Shougo/vimproc', {
       \ 'build' : {
-      \     'windows' : 'echo "Sorry, cannot update vimproc binary file in Windows."',
+      \     'windows' : 'make -f make_mingw32.mak',
       \     'cygwin' : 'make -f make_cygwin.mak',
       \     'mac' : 'make -f make_mac.mak',
       \     'unix' : 'make -f make_unix.mak',
@@ -103,15 +103,12 @@ NeoBundle 'tsukkee/unite-tag'
 NeoBundle 'tyru/caw.vim'
 NeoBundle 'tyru/open-browser.vim'
 NeoBundle 'ujihisa/vimshell-ssh'
+NeoBundle 'vim-jp/autofmt'
 NeoBundle 'vim-ruby/vim-ruby'
 NeoBundle 'vim-scripts/errormarker.vim'
 NeoBundle 'vim-scripts/gtags.vim'
 NeoBundle 'vim-scripts/taglist.vim'
 NeoBundle 'yuratomo/w3m.vim'
-
-" From vim.org
-NeoBundle 'sudo.vim'
-NeoBundle 'autofmt'
 
 " Installation check.
 if neobundle#exists_not_installed_bundles()
@@ -499,6 +496,8 @@ if !exists('g:neocomplcache_keyword_patterns')
 endif
 let g:neocomplcache_keyword_patterns['default'] = '\h\w*'
 
+let g:neosnippet#snippets_directory = $HOME . '/.vim/snippets'
+
 " Plugin key-mappings.
 inoremap <expr><C-g> neocomplcache#undo_completion()
 inoremap <expr><C-l> neocomplcache#complete_common_string()
@@ -506,7 +505,8 @@ imap <C-k> <Plug>(neosnippet_expand_or_jump)
 smap <C-k> <Plug>(neosnippet_expand_or_jump)
 imap <C-s> <Plug>(neosnippet_start_unite_snippet)
 
-let g:neosnippet#snippets_directory = $HOME . '/.vim/snippets'
+" Enable snipMate compatibility feature.
+let g:neosnippet#enable_snipmate_compatibility = 1
 
 " <CR>: close popup and save indent.
 inoremap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
@@ -536,6 +536,7 @@ if !exists('g:neocomplcache_omni_patterns')
 endif
 let g:neocomplcache_omni_patterns.ruby = '[^. *\t]\.\h\w*\|\h\w*::'
 let g:neocomplcache_force_omni_patterns.ruby = '[^. *\t]\.\w*\|\h\w*::'
+let g:neocomplcache_force_omni_patterns.python = '[^. \t]\.\w*'
 let g:neocomplcache_omni_patterns.c = '[^.[:digit:] *\t]\%(\.\|->\)'
 let g:neocomplcache_omni_patterns.cpp = '[^.[:digit:] *\t]\%(\.\|->\)\|\h\w*::'
 "}}}
