@@ -27,7 +27,11 @@ function is_msys() {
   return 1
 }
 
-export LANG=en_US.UTF-8
+if is_msys ; then
+  export LANG=ja_JP.SJIS
+else
+  export LANG=en_US.UTF-8
+fi
 
 [ -f ~/.bash.d/git-completion.sh ] && source ~/.bash.d/git-completion.sh
 if [ -f ~/.bash.d/z.sh ]; then

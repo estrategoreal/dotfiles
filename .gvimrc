@@ -78,7 +78,7 @@ if has('win32') || has('win64')
   augroup Transparency
     autocmd!
     autocmd FocusGained * set transparency=240
-    autocmd FocusLost * set transparency=120
+    "autocmd FocusLost * set transparency=120
   augroup END
 endif
 
