@@ -1,38 +1,53 @@
 snippet     if
-abbr        if end
-    if ${1:condition}
-      ${2}
+abbr        if ... end
+    if ${1:#:condition}
+        ${2:TARGET}
     end
 
 snippet     def
-abbr        def end
-    def ${1:func_name}
-      ${2}
+abbr        def ... end
+    def ${1:#:method_name}
+        ${2:TARGET}
+    end
+
+snippet     defrescue
+alias       defr
+abbr        def ... rescue ... end
+    def ${1:#:method_name}
+        ${2:TARGET}
+    rescue ${3:#:StandardError} => ${4:error}
+        ${5}
     end
 
 snippet     do
-abbr        do end
+abbr        do ... end
     do
-      ${1}
+        ${1:TARGET}
     end
 
 snippet     dovar
-abbr        do |var| end
-    do |${1:var}|
-      ${2}
+abbr        do |var| ... end
+    do |${1:#:var}|
+        ${2:TARGET}
     end
 
 snippet     block
-abbr        { |var| }
+abbr        { ... }
     {
-      ${1}
+        ${1:TARGET}
     }
 
 snippet     blockvar
-abbr        { |var| }
-    { |${1:var}var|
-      ${2}
+abbr        {|var| ... }
+    {|${1:#:var}|
+        ${2:TARGET}
     }
+
+snippet     fileopen
+abbr        File.open(filename) do ... end
+    File.open(${1:#:filename}, '${2:#:mode}') do |${3:io}|
+        ${0:TARGET}
+    end
 
 snippet     edn
 abbr        => end?
@@ -46,28 +61,28 @@ snippet     urlencode
 snippet     require
 alias       req
 abbr        require '...'
-    require '${1:}'${0}
+    require '${1:#:module}'${0}
 
 snippet     class
 abbr        class end
-    class ${1:class}
+    class ${1:#:class}
       def initialize
         ${2}
       end
-    
+
       ${3}
     end
 
 snippet     unless
 abbr        unless
-    unless ${1:condition}
+    unless ${1:#:condition}
       ${2}
     end
 
 snippet     case
 abbr        case when end
-    case ${1:var}
-    when ${2:val}
+    case ${1:#:var}
+    when ${2:#:val}
       ${3}
     end
 
@@ -75,7 +90,7 @@ snippet     begin
 abbr        begin ... rescure ... end
     begin
       ${2}
-    rescure ${1:error}
+    rescure ${1:#:error}
       ${3}
     end
 

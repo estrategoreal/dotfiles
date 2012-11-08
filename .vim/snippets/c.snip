@@ -1,23 +1,23 @@
 snippet     if
 abbr        if () {}
-    if (${1:/* condition */}) {
-        ${0:/* code */}
+    if (${1:#:condition}) {
+        ${0:TARGET}
     }
 
 snippet else
     else {
-        ${0}
+        ${0:TARGET}
     }
 
 snippet elseif
-    else if (${1:/* condition */}) {
-        ${0}
+    else if (${1:#:condition}) {
+        ${0:TARGET}
     }
 
 snippet     ifelse
 abbr        if () {} else {}
-    if (${1:condition}) {
-        ${2}
+    if (${1:#:condition}) {
+        ${2:TARGET}
     } else {
         ${3}
     }
@@ -25,73 +25,72 @@ abbr        if () {} else {}
 snippet     for
 abbr        for () {}
     for (${1} = 0; $1 < ${2}; $1++) {
-        ${0}
+        ${0:TARGET}
     }
 
 snippet     while
 abbr        while () {}
-    while (${1:/* condition */}) {
-        ${0:/* code */}
+    while (${1:#:condition}) {
+        ${0:TARGET}
     }
 
 snippet     do_while
 alias       do
     do {
-        ${0:/* code */}
-    } while (${1:/* condition */});
+        ${0:TARGET:code}
+    } while (${1:#:condition});
 
 snippet     switch
 abbr        switch () {}
-    switch (${1:var}) {
-    case ${2:val}:
-        ${0}
+    switch (${1:#:var}) {
+    case ${2:#:val}:
+        ${0:TARGET}
         break;
     }
 
 snippet     function
 alias       func
 abbr        func() {}
-    ${1:void} ${2:func_name}(${3}) {
-        ${0}
+    ${1:void} ${2:#:func_name}(${3:#:args}) {
+        ${0:TARGET}
     }
 
 snippet     macro_function
 alias       macro
 abbr        #define ... do {} while (0)
-    #define ${1:MACRO}()   do { \
-        ${0} \
+    #define ${1:#:macro}()   do { \
+        ${0:TARGET} \
     } while (0)
 
 snippet     struct
 abbr        struct {}
-    struct ${1:name} {
-        ${0:/* data */}
+    struct ${1:#:name} {
+        ${0:TARGET:data}
     };
 
 # Typedef struct
 snippet struct_typedef
-    typedef struct _${1:name} {
-        ${0:/* data */}
+    typedef struct _${1:#:name} {
+        ${0:TARGET:data}
     } $1;
 
 snippet     enum
 abbr        enum {}
-    enum ${1:name} {
-        ${0}
+    enum ${1:#:name} {
+        ${0:TARGET}
     };
 
 # Typedef enum
 snippet enum_typedef
-    typedef enum _${1:name} {
-        ${0}
+    typedef enum _${1:#:name} {
+        ${0:TARGET}
     } $1;
 
-# main function.
+# hard-tab is necessary; C indent doesn't support this.
 snippet main
-    int main(int argc, char const *argv[])
+    int main(int argc, char const* argv[])
     {
-        ${0}
-    
+        ${0:TARGET}
         return 0;
     }
 
@@ -102,12 +101,12 @@ alias   #inc, #include
 # #include "..."
 snippet inc2
 alias   #inc2, #include2
-    #include "${1:}.h"${0}
+    #include "${1}.h"${0}
 
 snippet ifdef
 alias   #ifdef
 abbr #ifdef ... #else ... #endif
-    #ifdef ${1:SYMBOL}
+    #ifdef ${1:#:SYMBOL}
         ${0}
     #else   /* $1 */
     #endif  /* $1 */
@@ -116,8 +115,8 @@ snippet ifndef
 alias   #ifndef
 abbr #ifndef ... #define ... #endif
     #ifndef $1
-    #define ${1:SYMBOL} ${2:value}
-    #endif  /* $1 */${0}
+    #define ${1:#:SYMBOL}
+    #endif${0}
 
 snippet def
 alias   #def, #define
@@ -127,43 +126,53 @@ alias   #def, #define
 snippet once
 abbr include-guard
     #ifndef ${1:SYMBOL}
-        #define $1
-    
-        ${0}
-    #endif /* end of include guard */
+    #define $1
+
+    ${0:TARGET}
+    #endif  /* $1 */
 
 # Tertiary conditional
 snippet conditional
-    (${1:/* condition */})? ${2:a} : ${3:b}
+    (${1:#:condition}) ? ${2:#:a} : ${3:#:b}
 
 # Typedef
 snippet typedef
-    typedef ${1:base_type} ${2:custom_type};
+    typedef ${1:#:base_type} ${2:#:custom_type};
 
 snippet printf
-    printf("${1}\n"${2});${0}
+abbr    printf("...\n", ...);
+    printf("${1}\n", ${2});
 
 snippet fprintf
-    fprintf(${1:stderr}, "${2}\n"${3});${0}
+abbr    fprintf(..., "...\n", ...);
+    fprintf(${1:stderr}, "${2}\n"${3});
 
 snippet comment
 alias /*
-    /* ${1:comment} */
+    /* ${1:#:comment} */
     ${0}
 snippet comment2
     /*
-     * ${1:comment}
+     * ${1:#:comment}
      */
     ${0}
 
 snippet sizeof
 alias size
-    sizeof(${0})
+    sizeof(${0:TARGET})
+
+snippet helloworld
+    #include <stdio.h>
+    int main(int argc, char const* argv[])
+    {
+        puts("hello, world!");
+        return 0;
+    }
 
 snippet header
 abbr header file template
     /******************************************************************************/
-    /** @ingroup ${1:fname}
+    /** @ingroup ${1:#:file_name}
      ** @file $1.h
      ** description
      *
@@ -171,35 +180,35 @@ abbr header file template
      * $Revision$ : $Author$
      * $Date::                           $
      ******************************************************************************/
-    
+
     #ifndef _${2:FNAME}_H_
     #define _$2_H_
-    
+
     ${0}
-    
+
     /******************************************************************************/
     /* definitions                                                                */
     /******************************************************************************/
-    
+
     /******************************************************************************/
     /* structs                                                                    */
     /******************************************************************************/
-    
+
     /******************************************************************************/
     /* variables                                                                  */
     /******************************************************************************/
-    
+
     /******************************************************************************/
     /* functions                                                                  */
     /******************************************************************************/
-    
+
     #endif  /* _$2_H_ */
-    
+    ${1}
 
 snippet source
 abbr source file template
     /******************************************************************************/
-    /** @defgroup ${1:fname} ${2:title}                                           */
+    /** @defgroup ${1:#:file_name} ${2:#:title}                                   */
     /** @ingroup $1
      ** @file $1.c
      ** description
@@ -208,31 +217,31 @@ abbr source file template
      * $Revision$ : $Author$
      * $Date::                           $
      ******************************************************************************/
-    
+
     ${0}
-    
+
     /******************************************************************************/
     /* definitions                                                                */
     /******************************************************************************/
-    
+
     /******************************************************************************/
     /* structs                                                                    */
     /******************************************************************************/
-    
+
     /******************************************************************************/
     /* variables                                                                  */
     /******************************************************************************/
-    
+
     /******************************************************************************/
     /* function definitions                                                       */
     /******************************************************************************/
-    
+
     /******************************************************************************/
     /* global functions                                                           */
     /******************************************************************************/
-    
+
     /******************************************************************************/
     /* local functions                                                            */
     /******************************************************************************/
-    
+    ${1}
 
