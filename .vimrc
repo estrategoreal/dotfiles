@@ -60,7 +60,8 @@ NeoBundle 'Shougo/neobundle.vim'
 
 " My Bundles here:
 NeoBundle 'anyakichi/vim-surround'
-NeoBundle 'basyura/TweetVim', { 'depends' : 'basyura/twibill.vim' }
+NeoBundle 'basyura/TweetVim', { 'depends' :
+      \ ['basyura/twibill.vim', 'tyru/open-browser.vim'] }
 NeoBundleLazy 'davidhalter/jedi-vim'
 NeoBundle 'gregsexton/gitv'
 NeoBundle 'h1mesuke/unite-outline'
@@ -76,8 +77,8 @@ NeoBundle 'rhysd/accelerated-jk'
 NeoBundle 'Shougo/neocomplcache'
 NeoBundle 'Shougo/neocomplcache-clang_complete'
 NeoBundle 'Shougo/neosnippet'
-NeoBundle 'Shougo/unite-build'
 NeoBundle 'Shougo/unite.vim'
+NeoBundle 'Shougo/unite-build'
 NeoBundle 'Shougo/unite-ssh'
 NeoBundle 'Shougo/unite-sudo'
 NeoBundle 'Shougo/vim-vcs'
@@ -105,9 +106,9 @@ NeoBundle 'tyru/open-browser.vim'
 NeoBundle 'ujihisa/vimshell-ssh'
 NeoBundle 'vim-jp/autofmt'
 NeoBundle 'vim-ruby/vim-ruby'
-NeoBundle 'vim-scripts/errormarker.vim'
+"NeoBundle 'vim-scripts/errormarker.vim'
 NeoBundle 'vim-scripts/gtags.vim'
-NeoBundle 'vim-scripts/taglist.vim'
+NeoBundle 'vim-scripts/taglist.vim', { 'type' : 'nosync' }
 NeoBundle 'yuratomo/w3m.vim'
 
 " Installation check.
@@ -395,7 +396,6 @@ let g:neocomplcache_dictionary_filetype_lists.tweetvim_say =
       \ expand('~/.tweetvim/screen_name')
 "}}}
 
-" 
 " jedi-vim"{{{
 let g:jedi#auto_initialization = 1
 let g:jedi#popup_on_dot = 0
@@ -456,11 +456,11 @@ let g:neocomplcache_enable_at_startup = 1
 " Use smartcase.
 let g:neocomplcache_enable_smart_case = 0
 " Use camel case completion.
-let g:neocomplcache_enable_camel_case_completion = 0
+let g:neocomplcache_enable_camel_case_completion = 1
 " Use underbar completion.
 let g:neocomplcache_enable_underbar_completion = 1
 " Use fuzzy completion.
-let g:neocomplcache_enable_fuzzy_completion = 1
+let g:neocomplcache_enable_fuzzy_completion = 0
 " Set minimum syntax keyword length.
 let g:neocomplcache_min_syntax_length = 3
 " Set auto completion length.
@@ -584,8 +584,39 @@ nnoremap <silent> [Space]b :<C-u>UniteBookmarkAdd<CR>
 " Keymapping in unite.vim.
 autocmd MyAutoCmd FileType unite call s:unite_my_settings()
 function! s:unite_my_settings()"{{{
-  " Delete a path upward.
-  imap <buffer> <C-w> <Plug>(unite_delete_backward_path)
+  " Overwrite settings.
+  nmap <buffer> <ESC>   <Plug>(unite_exit)
+  imap <buffer> jj      <Plug>(unite_insert_leave)
+  imap <buffer> <C-w>   <Plug>(unite_delete_backward_path)
+
+  imap <buffer><expr> j unite#smart_map('j', '')
+  imap <buffer> <TAB>   <Plug>(unite_select_next_line)
+  imap <buffer> <C-w>   <Plug>(unite_delete_backward_path)
+  imap <buffer> '       <Plug>(unite_quick_match_default_action)
+  nmap <buffer> '       <Plug>(unite_quick_match_default_action)
+  imap <buffer><expr> x
+        \ unite#smart_map('x', "\<Plug>(unite_quick_match_choose_action)")
+  nmap <buffer> x       <Plug>(unite_quick_match_choose_action)
+  nmap <buffer> <C-z>   <Plug>(unite_toggle_transpose_window)
+  imap <buffer> <C-z>   <Plug>(unite_toggle_transpose_window)
+  imap <buffer> <C-y>   <Plug>(unite_narrowing_path)
+  nmap <buffer> <C-y>   <Plug>(unite_narrowing_path)
+  nmap <buffer> <C-j>   <Plug>(unite_toggle_auto_preview)
+  nmap <buffer> <C-r>   <Plug>(unite_narrowing_input_history)
+  imap <buffer> <C-r>   <Plug>(unite_narrowing_input_history)
+  nnoremap <silent><buffer><expr> l
+        \ unite#smart_map('l', unite#do_action('default'))
+
+  let unite = unite#get_current_unite()
+  if unite.buffer_name =~# '^search'
+    nnoremap <silent><buffer><expr> r unite#do_action('replace')
+  else
+    nnoremap <silent><buffer><expr> r unite#do_action('rename')
+  endif
+
+  nnoremap <silent><buffer><expr> cd unite#do_action('lcd')
+  nnoremap <buffer><expr> S          unite#mappings#set_current_filters(
+        \ empty(unite#mappings#get_current_filters()) ? ['sorter_reverse'] : [])
 endfunction"}}}
 
 " t: tags-and-searches "{{{
@@ -1014,6 +1045,15 @@ noremap [Space]gg :<C-u>echo FoldCCnavi()<CR>
 
 " Auto escape / substitute.
 xnoremap s y:%s/<C-r>=substitute(@0, '/', '\\/', 'g')<Return>//g<Left><Left>
+
+" Easy escape."{{{
+inoremap jj <ESC>
+cnoremap <expr> j getcmdline()[getcmdpos()-2] ==# 'j' ? "\<BS>\<C-c>" : 'j'
+onoremap jj <ESC>
+
+inoremap j<Space> j
+onoremap j<Space> j
+"}}}
 
 " Capitalize a word.
 nnoremap gu <ESC>gUiw`]
