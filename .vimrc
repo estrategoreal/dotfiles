@@ -425,7 +425,7 @@ inoremap <expr> ? smartchr#one_of(' ? ', '?')
 " Smart =.
 inoremap <expr> = search('\(&\<bar><bar>\<bar>+\<bar>-\<bar>/\<bar>>\<bar><\) \%#', 'bcn')? '<bs>= '
       \ : search('\(*\<bar>!\)\%#', 'bcn') ? '= '
-      \ : smartchr#one_of(' = ', '=', ' == ')
+      \ : smartchr#one_of(' = ', ' == ', '=')
 augroup MyAutoCmd
   " Substitute .. into -> .
   autocmd FileType c,cpp inoremap <buffer> <expr> . smartchr#loop('.', '->', '...')
@@ -638,7 +638,7 @@ nnoremap <silent> [Tag]p :<C-u>pop<CR>
 " Execute help.
 nnoremap <silent> <C-h> :<C-u>Unite -buffer-name=help help<CR>
 " Execute help by cursor keyword.
-nnoremap <silent> g<C-h> :<C-u>UniteWithInput help<CR>
+nnoremap <silent> g<C-h>  :<C-u>help<Space><C-r><C-w><CR>
 
 let g:unite_source_history_yank_enable = 1
 
