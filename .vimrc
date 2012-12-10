@@ -68,7 +68,6 @@ NeoBundle 'h1mesuke/unite-outline'
 NeoBundle 'h1mesuke/vim-alignta'
 NeoBundle 'kana/vim-smartchr'
 NeoBundle 'LeafCage/foldCC'
-NeoBundle 'Lokaltog/vim-easymotion'
 NeoBundle 'mrtazz/DoxygenToolkit.vim'
 NeoBundle 'osyo-manga/unite-quickfix'
 NeoBundle 'othree/eregex.vim'
@@ -120,7 +119,7 @@ if neobundle#exists_not_installed_bundles()
 endif
 
 "-----------------------------------------------------------------------------
-" Encoding:"{{{
+" Encoding: "{{{
 "
 " The automatic recognition of the character code.
 
@@ -128,7 +127,7 @@ endif
 " Make it normal in UTF-8 in Unix.
 set encoding=utf-8
 
-" Setting of terminal encoding."{{{
+" Setting of terminal encoding. "{{{
 if !has('gui_running')
   if &term == 'win32' || &term == 'win64'
     " Setting to use the non-GUI Japanese console.
@@ -147,7 +146,7 @@ elseif s:is_windows
 endif
 "}}}
 
-" The automatic recognition of the character code."{{{
+" The automatic recognition of the character code. "{{{
 if !exists('did_encoding_settings') && has('iconv')
   let s:enc_euc = 'euc-jp'
   let s:enc_jis = 'iso-2022-jp'
@@ -192,7 +191,7 @@ if has('kaoriya')
 endif
 
 " When any Japanese character is not included, use encoding for fileencoding.
-function! AU_ReCheck_FENC()"{{{
+function! AU_ReCheck_FENC() "{{{
   if &fileencoding =~# 'iso-2022-jp' && search("[^\x01-\x7e]", 'n') == 0
     let &fileencoding = &encoding
   endif
@@ -213,7 +212,7 @@ endif
 "}}}
 
 "-----------------------------------------------------------------------------
-" Search:"{{{
+" Search: "{{{
 "
 " Ignore case in search patterns.
 set ignorecase
@@ -225,7 +224,7 @@ set wrapscan
 "}}}
 
 "-----------------------------------------------------------------------------
-" Edit:"{{{
+" Edit: "{{{
 "
 " Smart insert tab setting.
 set smarttab
@@ -296,7 +295,7 @@ set formatexpr=autofmt#japanese#formatexpr()
 "}}}
 
 "-----------------------------------------------------------------------------
-" View:"{{{
+" View: "{{{
 "
 " Print the line number.
 set number
@@ -337,7 +336,7 @@ endif
 "}}}
 
 "-----------------------------------------------------------------------------
-" Syntax:"{{{
+" Syntax: "{{{
 "
 " Enable smart autoindenting.
 set smartindent
@@ -357,9 +356,9 @@ augroup END
 "}}}
 
 "-----------------------------------------------------------------------------
-" Plugin:"{{{
+" Plugin: "{{{
 "
-" surround.vim"{{{
+" surround.vim "{{{
 let g:surround_no_mappings = 1
 autocmd MyAutoCmd FileType * call s:define_surround_keymappings()
 
@@ -378,11 +377,11 @@ function! s:define_surround_keymappings()
 endfunction
 "}}}
 
-" TweetVim"{{{
+" TweetVim "{{{
 " Start TweetVim.
 nnoremap <silent> [unite]e :<C-u>Unite tweetvim<CR>
 autocmd MyAutoCmd FileType tweetvim call s:tweetvim_my_settings()
-function! s:tweetvim_my_settings()"{{{
+function! s:tweetvim_my_settings() "{{{
   " Open say buffer.
   nnoremap <silent><buffer> s :<C-u>TweetVimSay<CR>
   nnoremap <silent><buffer> q :<C-u>close<CR>
@@ -396,14 +395,14 @@ let g:neocomplcache_dictionary_filetype_lists.tweetvim_say =
       \ expand('~/.tweetvim/screen_name')
 "}}}
 
-" jedi-vim"{{{
+" jedi-vim "{{{
 let g:jedi#auto_initialization = 1
 let g:jedi#popup_on_dot = 0
 let g:jedi#rename_command = '<leader>R'
 autocmd MyAutoCmd FileType python* NeoBundleSource jedi-vim | let b:did_ftplugin = 1
 "}}}
 
-" alignta.vim"{{{
+" alignta.vim "{{{
 let g:unite_source_alignta_preset_arguments = [
       \ ["Align at '='", '=>\='],
       \ ["Align at '/*' & '*/'",   '<-- /* -> */'  ],
@@ -418,7 +417,7 @@ let g:unite_source_alignta_preset_arguments = [
 xnoremap <silent> [unite]a :<C-u>Unite alignta:arguments<CR>
 "}}}
 
-" smartchr.vim"{{{
+" smartchr.vim "{{{
 inoremap <expr> , smartchr#one_of(', ', ',')
 inoremap <expr> ? smartchr#one_of(' ? ', '?')
 
@@ -433,24 +432,24 @@ augroup MyAutoCmd
 augroup END
 "}}}
 
-" EasyMotion.vim"{{{
+" EasyMotion.vim "{{{
 let g:EasyMotion_leader_key = '<Space><Space>'
 let g:EasyMotion_keys = 'fdsaghjklwertyuiovbcnm'
 "}}}
 
-" DoxygenToolkit.vim"{{{
+" DoxygenToolkit.vim "{{{
 nnoremap <silent> [Space]x :<C-u>Dox<CR>
 let g:load_doxygen_syntax = 1
 "}}}
 
-" accelerated-jk"{{{
+" accelerated-jk "{{{
 nmap <silent>j <Plug>(accelerated_jk_gj)
 nnoremap gj j
 nmap <silent>k <Plug>(accelerated_jk_gk)
 nnoremap gk k
 "}}}
 
-" neocomplcache.vim"{{{
+" neocomplcache.vim "{{{
 " Use neocomplcache.
 let g:neocomplcache_enable_at_startup = 1
 " Use smartcase.
@@ -541,7 +540,7 @@ let g:neocomplcache_omni_patterns.c = '[^.[:digit:] *\t]\%(\.\|->\)'
 let g:neocomplcache_omni_patterns.cpp = '[^.[:digit:] *\t]\%(\.\|->\)\|\h\w*::'
 "}}}
 
-" unite.vim"{{{
+" unite.vim "{{{
 " The prefix key.
 nnoremap [unite] <Nop>
 xnoremap [unite] <Nop>
@@ -583,7 +582,7 @@ nnoremap <silent> [Space]b :<C-u>UniteBookmarkAdd<CR>
 
 " Keymapping in unite.vim.
 autocmd MyAutoCmd FileType unite call s:unite_my_settings()
-function! s:unite_my_settings()"{{{
+function! s:unite_my_settings() "{{{
   " Overwrite settings.
   nmap <buffer> <ESC>   <Plug>(unite_exit)
   imap <buffer> jj      <Plug>(unite_insert_leave)
@@ -685,7 +684,7 @@ let g:unite_build_warning_icon = expand('~/.vim') . '/signs/warn.'
       \ . (s:is_windows ? 'bmp' : 'png')
 "}}}
 
-" vimfiler.vim"{{{
+" vimfiler.vim "{{{
 nnoremap <silent> <C-g> :<C-u>VimFiler -buffer-name=explorer -simple -toggle<CR>
 
 let g:vimfiler_as_default_explorer = 1
@@ -706,7 +705,7 @@ else
 endif
 
 autocmd MyAutoCmd FileType vimfiler call s:vimfiler_my_settings()
-function! s:vimfiler_my_settings()"{{{
+function! s:vimfiler_my_settings() "{{{
   " Overwrite settings.
   nnoremap <silent><buffer> J
         \ <C-u>:Unite -buffer-name=files -default-action=lcd directory_mru<CR>
@@ -719,7 +718,7 @@ function! s:vimfiler_my_settings()"{{{
 endfunction"}}}
 "}}}
 
-" vimshell.vim"{{{
+" vimshell.vim "{{{
 nmap <silent> <C-@> <Plug>(vimshell_switch)
 
 let g:vimshell_user_prompt = 'fnamemodify(getcwd(), ":~")'
@@ -739,7 +738,7 @@ let g:vimshell_execute_file_list['py'] = 'python'
 let g:vimshell_execute_file_list['rb'] = 'ruby'
 
 autocmd MyAutoCmd FileType vimshell call s:vimshell_my_settings()
-function! s:vimshell_my_settings()"{{{
+function! s:vimshell_my_settings() "{{{
   " Hide the window in hitting ESC key twice.
   nmap <silent><buffer> <ESC><ESC> <C-^>
   imap <silent><buffer> <ESC><ESC> <ESC><C-^>
@@ -758,33 +757,33 @@ function! s:vimshell_my_settings()"{{{
 endfunction"}}}
 "}}}
 
-" vinarise.vim"{{{
+" vinarise.vim "{{{
 let g:vinarise_enable_auto_detect = 1
 "}}}
 
-" Gundo.vim"{{{
+" Gundo.vim "{{{
 nnoremap U :<C-u>GundoToggle<CR>
 "}}}
 
-" qfreplace.vim"{{{
+" qfreplace.vim "{{{
 autocmd MyAutoCmd FileType qf nnoremap <buffer> r :<C-u>Qfreplace<CR>
 "}}}
 
-" ref.vim"{{{
+" ref.vim "{{{
 autocmd MyAutoCmd FileType ref call s:ref_my_settings()
-function! s:ref_my_settings()"{{{
+function! s:ref_my_settings() "{{{
   " Overwrite settings.
   nmap <buffer> [Tag]t <Plug>(ref-keyword)
   nmap <buffer> [Tag]p <Plug>(ref-back)
 endfunction"}}}
 "}}}
 
-" gitv.vim"{{{
+" gitv.vim "{{{
 nnoremap <silent> [Space]gv :<C-u>Gitv<CR>
 nnoremap <silent> [Space]gf :<C-u>Gitv!<CR>
 "}}}
 
-" fugitive.vim"{{{
+" fugitive.vim "{{{
 nnoremap <silent> [Space]gd :<C-u>call <SID>fugitive_tab('Gdiff')<CR>
 nnoremap <silent> [Space]gs :<C-u>Gstatus<CR>
 nnoremap <silent> [Space]gl :<C-u>call <SID>fugitive_tab('Glog')<CR>
@@ -799,18 +798,18 @@ function! s:fugitive_tab(cmd)
 endfunction
 "}}}
 
-" caw.vim"{{{
+" caw.vim "{{{
 nmap gcc <Plug>(caw:i:toggle)
 xmap gcc <Plug>(caw:i:toggle)
 "}}}
 
-" open-browser.vim"{{{
+" open-browser.vim "{{{
 let g:netrw_nogx = 1 " disable netrw's gx mapping.
 nmap gx <Plug>(openbrowser-smart-search)
 vmap gx <Plug>(openbrowser-smart-search)
 "}}}
 
-" errormarker.vim"{{{
+" errormarker.vim "{{{
 let errormarker_errortext      = '!!'
 let errormarker_warningtext    = '??'
 let g:errormarker_errorgroup   = 'Error'
@@ -821,13 +820,13 @@ let g:errormarker_warningicon  = expand('~/.vim') . '/signs/warn.'
       \ . (s:is_windows ? 'bmp' : 'png')
 "}}}
 
-" gtags.vim"{{{
+" gtags.vim "{{{
 nnoremap <C-j> :<C-u>GtagsCursor<CR> zv
 nnoremap <silent> <C-n> :<C-u>cnext<CR> zv zz
 nnoremap <silent> <C-p> :<C-u>cprevious<CR>
 "}}}
 
-" taglist.vim"{{{
+" taglist.vim "{{{
 if has('mac') || s:is_windows
   let Tlist_Ctags_Cmd = '/usr/local/bin/ctags'
 elseif s:is_freebsd
@@ -844,7 +843,7 @@ if has('gui_running')
 endif
 "}}}
 
-" w3m.vim"{{{
+" w3m.vim "{{{
 nnoremap W :<C-u>W3mTab<Space>
 if has('mac')
   let g:w3m#external_browser = 'open -a "Google Chrome"'
@@ -868,9 +867,9 @@ endfunction
 "}}}
 
 "-----------------------------------------------------------------------------
-" Key-mappings:"{{{
+" Key-mappings: "{{{
 "
-" Command-line mode keymappings:"{{{
+" Command-line mode keymappings: "{{{
 " <C-a>: start of line.
 cnoremap <C-a> <Home>
 " <C-b>: back one character.
@@ -1046,7 +1045,7 @@ noremap [Space]gg :<C-u>echo FoldCCnavi()<CR>
 " Auto escape / substitute.
 xnoremap s y:%s/<C-r>=substitute(@0, '/', '\\/', 'g')<Return>//g<Left><Left>
 
-" Easy escape."{{{
+" Easy escape. "{{{
 inoremap jj <ESC>
 cnoremap <expr> j getcmdline()[getcmdpos()-2] ==# 'j' ? "\<BS>\<C-c>" : 'j'
 onoremap jj <ESC>
@@ -1064,14 +1063,14 @@ nnoremap <silent> <ESC><ESC> :<C-u>nohlsearch<CR>
 "}}}
 
 "-----------------------------------------------------------------------------
-" Commands:"{{{
+" Commands: "{{{
 "
 " Display diff with the file.
 command! -nargs=1 -complete=file Diff tabedit % | vertical diffsplit <args>
 "}}}
 
 "-----------------------------------------------------------------------------
-" Platform depends:"{{{
+" Platform depends: "{{{
 "
 " Change colorscheme.
 " Don't override colorscheme.
@@ -1089,7 +1088,7 @@ endif
 "}}}
 
 "-----------------------------------------------------------------------------
-" Others:"{{{
+" Others: "{{{
 "
 " allow backspacing over everything in insert mode
 set backspace=indent,eol,start
