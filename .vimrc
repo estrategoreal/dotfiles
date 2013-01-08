@@ -77,7 +77,9 @@ NeoBundle 'gregsexton/gitv'
 NeoBundle 'h1mesuke/unite-outline', '', 'same'
 NeoBundle 'h1mesuke/vim-alignta', '', 'same'
 NeoBundleLazy 'hrsh7th/vim-versions', {
-      \ 'autoload' : {'functions' : 'versions#info', 'commands' : 'UniteVersions'},
+      \ 'autoload' : {
+      \     'functions' : 'versions#info', 'commands' : 'UniteVersions'
+      \    },
       \ }
 NeoBundle 'kana/vim-smartchr', '', 'same', { 'autoload' : {
       \ 'insert' : 1,
@@ -114,7 +116,7 @@ NeoBundle 'Shougo/unite-sudo'
 NeoBundleLazy 'Shougo/vim-vcs', {
       \ 'depends' : 'thinca/vim-openbuf',
       \ 'autoload' : {'functions' : 'vcs#info', 'commands' : 'Vcs'},
-      \   }
+      \ }
 NeoBundle 'Shougo/vimfiler',
       \ { 'depends' : 'Shougo/unite.vim' }
 NeoBundle 'Shougo/vimproc', {
@@ -161,7 +163,6 @@ NeoBundleLazy 'vim-ruby/vim-ruby', { 'autoload' : {
       \ 'mappings' : '<Plug>(ref-keyword)',
       \ 'filetypes' : 'ruby'
       \ }}
-"NeoBundle 'vim-scripts/errormarker.vim'
 NeoBundle 'vim-scripts/gtags.vim', '', 'same'
 NeoBundle 'vim-scripts/taglist.vim', '', 'same', { 'type' : 'nosync' }
 NeoBundleLazy 'yomi322/vim-gitcomplete', { 'autoload' : {
@@ -555,6 +556,8 @@ function! bundle.hooks.on_source(bundle)
         \ '[^.[:digit:] *\t]\%(\.\|->\)'
   let g:neocomplcache_force_omni_patterns.cpp =
         \ '[^.[:digit:] *\t]\%(\.\|->\)\|\h\w*::'
+  let g:neocomplcache_force_omni_patterns.objc =
+        \ '[^.[:digit:] *\t]\%(\.\|->\)'
 
   " Define dictionary.
   let g:neocomplcache_dictionary_filetype_lists = {
@@ -1056,13 +1059,18 @@ endfunction
 nnoremap [Quickfix] <Nop>
 nmap q [Quickfix]
 
+" Open the quickfix window automatically if it's not empty.
+autocmd QuickFixCmdPost [^l]* botright cwindow
+
 " Toggle quickfix window.
-nnoremap <silent> [Quickfix]<Space> :<C-u>call <SID>toggle_quickfix_window('c')<CR>
-function! s:toggle_quickfix_window(type)
+nnoremap <silent> [Quickfix]<Space> :<C-u>call <SID>toggle_quickfix_window()<CR>
+function! s:toggle_quickfix_window()
   let _ = winnr('$')
   cclose
   if _ == winnr('$')
     botright copen
+    setlocal nowrap
+    setlocal whichwrap=b,s
   endif
 endfunction
 "}}}
