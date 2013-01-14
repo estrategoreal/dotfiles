@@ -102,7 +102,6 @@ call neobundle#config('neocomplcache', {
       \   'insert' : 1,
       \ }})
 NeoBundle 'Shougo/neobundle-vim-scripts'
-NeoBundle 'Shougo/neocomplcache-clang_complete'
 NeoBundle 'Shougo/neosnippet'
 call neobundle#config('neosnippet', {
       \ 'lazy' : 1,
@@ -110,6 +109,11 @@ call neobundle#config('neosnippet', {
       \   'insert' : 1,
       \ }})
 NeoBundle 'Shougo/unite.vim'
+call neobundle#config('unite.vim',{
+      \ 'lazy' : 1,
+      \ 'autoload' : {
+      \   'commands' : ['Unite', 'UniteWithCursorWord', 'UniteWithInput']
+      \ }})
 NeoBundle 'Shougo/unite-build'
 NeoBundle 'Shougo/unite-ssh'
 NeoBundle 'Shougo/unite-sudo'
@@ -117,8 +121,15 @@ NeoBundleLazy 'Shougo/vim-vcs', {
       \ 'depends' : 'thinca/vim-openbuf',
       \ 'autoload' : {'functions' : 'vcs#info', 'commands' : 'Vcs'},
       \ }
-NeoBundle 'Shougo/vimfiler',
-      \ { 'depends' : 'Shougo/unite.vim' }
+NeoBundle 'Shougo/vimfiler'
+call neobundle#config('vimfiler', {
+      \ 'lazy' : 1,
+      \ 'depends' : 'Shougo/unite.vim',
+      \ 'autoload' : {
+      \    'commands' : ['VimFilerExplorer', 'VimFiler', 'Edit'],
+      \    'mappings' : ['<Plug>(vimfiler_switch)']
+      \ }
+      \ })
 NeoBundle 'Shougo/vimproc', {
       \ 'build' : {
       \     'windows' : 'make -f make_mingw32.mak',
@@ -128,6 +139,13 @@ NeoBundle 'Shougo/vimproc', {
       \    },
       \ }
 NeoBundle 'Shougo/vimshell'
+call neobundle#config('vimshell',{
+      \ 'lazy' : 1,
+      \ 'autoload' : {
+      \   'commands' : ['VimShell', 'VimShellExecute',
+      \                 'VimShellInteractive', 'VimShellTerminal', 'VimShellPop'],
+      \   'mappings' : ['<Plug>(vimshell_switch)']
+      \ }})
 NeoBundleLazy 'Shougo/vinarise', { 'autoload' :
       \  {'commands' : 'Vinarise' }
       \ }
@@ -367,7 +385,11 @@ set number
 set numberwidth=6
 " Show tabs and trailing spaces.
 set list
-set listchars=tab:>-,trail:-,extends:>,precedes:<
+if s:is_windows
+  set listchars=tab:>-,trail:-,extends:>,precedes:<
+else
+  set listchars=tab:▸\ ,extends:»,precedes:«,nbsp:%
+endif
 " Wrap long lines.
 set wrap
 " Wrap conditions.
@@ -407,11 +429,13 @@ endif
 set smartindent
 
 augroup MyAutoCmd
-  " Close help, quickfix, quickrun and reference window by pressing q.
-  autocmd FileType help,qf,qfreplace,quickrun,ref
+  " Close help, git, quickfix, quickrun and reference window by pressing q.
+  autocmd FileType help,gitcommit,qf,qfreplace,quickrun,ref
         \ nnoremap <buffer><silent> q :<C-u>call <SID>smart_close()<CR>
   autocmd FileType * if (&readonly || !&modifiable) && !hasmapto('q', 'n')
         \ | nnoremap <buffer><silent> q :<C-u>call <SID>smart_close()<CR>| endif
+
+  autocmd FileType gitcommit setlocal nofoldenable
 
   " Enable omni completion.
   autocmd FileType c setlocal omnifunc=ccomplete#Complete
@@ -483,8 +507,6 @@ xnoremap <silent> [unite]a :<C-u>Unite alignta:arguments<CR>
 
 " vim-versions{{{
 nnoremap <silent> [Space]gs :<C-u>UniteVersions status:!<CR>
-
-call unite#custom_default_action('versions/git/status', 'commit')
 "}}}
 
 " smartchr.vim "{{{
@@ -680,44 +702,6 @@ function! s:visual_grep()
 endfunction
 nnoremap <silent> [Space]b :<C-u>UniteBookmarkAdd<CR>
 
-" Keymapping in unite.vim.
-autocmd MyAutoCmd FileType unite call s:unite_my_settings()
-function! s:unite_my_settings() "{{{
-  " Overwrite settings.
-  nmap <buffer> <ESC>   <Plug>(unite_exit)
-  imap <buffer> jj      <Plug>(unite_insert_leave)
-  imap <buffer> <C-w>   <Plug>(unite_delete_backward_path)
-
-  imap <buffer><expr> j unite#smart_map('j', '')
-  imap <buffer> <TAB>   <Plug>(unite_select_next_line)
-  imap <buffer> <C-w>   <Plug>(unite_delete_backward_path)
-  imap <buffer> '       <Plug>(unite_quick_match_default_action)
-  nmap <buffer> '       <Plug>(unite_quick_match_default_action)
-  imap <buffer><expr> x
-        \ unite#smart_map('x', "\<Plug>(unite_quick_match_choose_action)")
-  nmap <buffer> x       <Plug>(unite_quick_match_choose_action)
-  nmap <buffer> <C-z>   <Plug>(unite_toggle_transpose_window)
-  imap <buffer> <C-z>   <Plug>(unite_toggle_transpose_window)
-  imap <buffer> <C-y>   <Plug>(unite_narrowing_path)
-  nmap <buffer> <C-y>   <Plug>(unite_narrowing_path)
-  nmap <buffer> <C-j>   <Plug>(unite_toggle_auto_preview)
-  nmap <buffer> <C-r>   <Plug>(unite_narrowing_input_history)
-  imap <buffer> <C-r>   <Plug>(unite_narrowing_input_history)
-  nnoremap <silent><buffer><expr> l
-        \ unite#smart_map('l', unite#do_action('default'))
-
-  let unite = unite#get_current_unite()
-  if unite.buffer_name =~# '^search'
-    nnoremap <silent><buffer><expr> r unite#do_action('replace')
-  else
-    nnoremap <silent><buffer><expr> r unite#do_action('rename')
-  endif
-
-  nnoremap <silent><buffer><expr> cd unite#do_action('lcd')
-  nnoremap <buffer><expr> S          unite#mappings#set_current_filters(
-        \ empty(unite#mappings#get_current_filters()) ? ['sorter_reverse'] : [])
-endfunction"}}}
-
 " t: tags-and-searches "{{{
 " The prefix key.
 nnoremap [Tag] <Nop>
@@ -739,121 +723,169 @@ nnoremap <silent> <C-h> :<C-u>Unite -buffer-name=help help<CR>
 " Execute help by cursor keyword.
 nnoremap <silent> g<C-h>  :<C-u>help<Space><C-r><C-w><CR>
 
-let g:unite_source_history_yank_enable = 1
+let bundle = neobundle#get('unite.vim')
+function! bundle.hooks.on_source(bundle)
+  " Keymapping in unite.vim.
+  autocmd MyAutoCmd FileType unite call s:unite_my_settings()
+  function! s:unite_my_settings() "{{{
+    " Overwrite settings.
+    nmap <buffer> <ESC>   <Plug>(unite_exit)
+    imap <buffer> jj      <Plug>(unite_insert_leave)
+    imap <buffer> <C-w>   <Plug>(unite_delete_backward_path)
 
-" migemo.
-call unite#custom_source('line_migemo', 'matchers', 'matcher_migemo')
+    imap <buffer><expr> j unite#smart_map('j', '')
+    imap <buffer> <TAB>   <Plug>(unite_select_next_line)
+    imap <buffer> <C-w>   <Plug>(unite_delete_backward_path)
+    imap <buffer> '       <Plug>(unite_quick_match_default_action)
+    nmap <buffer> '       <Plug>(unite_quick_match_default_action)
+    imap <buffer><expr> x
+          \ unite#smart_map('x', "\<Plug>(unite_quick_match_choose_action)")
+    nmap <buffer> x       <Plug>(unite_quick_match_choose_action)
+    nmap <buffer> <C-z>   <Plug>(unite_toggle_transpose_window)
+    imap <buffer> <C-z>   <Plug>(unite_toggle_transpose_window)
+    imap <buffer> <C-y>   <Plug>(unite_narrowing_path)
+    nmap <buffer> <C-y>   <Plug>(unite_narrowing_path)
+    nmap <buffer> <C-j>   <Plug>(unite_toggle_auto_preview)
+    nmap <buffer> <C-r>   <Plug>(unite_narrowing_input_history)
+    imap <buffer> <C-r>   <Plug>(unite_narrowing_input_history)
+    nnoremap <silent><buffer><expr> l
+          \ unite#smart_map('l', unite#do_action('default'))
 
-let g:unite_enable_start_insert = 0
-let g:unite_source_grep_max_candidates = 500
+    let unite = unite#get_current_unite()
+    if unite.buffer_name =~# '^search'
+      nnoremap <silent><buffer><expr> r unite#do_action('replace')
+    else
+      nnoremap <silent><buffer><expr> r unite#do_action('rename')
+    endif
 
-" For ack.
-if executable('ack-grep')
-  "let g:unite_source_grep_command = 'ack-grep'
-  "let g:unite_source_grep_default_opts = '--no-heading --no-color -a'
-  "let g:unite_source_grep_recursive_opt = ''
-endif
+    nnoremap <silent><buffer><expr> cd unite#do_action('lcd')
+    nnoremap <buffer><expr> S          unite#mappings#set_current_filters(
+          \ empty(unite#mappings#get_current_filters()) ? ['sorter_reverse'] : [])
+  endfunction"}}}
 
-" For unite-alias.
-let g:unite_source_alias_aliases = {}
-let g:unite_source_alias_aliases.line_migemo = {
-      \ 'source' : 'line',
-      \ }
+  let g:unite_source_history_yank_enable = 1
 
-" For unite-menu.
-let g:unite_source_menu_menus = {}
+  " migemo.
+  call unite#custom_source('line_migemo', 'matchers', 'matcher_migemo')
 
-let g:unite_source_menu_menus.unite = {
-      \     'description' : 'Start unite sources',
-      \ }
-let g:unite_source_menu_menus.unite.command_candidates = {
-      \ 'directory' : 'Unite -buffer-name=files '.
-      \       '-default-action=lcd bookmark directory_mru',
-      \ 'history'   : 'Unite history/command',
-      \ 'mapping'   : 'Unite mapping',
-      \ 'message'   : 'Unite output:message',
-      \ 'quickfix'  : 'Unite qflist -no-quit',
-      \ 'resume'    : 'Unite -buffer-name=resume resume',
-      \ }
-nnoremap <silent> [unite]u :<C-u>Unite menu:unite<CR>
+  let g:unite_enable_start_insert = 0
+  let g:unite_source_grep_max_candidates = 500
 
-let g:unite_build_error_icon   = expand('~/.vim') . '/signs/err.'
-      \ . (s:is_windows ? 'bmp' : 'png')
-let g:unite_build_warning_icon = expand('~/.vim') . '/signs/warn.'
-      \ . (s:is_windows ? 'bmp' : 'png')
+  " For ack.
+  if executable('ack-grep')
+    "let g:unite_source_grep_command = 'ack-grep'
+    "let g:unite_source_grep_default_opts = '--no-heading --no-color -a'
+    "let g:unite_source_grep_recursive_opt = ''
+  endif
+
+  " For unite-alias.
+  let g:unite_source_alias_aliases = {}
+  let g:unite_source_alias_aliases.line_migemo = {
+        \ 'source' : 'line',
+        \ }
+
+  " For unite-menu.
+  let g:unite_source_menu_menus = {}
+
+  let g:unite_source_menu_menus.unite = {
+        \     'description' : 'Start unite sources',
+        \ }
+  let g:unite_source_menu_menus.unite.command_candidates = {
+        \ 'directory' : 'Unite -buffer-name=files '.
+        \       '-default-action=lcd bookmark directory_mru',
+        \ 'history'   : 'Unite history/command',
+        \ 'mapping'   : 'Unite mapping',
+        \ 'message'   : 'Unite output:message',
+        \ 'quickfix'  : 'Unite qflist -no-quit',
+        \ 'resume'    : 'Unite -buffer-name=resume resume',
+        \ }
+  nnoremap <silent> [unite]u :<C-u>Unite menu:unite<CR>
+
+  let g:unite_build_error_icon   = expand('~/.vim') . '/signs/err.'
+        \ . (s:is_windows ? 'bmp' : 'png')
+  let g:unite_build_warning_icon = expand('~/.vim') . '/signs/warn.'
+        \ . (s:is_windows ? 'bmp' : 'png')
+endfunction
 "}}}
 
 " vimfiler.vim "{{{
 nnoremap <silent> <C-g> :<C-u>VimFiler -buffer-name=explorer -simple -toggle<CR>
 
-let g:vimfiler_as_default_explorer = 1
-
-" Enable file operation commands.
-let g:vimfiler_safe_mode_by_default = 0
-
-if s:is_windows
-  " Use trashbox.
-  let g:unite_kind_file_use_trashbox = 1
-else
-  " Like Textmate icons.
-  let g:vimfiler_tree_leaf_icon = ' '
-  let g:vimfiler_tree_opened_icon = '▾'
-  let g:vimfiler_tree_closed_icon = '▸'
-  let g:vimfiler_file_icon = '-'
-  let g:vimfiler_marked_file_icon = '*'
-endif
-
-autocmd MyAutoCmd FileType vimfiler call s:vimfiler_my_settings()
-function! s:vimfiler_my_settings() "{{{
-  " Overwrite settings.
-  nnoremap <silent><buffer> J
-        \ <C-u>:Unite -buffer-name=files -default-action=lcd directory_mru<CR>
-
-  " Migemo search.
-  if !empty(unite#get_filters('matcher_migemo'))
-    nnoremap <silent><buffer><expr> / line('$') > 10000 ? 'g/' :
-          \ ":\<C-u>Unite -buffer-name=search -start-insert line_migemo\<CR>"
+let bundle = neobundle#get('vimfiler')
+function! bundle.hooks.on_source(bundle)
+  let g:vimfiler_as_default_explorer = 1
+  
+  " Enable file operation commands.
+  let g:vimfiler_safe_mode_by_default = 0
+  
+  if s:is_windows
+    " Use trashbox.
+    let g:unite_kind_file_use_trashbox = 1
+  else
+    " Like Textmate icons.
+    let g:vimfiler_tree_leaf_icon = ' '
+    let g:vimfiler_tree_opened_icon = '▾'
+    let g:vimfiler_tree_closed_icon = '▸'
+    let g:vimfiler_file_icon = '-'
+    let g:vimfiler_readonly_file_icon = '✗'
+    let g:vimfiler_marked_file_icon = '✓'
   endif
-endfunction"}}}
+  
+  autocmd MyAutoCmd FileType vimfiler call s:vimfiler_my_settings()
+  function! s:vimfiler_my_settings() "{{{
+    " Overwrite settings.
+    nnoremap <silent><buffer> J
+          \ <C-u>:Unite -buffer-name=files -default-action=lcd directory_mru<CR>
+  
+    " Migemo search.
+    if !empty(unite#get_filters('matcher_migemo'))
+      nnoremap <silent><buffer><expr> / line('$') > 10000 ? 'g/' :
+            \ ":\<C-u>Unite -buffer-name=search -start-insert line_migemo\<CR>"
+    endif
+  endfunction"}}}
+endfunction
 "}}}
 
 " vimshell.vim "{{{
 nmap <silent> <C-@> <Plug>(vimshell_switch)
 
-let g:vimshell_user_prompt = 'fnamemodify(getcwd(), ":~")'
-let g:vimshell_right_prompt = 'vcs#info("(%s)-[%b]%p", "(%s)-[%b|%a]%p")'
-let g:vimshell_prompt = '% '
-let g:vimshell_split_command = ''
-
-autocmd MyAutoCmd FileType vimshell call s:vimshell_settings()
-function! s:vimshell_settings() "{{{
-  if !s:is_windows
-    " Use zsh history.
-    let g:vimshell_external_history_path = expand('~/.zsh_history')
-  endif
-
-  " Initialize execute file list.
-  let g:vimshell_execute_file_list = {}
-  call vimshell#set_execute_file('txt,vim,c,h,cpp', 'vim')
-  let g:vimshell_execute_file_list['py'] = 'python'
-  let g:vimshell_execute_file_list['rb'] = 'ruby'
-
-  " Hide the window in hitting ESC key twice.
-  nmap <silent><buffer> <ESC><ESC> <C-^>
-  imap <silent><buffer> <ESC><ESC> <ESC><C-^>
-  imap <buffer><C-k> <Plug>(vimshell_zsh_complete)
-
-  nnoremap <silent><buffer> J
-        \ <C-u>:Unite -buffer-name=files -default-action=lcd directory_mru<CR>
-
-  call vimshell#set_alias('ll', 'ls -l')
-  call vimshell#set_alias('la', 'ls -alF')
-  call vimshell#set_alias('l', 'ls -CF')
-  call vimshell#set_alias('l.', 'ls -d .*')
-  call vimshell#set_alias('cp', 'cp -i')
-  call vimshell#set_alias('rm', 'rm -i')
-  call vimshell#set_alias('mv', 'mv -i')
-endfunction"}}}
+let bundle = neobundle#get('vimshell')
+function! bundle.hooks.on_source(bundle)
+  let g:vimshell_user_prompt = 'fnamemodify(getcwd(), ":~")'
+  let g:vimshell_right_prompt = 'vcs#info("(%s)-[%b]%p", "(%s)-[%b|%a]%p")'
+  let g:vimshell_prompt = '% '
+  let g:vimshell_split_command = ''
+  
+  autocmd MyAutoCmd FileType vimshell call s:vimshell_settings()
+  function! s:vimshell_settings() "{{{
+    if !s:is_windows
+      " Use zsh history.
+      let g:vimshell_external_history_path = expand('~/.zsh_history')
+    endif
+  
+    " Initialize execute file list.
+    let g:vimshell_execute_file_list = {}
+    call vimshell#set_execute_file('txt,vim,c,h,cpp', 'vim')
+    let g:vimshell_execute_file_list['py'] = 'python'
+    let g:vimshell_execute_file_list['rb'] = 'ruby'
+  
+    " Hide the window in hitting ESC key twice.
+    nmap <silent><buffer> <ESC><ESC> <C-^>
+    imap <silent><buffer> <ESC><ESC> <ESC><C-^>
+    imap <buffer><C-k> <Plug>(vimshell_zsh_complete)
+  
+    nnoremap <silent><buffer> J
+          \ <C-u>:Unite -buffer-name=files -default-action=lcd directory_mru<CR>
+  
+    call vimshell#set_alias('ll', 'ls -l')
+    call vimshell#set_alias('la', 'ls -alF')
+    call vimshell#set_alias('l', 'ls -CF')
+    call vimshell#set_alias('l.', 'ls -d .*')
+    call vimshell#set_alias('cp', 'cp -i')
+    call vimshell#set_alias('rm', 'rm -i')
+    call vimshell#set_alias('mv', 'mv -i')
+  endfunction"}}}
+endfunction
 "}}}
 
 " vinarise.vim "{{{
