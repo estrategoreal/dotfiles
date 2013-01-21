@@ -388,7 +388,7 @@ set list
 if s:is_windows
   set listchars=tab:>-,trail:-,extends:>,precedes:<
 else
-  set listchars=tab:▸\ ,extends:»,precedes:«,nbsp:%
+  set listchars=tab:▸\ ,trail:-,extends:»,precedes:«,nbsp:%
 endif
 " Wrap long lines.
 set wrap
