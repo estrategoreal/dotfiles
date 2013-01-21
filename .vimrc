@@ -77,9 +77,7 @@ NeoBundle 'gregsexton/gitv'
 NeoBundle 'h1mesuke/unite-outline', '', 'same'
 NeoBundle 'h1mesuke/vim-alignta', '', 'same'
 NeoBundleLazy 'hrsh7th/vim-versions', {
-      \ 'autoload' : {
-      \     'functions' : 'versions#info', 'commands' : 'UniteVersions'
-      \    },
+      \ 'autoload' : {'commands' : 'UniteVersions'},
       \ }
 NeoBundle 'kana/vim-smartchr', '', 'same', { 'autoload' : {
       \ 'insert' : 1,
@@ -107,26 +105,31 @@ call neobundle#config('neosnippet', {
       \ 'lazy' : 1,
       \ 'autoload' : {
       \   'insert' : 1,
+      \   'filetypes' : 'snippet',
       \ }})
 NeoBundle 'Shougo/unite.vim'
 call neobundle#config('unite.vim',{
       \ 'lazy' : 1,
       \ 'autoload' : {
-      \   'commands' : ['Unite', 'UniteWithCursorWord', 'UniteWithInput']
+      \   'commands' : [{ 'name' : 'Unite',
+      \                   'complete' : 'customlist,unite#complete_source'},
+      \                 'UniteWithCursorWord', 'UniteWithInput']
       \ }})
 NeoBundle 'Shougo/unite-build'
 NeoBundle 'Shougo/unite-ssh'
 NeoBundle 'Shougo/unite-sudo'
 NeoBundleLazy 'Shougo/vim-vcs', {
       \ 'depends' : 'thinca/vim-openbuf',
-      \ 'autoload' : {'functions' : 'vcs#info', 'commands' : 'Vcs'},
-      \ }
+      \ 'autoload' : {'commands' : 'Vcs'},
+      \   }
 NeoBundle 'Shougo/vimfiler'
 call neobundle#config('vimfiler', {
       \ 'lazy' : 1,
       \ 'depends' : 'Shougo/unite.vim',
       \ 'autoload' : {
-      \    'commands' : ['VimFilerExplorer', 'VimFiler', 'Edit'],
+      \    'commands' : [{ 'name' : 'VimFiler',
+      \                    'complete' : 'customlist,vimfiler#complete' },
+      \                  'VimFilerExplorer', 'Edit'],
       \    'mappings' : ['<Plug>(vimfiler_switch)']
       \ }
       \ })
@@ -142,8 +145,10 @@ NeoBundle 'Shougo/vimshell'
 call neobundle#config('vimshell',{
       \ 'lazy' : 1,
       \ 'autoload' : {
-      \   'commands' : ['VimShell', 'VimShellExecute',
-      \                 'VimShellInteractive', 'VimShellTerminal', 'VimShellPop'],
+      \   'commands' : [{ 'name' : 'VimShell',
+      \                   'complete' : 'customlist,vimshell#complete'},
+      \                 'VimShellExecute', 'VimShellInteractive',
+      \                 'VimShellTerminal', 'VimShellPop'],
       \   'mappings' : ['<Plug>(vimshell_switch)']
       \ }})
 NeoBundleLazy 'Shougo/vinarise', { 'autoload' :
@@ -191,12 +196,7 @@ NeoBundleLazy 'yuratomo/w3m.vim', '', 'same', { 'autoload' : {
       \ }}
 
 " Installation check.
-if neobundle#exists_not_installed_bundles()
-  echomsg 'Not installed bundles : ' .
-        \ string(neobundle#get_not_installed_bundle_names())
-  echomsg 'Please execute ":NeoBundleInstall" command.'
-  finish
-endif
+NeoBundleCheck
 "}}}
 
 "-----------------------------------------------------------------------------
@@ -855,29 +855,28 @@ function! bundle.hooks.on_source(bundle)
   let g:vimshell_right_prompt = 'vcs#info("(%s)-[%b]%p", "(%s)-[%b|%a]%p")'
   let g:vimshell_prompt = '% '
   let g:vimshell_split_command = ''
-  
+
   autocmd MyAutoCmd FileType vimshell call s:vimshell_settings()
   function! s:vimshell_settings() "{{{
     if !s:is_windows
       " Use zsh history.
       let g:vimshell_external_history_path = expand('~/.zsh_history')
     endif
-  
+
     " Initialize execute file list.
     let g:vimshell_execute_file_list = {}
     call vimshell#set_execute_file('txt,vim,c,h,cpp', 'vim')
     let g:vimshell_execute_file_list['py'] = 'python'
     let g:vimshell_execute_file_list['rb'] = 'ruby'
-  
+
     " Hide the window in hitting ESC key twice.
     nmap <silent><buffer> <ESC><ESC> <C-^>
     imap <silent><buffer> <ESC><ESC> <ESC><C-^>
     imap <buffer><C-k> <Plug>(vimshell_zsh_complete)
-  
+
     nnoremap <silent><buffer> J
           \ <C-u>:Unite -buffer-name=files -default-action=lcd directory_mru<CR>
-  
-    call vimshell#set_alias('ll', 'ls -l')
+call vimshell#set_alias('ll', 'ls -l')
     call vimshell#set_alias('la', 'ls -alF')
     call vimshell#set_alias('l', 'ls -CF')
     call vimshell#set_alias('l.', 'ls -d .*')
