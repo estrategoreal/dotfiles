@@ -667,7 +667,7 @@ nnoremap <silent> [unite]f
 nnoremap <silent> [unite]j
       \ :<C-u>Unite change jump<CR>
 nnoremap <silent> [unite]o
-      \ :<C-u>Unite outline -start-insert<CR>
+      \ :<C-u>Unite outline -start-insert -resume<CR>
 nnoremap <silent> [unite]r
       \ :<C-u>Unite -buffer-name=register register history/yank<CR>
 xnoremap <silent> [unite]r
@@ -690,7 +690,7 @@ xnoremap <silent> [unite]G
 function! s:cursor_grep()
   let w = expand('<cword>')
   call s:my_idenew()
-  execute ':Unite grep:.::' . w . ' -buffer-name=search -no-quit<CR>'
+  execute ':Unite grep:.::' . w . ' -buffer-name=search -no-quit -resume<CR>'
 endfunction
 function! s:visual_grep()
   let tmp = @@
@@ -698,7 +698,7 @@ function! s:visual_grep()
   let selected = @@
   let @@ = tmp
   call s:my_idenew()
-  execute ':Unite grep:.::' . selected . ' -buffer-name=search -no-quit<CR>'
+  execute ':Unite grep:.::' . selected . ' -buffer-name=search -no-quit -resume<CR>'
 endfunction
 nnoremap <silent> [Space]b :<C-u>UniteBookmarkAdd<CR>
 
@@ -723,8 +723,13 @@ nnoremap <silent> <C-h> :<C-u>Unite -buffer-name=help help<CR>
 " Execute help by cursor keyword.
 nnoremap <silent> g<C-h>  :<C-u>help<Space><C-r><C-w><CR>
 
+let g:unite_source_history_yank_enable = 1
+
 let bundle = neobundle#get('unite.vim')
 function! bundle.hooks.on_source(bundle)
+  " migemo.
+  call unite#custom_source('line_migemo', 'matchers', 'matcher_migemo')
+
   " Keymapping in unite.vim.
   autocmd MyAutoCmd FileType unite call s:unite_my_settings()
   function! s:unite_my_settings() "{{{
@@ -763,11 +768,6 @@ function! bundle.hooks.on_source(bundle)
           \ empty(unite#mappings#get_current_filters()) ? ['sorter_reverse'] : [])
   endfunction"}}}
 
-  let g:unite_source_history_yank_enable = 1
-
-  " migemo.
-  call unite#custom_source('line_migemo', 'matchers', 'matcher_migemo')
-
   let g:unite_enable_start_insert = 0
   let g:unite_source_grep_max_candidates = 500
 
@@ -799,7 +799,7 @@ function! bundle.hooks.on_source(bundle)
         \ 'quickfix'  : 'Unite qflist -no-quit',
         \ 'resume'    : 'Unite -buffer-name=resume resume',
         \ }
-  nnoremap <silent> [unite]u :<C-u>Unite menu:unite<CR>
+  nnoremap <silent> [unite]u :<C-u>Unite menu:unite -resume<CR>
 
   let g:unite_build_error_icon   = expand('~/.vim') . '/signs/err.'
         \ . (s:is_windows ? 'bmp' : 'png')
