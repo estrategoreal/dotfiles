@@ -72,6 +72,8 @@ set guioptions-=T
 set guioptions-=m
 " Scrollbar is always off.
 set guioptions-=rL
+" Not guitablabel.
+set guioptions-=e
 
 if has('win32') || has('win64')
   gui

@@ -27,7 +27,7 @@ if s:is_windows
   language message en
 else
   " For Linux.
-  language mes C
+  language message C
 endif
 
 if s:is_windows
@@ -64,7 +64,12 @@ call neobundle#rc(expand('~/.vim/bundle/'))
 NeoBundleFetch 'Shougo/neobundle.vim'
 
 " My Bundles here:
-NeoBundle 'anyakichi/vim-surround', '', 'same'
+NeoBundleLazy 'anyakichi/vim-surround', {
+      \ 'autoload' : {
+      \   'mappings' : [
+      \     ['n', '<Plug>Dsurround'], ['n', '<Plug>Csurround'],
+      \     ['n', '<Plug>Ysurround'], ['n', '<Plug>YSurround']
+      \ ]}}
 NeoBundleLazy 'basyura/TweetVim', { 'depends' :
       \ ['basyura/twibill.vim', 'tyru/open-browser.vim'],
       \ 'autoload' : { 'commands' : 'TweetVimHomeTimeline' }}
@@ -74,24 +79,33 @@ NeoBundleLazy 'davidhalter/jedi-vim', {
       \    },
       \ }
 NeoBundle 'gregsexton/gitv'
-NeoBundle 'h1mesuke/unite-outline', '', 'same'
-NeoBundle 'h1mesuke/vim-alignta', '', 'same'
-NeoBundleLazy 'hrsh7th/vim-versions', {
-      \ 'autoload' : {'commands' : 'UniteVersions'},
-      \ }
-NeoBundle 'kana/vim-smartchr', '', 'same', { 'autoload' : {
+NeoBundle 'h1mesuke/unite-outline'
+NeoBundle 'h1mesuke/vim-alignta',
+NeoBundle 'hrsh7th/vim-versions'
+call neobundle#config('hrsh7th/vim-versions', {
+      \ 'lazy' : 1,
+      \ 'autoload' : {
+      \   'commands' : 'UniteVersions'},
+      \ })
+NeoBundleLazy 'kana/vim-smartchr', { 'autoload' : {
       \ 'insert' : 1,
       \ }}
-NeoBundle 'mrtazz/DoxygenToolkit.vim', '', 'same'
-NeoBundle 'osyo-manga/unite-quickfix', '', 'same'
-NeoBundle 'othree/eregex.vim', '', 'same'
+NeoBundle 'mrtazz/DoxygenToolkit.vim'
+NeoBundle 'osyo-manga/unite-quickfix'
+NeoBundle 'othree/eregex.vim'
 NeoBundleLazy 'Rip-Rip/clang_complete', {
       \ 'autoload' : {
       \     'filetypes' : ['c', 'cpp'],
       \    },
       \ }
-NeoBundle 'rhysd/accelerated-jk'
-NeoBundleLazy 'Shougo/foldCC', '', 'same',
+NeoBundleLazy 'rhysd/accelerated-jk', { 'autoload' : {
+      \ 'mappings' : ['<Plug>(accelerated_jk_gj)',
+      \               '<Plug>(accelerated_jk_gk)'],
+      \ }}
+NeoBundleLazy 'rhysd/clever-f.vim', { 'autoload' : {
+      \ 'mappings' : 'f',
+      \ }}
+NeoBundleLazy 'Shougo/foldCC',
       \  { 'autoload' : { 'filetypes' : 'vim' }}
 NeoBundle 'Shougo/neocomplcache'
 call neobundle#config('neocomplcache', {
@@ -129,7 +143,8 @@ call neobundle#config('vimfiler', {
       \ 'autoload' : {
       \    'commands' : [{ 'name' : 'VimFiler',
       \                    'complete' : 'customlist,vimfiler#complete' },
-      \                  'VimFilerExplorer', 'Edit'],
+      \                  'VimFilerExplorer',
+      \                  'Edit', 'Read', 'Source', 'Write'],
       \    'mappings' : ['<Plug>(vimfiler_switch)']
       \ }
       \ })
@@ -142,7 +157,7 @@ NeoBundle 'Shougo/vimproc', {
       \    },
       \ }
 NeoBundle 'Shougo/vimshell'
-call neobundle#config('vimshell',{
+call neobundle#config('vimshell', {
       \ 'lazy' : 1,
       \ 'autoload' : {
       \   'commands' : [{ 'name' : 'VimShell',
@@ -151,13 +166,16 @@ call neobundle#config('vimshell',{
       \                 'VimShellTerminal', 'VimShellPop'],
       \   'mappings' : ['<Plug>(vimshell_switch)']
       \ }})
-NeoBundleLazy 'Shougo/vinarise', { 'autoload' :
-      \  {'commands' : 'Vinarise' }
-      \ }
-NeoBundleLazy 'sjl/gundo.vim', '', 'same', { 'autoload' : {
+NeoBundle 'Shougo/vinarise'
+call neobundle#config('vinarise', {
+      \ 'lazy' : 1,
+      \ 'autoload' : {
+      \   'commands' : 'Vinarise',
+      \ }})
+NeoBundleLazy 'sjl/gundo.vim', { 'autoload' : {
       \ 'commands' : 'GundoToggle'
       \ }}
-NeoBundleLazy 'thinca/vim-qfreplace', '', 'same', { 'autoload' : {
+NeoBundleLazy 'thinca/vim-qfreplace', { 'autoload' : {
       \ 'filetypes' : ['unite', 'quickfix']
       \ }}
 NeoBundleLazy 'thinca/vim-quickrun', { 'autoload' : {
@@ -166,32 +184,36 @@ NeoBundleLazy 'thinca/vim-quickrun', { 'autoload' : {
 NeoBundleLazy 'thinca/vim-ref', { 'autoload' : {
       \ 'commands' : 'Ref'
       \ }}
+NeoBundleLazy 'tpope/vim-endwise'
 NeoBundle 'tpope/vim-fugitive'
-NeoBundle 'tsukkee/unite-help', '', 'same'
-NeoBundle 'tsukkee/unite-tag', '', 'same'
+NeoBundle 'tsukkee/unite-help'
+NeoBundle 'tsukkee/unite-tag'
 NeoBundleLazy 'tyru/caw.vim', { 'autoload' : {
       \ 'mappings' : [
       \   '<Plug>(caw:prefix)', '<Plug>(caw:i:toggle)']
       \ }}
-NeoBundleLazy 'tyru/open-browser.vim', '', 'same', { 'autoload' : {
+NeoBundleLazy 'tyru/open-browser.vim', { 'autoload' : {
       \ 'mappings' : '<Plug>(openbrowser-smart-search)',
+      \ }}
+NeoBundleLazy 'ujihisa/vim-seek', { 'autoload' : {
+      \ 'mappings' : ['<Plug>(seek-seek)', '<Plug>(seek-back)'],
       \ }}
 NeoBundleLazy 'ujihisa/vimshell-ssh', { 'autoload' : {
       \ 'filetypes' : 'vimshell',
       \ }}
-NeoBundleLazy 'vim-jp/autofmt', '', 'same', { 'autoload' : {
+NeoBundleLazy 'vim-jp/autofmt', { 'autoload' : {
       \ 'mappings' : [['x', 'gq']],
       \ }}
 NeoBundleLazy 'vim-ruby/vim-ruby', { 'autoload' : {
       \ 'mappings' : '<Plug>(ref-keyword)',
       \ 'filetypes' : 'ruby'
       \ }}
-NeoBundle 'vim-scripts/gtags.vim', '', 'same'
-NeoBundle 'vim-scripts/taglist.vim', '', 'same', { 'type' : 'nosync' }
+NeoBundle 'vim-scripts/gtags.vim'
+NeoBundle 'vim-scripts/taglist.vim', { 'type' : 'nosync' }
 NeoBundleLazy 'yomi322/vim-gitcomplete', { 'autoload' : {
       \ 'filetype' : 'vimshell'
       \ }}
-NeoBundleLazy 'yuratomo/w3m.vim', '', 'same', { 'autoload' : {
+NeoBundleLazy 'yuratomo/w3m.vim', { 'autoload' : {
       \ 'commands' : 'W3mTab',
       \ }}
 
@@ -210,7 +232,7 @@ set encoding=utf-8
 
 " Setting of terminal encoding. "{{{
 if !has('gui_running')
-  if &term == 'win32' || &term == 'win64'
+  if &term ==# 'win32'
     " Setting to use the non-GUI Japanese console.
 
     " Garbled unless this is set.
@@ -272,13 +294,13 @@ if has('kaoriya')
 endif
 
 " When any Japanese character is not included, use encoding for fileencoding.
-function! AU_ReCheck_FENC() "{{{
+function! s:ReCheck_FENC() "{{{
   if &fileencoding =~# 'iso-2022-jp' && search("[^\x01-\x7e]", 'n') == 0
     let &fileencoding = &encoding
   endif
 endfunction"}}}
 
-autocmd MyAutoCmd BufReadPost * call AU_ReCheck_FENC()
+autocmd MyAutoCmd BufReadPost * call s:ReCheck_FENC()
 
 " The default fileformat.
 set fileformat=unix
@@ -453,13 +475,16 @@ autocmd MyAutoCmd FileType * call s:define_surround_keymappings()
 
 function! s:define_surround_keymappings()
   if !&modifiable
-    return
+    silent! nunmap <buffer> ds
+    silent! nunmap <buffer> cs
+    silent! nunmap <buffer> ys
+    silent! nunmap <buffer> yS
+  else
+    nmap <buffer> ds  <Plug>Dsurround
+    nmap <buffer> cs  <Plug>Csurround
+    nmap <buffer> ys  <Plug>Ysurround
+    nmap <buffer> yS  <Plug>YSurround
   endif
-
-  nmap <buffer> ds  <Plug>Dsurround
-  nmap <buffer> cs  <Plug>Csurround
-  nmap <buffer> ys  <Plug>Ysurround
-  nmap <buffer> yS  <Plug>YSurround
 endfunction
 "}}}
 
@@ -653,8 +678,8 @@ endfunction
 " The prefix key.
 nnoremap [unite] <Nop>
 xnoremap [unite] <Nop>
-nmap f [unite]
-xmap f [unite]
+nmap ; [unite]
+xmap ; [unite]
 
 nnoremap <expr><silent> [unite]b <SID>unite_build()
 function! s:unite_build()
@@ -814,10 +839,10 @@ nnoremap <silent> <C-g> :<C-u>VimFiler -buffer-name=explorer -simple -toggle<CR>
 let bundle = neobundle#get('vimfiler')
 function! bundle.hooks.on_source(bundle)
   let g:vimfiler_as_default_explorer = 1
-  
+
   " Enable file operation commands.
   let g:vimfiler_safe_mode_by_default = 0
-  
+
   if s:is_windows
     " Use trashbox.
     let g:unite_kind_file_use_trashbox = 1
@@ -830,13 +855,13 @@ function! bundle.hooks.on_source(bundle)
     let g:vimfiler_readonly_file_icon = '✗'
     let g:vimfiler_marked_file_icon = '✓'
   endif
-  
+
   autocmd MyAutoCmd FileType vimfiler call s:vimfiler_my_settings()
   function! s:vimfiler_my_settings() "{{{
     " Overwrite settings.
     nnoremap <silent><buffer> J
           \ <C-u>:Unite -buffer-name=files -default-action=lcd directory_mru<CR>
-  
+
     " Migemo search.
     if !empty(unite#get_filters('matcher_migemo'))
       nnoremap <silent><buffer><expr> / line('$') > 10000 ? 'g/' :
@@ -942,6 +967,15 @@ xmap gcc <Plug>(caw:i:toggle)
 let g:netrw_nogx = 1 " disable netrw's gx mapping.
 nmap gx <Plug>(openbrowser-smart-search)
 vmap gx <Plug>(openbrowser-smart-search)
+"}}}
+
+" vim-seek
+let g:seek_no_default_key_mappings = 1
+
+nmap ' <Plug>(seek-seek)
+nmap " <Plug>(seek-back)
+omap ' <Plug>(seek-seek)
+omap " <Plug>(seek-back)
 "}}}
 
 " gtags.vim "{{{
