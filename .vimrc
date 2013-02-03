@@ -195,9 +195,6 @@ NeoBundleLazy 'tyru/caw.vim', { 'autoload' : {
 NeoBundleLazy 'tyru/open-browser.vim', { 'autoload' : {
       \ 'mappings' : '<Plug>(openbrowser-smart-search)',
       \ }}
-NeoBundleLazy 'ujihisa/vim-seek', { 'autoload' : {
-      \ 'mappings' : ['<Plug>(seek-seek)', '<Plug>(seek-back)'],
-      \ }}
 NeoBundleLazy 'ujihisa/vimshell-ssh', { 'autoload' : {
       \ 'filetypes' : 'vimshell',
       \ }}
@@ -967,15 +964,6 @@ xmap gcc <Plug>(caw:i:toggle)
 let g:netrw_nogx = 1 " disable netrw's gx mapping.
 nmap gx <Plug>(openbrowser-smart-search)
 vmap gx <Plug>(openbrowser-smart-search)
-"}}}
-
-" vim-seek
-let g:seek_no_default_key_mappings = 1
-
-nmap ' <Plug>(seek-seek)
-nmap " <Plug>(seek-back)
-omap ' <Plug>(seek-seek)
-omap " <Plug>(seek-back)
 "}}}
 
 " gtags.vim "{{{
