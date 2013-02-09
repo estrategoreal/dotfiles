@@ -743,7 +743,7 @@ nnoremap <silent> [Tag]p :<C-u>pop<CR>
 " Execute help.
 nnoremap <silent> <C-h> :<C-u>Unite -buffer-name=help help<CR>
 " Execute help by cursor keyword.
-nnoremap <silent> g<C-h>  :<C-u>help<Space><C-r><C-w><CR>
+nnoremap <silent> g<C-h>  :<C-u>UniteWithCursorWord help<CR>
 
 let g:unite_source_history_yank_enable = 1
 
@@ -1164,7 +1164,7 @@ onoremap j<Space> j
 "}}}
 
 " Capitalize a word.
-nnoremap gu <ESC>gUiw`]
+nnoremap gu gUiw`]
 inoremap <C-q> <ESC>gUiw`]a
 
 " Clear highlight.
