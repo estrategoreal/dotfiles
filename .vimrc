@@ -704,23 +704,23 @@ nnoremap <silent> [unite]w
       \ :<C-u>Unite window<CR>
 
 nnoremap <silent> [unite]g
-      \ :<C-u>Unite grep:. -buffer-name=search -no-quit<CR>
+      \ :<C-u>Unite grep:. -buffer-name=search -auto-preview -no-quit -resume<CR>
 nnoremap <silent> [unite]G
       \ :<C-u>call <SID>cursor_grep()<CR>
 xnoremap <silent> [unite]G
       \ :<C-u>call <SID>visual_grep()<CR>
 function! s:cursor_grep()
   let w = expand('<cword>')
-  call s:my_idenew()
-  execute ':Unite grep:.::' . w . ' -buffer-name=search -no-quit -resume<CR>'
+  "call s:my_idenew()
+  execute ':Unite grep:.::' . w . ' -buffer-name=search -auto-preview -no-quit -resume<CR>'
 endfunction
 function! s:visual_grep()
   let tmp = @@
   silent normal gvy
   let selected = @@
   let @@ = tmp
-  call s:my_idenew()
-  execute ':Unite grep:.::' . selected . ' -buffer-name=search -no-quit -resume<CR>'
+  "call s:my_idenew()
+  execute ':Unite grep:.::' . selected . ' -buffer-name=search -auto-preview -no-quit -resume<CR>'
 endfunction
 nnoremap <silent> [Space]b :<C-u>UniteBookmarkAdd<CR>
 
