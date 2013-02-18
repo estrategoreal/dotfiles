@@ -145,7 +145,8 @@ call neobundle#config('vimfiler', {
       \                    'complete' : 'customlist,vimfiler#complete' },
       \                  'VimFilerExplorer',
       \                  'Edit', 'Read', 'Source', 'Write'],
-      \    'mappings' : ['<Plug>(vimfiler_switch)']
+      \    'mappings' : ['<Plug>(vimfiler_switch)'],
+      \    'explorer' : 1,
       \ }
       \ })
 NeoBundle 'Shougo/vimproc', {
