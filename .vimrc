@@ -57,7 +57,7 @@ if has('vim_starting')
   endif
 endif
 
-call neobundle#rc(expand('~/.vim/bundle/'))
+call neobundle#rc(expand('~/.vim/bundle'))
 
 " neobundle.vim "{{{
 " Let NeoBundle manage NeoBundle
@@ -80,9 +80,14 @@ NeoBundleLazy 'davidhalter/jedi-vim', {
       \ }
 NeoBundle 'gregsexton/gitv'
 NeoBundle 'h1mesuke/unite-outline'
+call neobundle#config('unite-outline', {
+      \ 'lazy' : 1,
+      \ 'autoload' : {
+      \   'unite_sources' : 'outline'},
+      \ })
 NeoBundle 'h1mesuke/vim-alignta',
 NeoBundle 'hrsh7th/vim-versions'
-call neobundle#config('hrsh7th/vim-versions', {
+call neobundle#config('vim-versions', {
       \ 'lazy' : 1,
       \ 'autoload' : {
       \   'commands' : 'UniteVersions'},
@@ -91,11 +96,13 @@ NeoBundleLazy 'kana/vim-smartchr', { 'autoload' : {
       \ 'insert' : 1,
       \ }}
 NeoBundle 'mrtazz/DoxygenToolkit.vim'
-NeoBundle 'osyo-manga/unite-quickfix'
+NeoBundleLazy 'osyo-manga/unite-quickfix', { 'autoload' : {
+      \ 'unite_sources' : 'quickfix',
+      \ }}
 NeoBundle 'othree/eregex.vim'
 NeoBundleLazy 'Rip-Rip/clang_complete', {
       \ 'autoload' : {
-      \     'filetypes' : ['c', 'cpp'],
+      \     'filetypes' : ['cpp'],
       \    },
       \ }
 NeoBundleLazy 'rhysd/accelerated-jk', { 'autoload' : {
@@ -141,10 +148,16 @@ call neobundle#config('vimfiler', {
       \ 'lazy' : 1,
       \ 'depends' : 'Shougo/unite.vim',
       \ 'autoload' : {
-      \    'commands' : [{ 'name' : 'VimFiler',
+      \    'commands' : [
+      \                  { 'name' : 'VimFiler',
       \                    'complete' : 'customlist,vimfiler#complete' },
-      \                  'VimFilerExplorer',
-      \                  'Edit', 'Read', 'Source', 'Write'],
+      \                  { 'name' : 'VimFilerExplorer',
+      \                    'complete' : 'customlist,vimfiler#complete' },
+      \                  { 'name' : 'Edit',
+      \                    'complete' : 'customlist,vimfiler#complete' },
+      \                  { 'name' : 'Write',
+      \                    'complete' : 'customlist,vimfiler#complete' },
+      \                  'Read', 'Source'],
       \    'mappings' : ['<Plug>(vimfiler_switch)'],
       \    'explorer' : 1,
       \ }
@@ -187,8 +200,12 @@ NeoBundleLazy 'thinca/vim-ref', { 'autoload' : {
       \ }}
 NeoBundleLazy 'tpope/vim-endwise'
 NeoBundle 'tpope/vim-fugitive'
-NeoBundle 'tsukkee/unite-help'
-NeoBundle 'tsukkee/unite-tag'
+NeoBundleLazy 'tsukkee/unite-help', { 'autoload' : {
+      \ 'unite_sources' : 'help'
+      \ }}
+NeoBundleLazy 'tsukkee/unite-tag', { 'autoload' : {
+      \ 'unite_sources' : 'tag'
+      \ }}
 NeoBundleLazy 'tyru/caw.vim', { 'autoload' : {
       \ 'mappings' : [
       \   '<Plug>(caw:prefix)', '<Plug>(caw:i:toggle)']
@@ -201,6 +218,9 @@ NeoBundleLazy 'ujihisa/vimshell-ssh', { 'autoload' : {
       \ }}
 NeoBundleLazy 'vim-jp/autofmt', { 'autoload' : {
       \ 'mappings' : [['x', 'gq']],
+      \ }}
+NeoBundleLazy 'vim-jp/cpp-vim', { 'autoload' : {
+      \ 'filetypes' : ['cpp'],
       \ }}
 NeoBundleLazy 'vim-ruby/vim-ruby', { 'autoload' : {
       \ 'mappings' : '<Plug>(ref-keyword)',
@@ -472,16 +492,16 @@ let g:surround_no_mappings = 1
 autocmd MyAutoCmd FileType * call s:define_surround_keymappings()
 
 function! s:define_surround_keymappings()
-  if !&modifiable
+  if !&l:modifiable
     silent! nunmap <buffer> ds
     silent! nunmap <buffer> cs
     silent! nunmap <buffer> ys
     silent! nunmap <buffer> yS
   else
-    nmap <buffer> ds  <Plug>Dsurround
-    nmap <buffer> cs  <Plug>Csurround
-    nmap <buffer> ys  <Plug>Ysurround
-    nmap <buffer> yS  <Plug>YSurround
+    nmap <buffer> ds <Plug>Dsurround
+    nmap <buffer> cs <Plug>Csurround
+    nmap <buffer> ys <Plug>Ysurround
+    nmap <buffer> yS <Plug>YSurround
   endif
 endfunction
 "}}}
@@ -585,6 +605,8 @@ function! bundle.hooks.on_source(bundle)
   let g:neocomplcache_manual_completion_start_length = 0
   " Set minimum keyword length.
   let g:neocomplcache_min_keyword_length = 3
+
+  let g:neocomplcache_enable_auto_close_preview = 1
 
   " For clang_complete.
   let g:neocomplcache_force_overwrite_completefunc = 1
@@ -713,7 +735,7 @@ xnoremap <silent> [unite]G
 function! s:cursor_grep()
   let w = expand('<cword>')
   "call s:my_idenew()
-  execute ':Unite grep:.::' . w . ' -buffer-name=search -auto-preview -no-quit -resume<CR>'
+  execute 'Unite grep:.::' . w . ' -buffer-name=search -auto-preview -no-quit'
 endfunction
 function! s:visual_grep()
   let tmp = @@
@@ -721,7 +743,7 @@ function! s:visual_grep()
   let selected = @@
   let @@ = tmp
   "call s:my_idenew()
-  execute ':Unite grep:.::' . selected . ' -buffer-name=search -auto-preview -no-quit -resume<CR>'
+  execute 'Unite grep:.::' . selected . ' -buffer-name=search -auto-preview -no-quit'
 endfunction
 nnoremap <silent> [Space]b :<C-u>UniteBookmarkAdd<CR>
 
@@ -955,10 +977,22 @@ endfunction
 "}}}
 
 " caw.vim "{{{
-nmap gc <Plug>(caw:prefix)
-xmap gc <Plug>(caw:prefix)
-nmap gcc <Plug>(caw:i:toggle)
-xmap gcc <Plug>(caw:i:toggle)
+autocmd MyAutoCmd FileType * call s:init_caw()
+function! s:init_caw()
+  if !&l:modifiable
+    silent! nunmap <buffer> gc
+    silent! xunmap <buffer> gc
+    silent! nunmap <buffer> gcc
+    silent! xunmap <buffer> gcc
+
+    return
+  endif
+
+  nmap <buffer> gc <Plug>(caw:prefix)
+  xmap <buffer> gc <Plug>(caw:prefix)
+  nmap <buffer> gcc <Plug>(caw:i:toggle)
+  xmap <buffer> gcc <Plug>(caw:i:toggle)
+endfunction
 "}}}
 
 " open-browser.vim "{{{
