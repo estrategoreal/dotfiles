@@ -85,7 +85,7 @@ call neobundle#config('unite-outline', {
       \ 'autoload' : {
       \   'unite_sources' : 'outline'},
       \ })
-NeoBundle 'h1mesuke/vim-alignta',
+NeoBundle 'h1mesuke/vim-alignta'
 NeoBundle 'hrsh7th/vim-versions'
 call neobundle#config('vim-versions', {
       \ 'lazy' : 1,
@@ -95,16 +95,26 @@ call neobundle#config('vim-versions', {
 NeoBundleLazy 'kana/vim-smartchr', { 'autoload' : {
       \ 'insert' : 1,
       \ }}
-NeoBundle 'mrtazz/DoxygenToolkit.vim'
+NeoBundleLazy 'mrtazz/DoxygenToolkit.vim', {
+      \ 'autoload' : {
+      \     'filetypes' : ['c', 'cpp'],
+      \    },
+      \ }
 NeoBundleLazy 'osyo-manga/unite-quickfix', { 'autoload' : {
       \ 'unite_sources' : 'quickfix',
       \ }}
-NeoBundle 'othree/eregex.vim'
+NeoBundleLazy 'othree/eregex.vim', { 'autoload' : {
+      \ 'commands' : 'M'
+      \ }}
+if s:is_windows
+NeoBundleLazy 'Rip-Rip/clang_complete'
+else
 NeoBundleLazy 'Rip-Rip/clang_complete', {
       \ 'autoload' : {
-      \     'filetypes' : ['cpp'],
+      \     'filetypes' : ['c', 'cpp'],
       \    },
       \ }
+endif
 NeoBundleLazy 'rhysd/accelerated-jk', { 'autoload' : {
       \ 'mappings' : ['<Plug>(accelerated_jk_gj)',
       \               '<Plug>(accelerated_jk_gk)'],
@@ -250,17 +260,7 @@ set encoding=utf-8
 
 " Setting of terminal encoding. "{{{
 if !has('gui_running')
-  if &term ==# 'win32'
-    " Setting to use the non-GUI Japanese console.
-
-    " Garbled unless this is set.
-    set termencoding=cp932
-    " Japanese input changes itself unless this is set.
-    " Be careful because the automatic recognition of the character code is not possible!
-    set encoding=japan
-  else
-    set termencoding=  " same as 'encoding'
-  endif
+  set termencoding=  " same as 'encoding'
 elseif s:is_windows
   " For system.
   set termencoding=cp932
@@ -816,8 +816,13 @@ function! bundle.hooks.on_source(bundle)
   let g:unite_enable_start_insert = 0
   let g:unite_source_grep_max_candidates = 500
 
-  " For ack.
-  if executable('ack-grep')
+  if executable('ag')
+    " For ag.
+    let g:unite_source_grep_command = 'ag'
+    let g:unite_source_grep_default_opts = '--nocolor --nogroup'
+    let g:unite_source_grep_recursive_opt = ''
+  elseif executable('ack-grep')
+    " For ack.
     "let g:unite_source_grep_command = 'ack-grep'
     "let g:unite_source_grep_default_opts = '--no-heading --no-color -a'
     "let g:unite_source_grep_recursive_opt = ''
@@ -1211,6 +1216,11 @@ nnoremap <silent> <ESC><ESC> :<C-u>nohlsearch<CR>
 "
 " Display diff with the file.
 command! -nargs=1 -complete=file Diff tabedit % | vertical diffsplit <args>
+
+" Input continuous numbers
+nnoremap <silent> co :ContinuousNumber <C-a><CR>
+vnoremap <silent> co :ContinuousNumber <C-a><CR>
+command! -count -nargs=1 ContinuousNumber let c = col('.')|for n in range(1, <count>?<count>-line('.'):1)|exec 'normal! j' . n . <q-args>|call cursor('.', c)|endfor
 "}}}
 
 "-----------------------------------------------------------------------------
