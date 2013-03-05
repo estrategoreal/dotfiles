@@ -155,6 +155,6 @@ elif is_cygwin ; then
 elif is_msys ; then
   export LC_MESSAGES=C
   export PS1="\n\[\e[36m\]\u@\h \[\e[35m\]\w$(__git_ps1)\n\[\e[00;37;44m\]How may I serve you, Master?\[\e[00m\]\n$ "
-  export PATH=$PATH:/usr/local/share/vim:/usr/local/share/git-svn-clone-externals:/c/git/bin:/c/Python27:/c/Ruby19/bin
+  export PATH=$PATH:/usr/local/share/vim:/usr/local/share/git-svn-clone-externals:/c/git/bin:/c/Python27:/c/Ruby/bin
 fi
 
