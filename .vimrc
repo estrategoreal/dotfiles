@@ -73,11 +73,27 @@ NeoBundleLazy 'anyakichi/vim-surround', {
 NeoBundleLazy 'basyura/TweetVim', { 'depends' :
       \ ['basyura/twibill.vim', 'tyru/open-browser.vim'],
       \ 'autoload' : { 'commands' : 'TweetVimHomeTimeline' }}
+NeoBundleLazy 'bkad/CamelCaseMotion', { 'autoload' : {
+      \ 'mappings' : ['<Plug>CamelCaseMotion_w',
+      \               '<Plug>CamelCaseMotion_b'],
+      \ }}
 NeoBundleLazy 'davidhalter/jedi-vim', {
       \ 'autoload' : {
       \     'filetypes' : ['python', 'python3'],
       \    },
       \ }
+NeoBundleLazy 'deton/jasegment.vim', { 'autoload' : {
+      \ 'mappings' : [['n', '<Plug>JaSegmentMoveNE'],
+      \               ['n', '<Plug>JaSegmentMoveNW'],
+      \               ['n', '<Plug>JaSegmentMoveNB'],
+      \               ['o', '<Plug>JaSegmentMoveOE'],
+      \               ['o', '<Plug>JaSegmentMoveOW'],
+      \               ['o', '<Plug>JaSegmentMoveOB'],
+      \               ['x', '<Plug>JaSegmentMoveVE'],
+      \               ['x', '<Plug>JaSegmentMoveVW'],
+      \               ['x', '<Plug>JaSegmentMoveVB'],
+      \ ],
+      \ }}
 NeoBundle 'gregsexton/gitv'
 NeoBundle 'h1mesuke/unite-outline'
 call neobundle#config('unite-outline', {
@@ -256,7 +272,9 @@ NeoBundleCheck
 
 " Setting of the encoding to use for a save and reading.
 " Make it normal in UTF-8 in Unix.
-set encoding=utf-8
+if !s:is_windows
+  set encoding=utf-8
+endif
 
 " Setting of terminal encoding. "{{{
 if !has('gui_running')
@@ -313,7 +331,8 @@ endif
 
 " When any Japanese character is not included, use encoding for fileencoding.
 function! s:ReCheck_FENC() "{{{
-  if &fileencoding =~# 'iso-2022-jp' && search("[^\x01-\x7e]", 'n') == 0
+  let is_multi_byte = search("[^\x01-\x7e]", 'n', 100, 100)
+  if &fileencoding =~# 'iso-2022-jp' && !is_multi_byte
     let &fileencoding = &encoding
   endif
 endfunction"}}}
@@ -524,6 +543,15 @@ endif
 let g:neocomplcache_dictionary_filetype_lists.tweetvim_say =
       \ expand('~/.tweetvim/screen_name')
 "}}}
+
+" camelcasemotion.vim "{{{
+nmap <silent> [Alt]w <Plug>CamelCaseMotion_w
+xmap <silent> [Alt]w <Plug>CamelCaseMotion_w
+omap <silent> [Alt]w <Plug>CamelCaseMotion_w
+nmap <silent> [Alt]b <Plug>CamelCaseMotion_b
+xmap <silent> [Alt]b <Plug>CamelCaseMotion_b
+omap <silent> [Alt]b <Plug>CamelCaseMotion_b
+""}}}
 
 " jedi-vim "{{{
 let g:jedi#auto_initialization = 1
@@ -819,7 +847,7 @@ function! bundle.hooks.on_source(bundle)
   if executable('ag')
     " For ag.
     let g:unite_source_grep_command = 'ag'
-    let g:unite_source_grep_default_opts = '--nocolor --nogroup'
+    let g:unite_source_grep_default_opts = '--nocolor --nogroup --column'
     let g:unite_source_grep_recursive_opt = ''
   elseif executable('ack-grep')
     " For ack.
@@ -1144,6 +1172,17 @@ function! s:my_idenew()
   VimFilerExplorer -winwidth=46
   wincmd l
 endfunction
+"}}}
+
+" e: Change basic commands "{{{
+" The prefix key.
+nnoremap [Alt] <Nop>
+xnoremap [Alt] <Nop>
+nmap e [Alt]
+xmap e [Alt]
+
+nnoremap [Alt]e e
+xnoremap [Alt]e e
 "}}}
 
 " q: Quickfix "{{{
