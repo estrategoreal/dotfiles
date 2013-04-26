@@ -847,7 +847,7 @@ function! bundle.hooks.on_source(bundle)
   if executable('ag')
     " For ag.
     let g:unite_source_grep_command = 'ag'
-    let g:unite_source_grep_default_opts = '--nocolor --nogroup --column'
+    let g:unite_source_grep_default_opts = '--nocolor --nogroup --hidden'
     let g:unite_source_grep_recursive_opt = ''
   elseif executable('ack-grep')
     " For ack.
