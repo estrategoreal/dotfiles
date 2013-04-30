@@ -183,6 +183,10 @@ fi
 
 [ -f ~/.zshrc.local ] && source ~/.zshrc.local
 
+if [ -x "`which rbenv`" ]; then
+  eval "$(rbenv init -)"
+fi
+
 # Source global definitions
 
 export PROMPT="%F{magenta}%~
@@ -194,13 +198,13 @@ if is_darwin ; then
 elif is_freebsd ; then
   export PATH=$PATH:/sbin:/usr/sbin:/usr/local/sbin
 elif is_linux ; then
-  PATH=$PATH:$HOME/.rvm/bin # Add RVM to PATH for scripting
+  export PATH="$HOME/.rbenv/bin:$PATH"
 elif is_cygwin ; then
   export LC_MESSAGES=C
   export CYGWIN=nodosfilewarning
   export PATH=$PATH:/usr/local/share/vim:/usr/local/share/git-svn-clone-externals
   export LIBRARY_PATH=/lib:/lib/w32api:/usr/local/lib
   export TCL_LIBRARY=/usr/share/tcl8.4
-  PATH=$PATH:$HOME/.rvm/bin # Add RVM to PATH for scripting
+  export PATH="$HOME/.rbenv/bin:$PATH"
 fi
 
