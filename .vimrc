@@ -102,12 +102,19 @@ call neobundle#config('unite-outline', {
       \   'unite_sources' : 'outline'},
       \ })
 NeoBundle 'h1mesuke/vim-alignta'
+NeoBundleLazy 'hail2u/vim-css3-syntax'
 NeoBundle 'hrsh7th/vim-versions'
 call neobundle#config('vim-versions', {
       \ 'lazy' : 1,
       \ 'autoload' : {
       \   'commands' : 'UniteVersions'},
       \ })
+NeoBundleLazy 'jiangmiao/simple-javascript-indenter', { 'autoload' : {
+      \ 'filetypes' : 'javascript',
+      \ }}
+NeoBundleLazy 'jelera/vim-javascript-syntax', { 'autoload' : {
+      \ 'filetypes' : 'javascript',
+      \ }}
 NeoBundleLazy 'kana/vim-smartchr', { 'autoload' : {
       \ 'insert' : 1,
       \ }}
@@ -214,6 +221,10 @@ call neobundle#config('vinarise', {
       \ }})
 NeoBundleLazy 'sjl/gundo.vim', { 'autoload' : {
       \ 'commands' : 'GundoToggle'
+      \ }}
+NeoBundleLazy 'teramako/jscomplete-vim', {
+      \ 'autoload' : {
+      \   'filetypes' : ['javascript']
       \ }}
 NeoBundleLazy 'thinca/vim-qfreplace', { 'autoload' : {
       \ 'filetypes' : ['unite', 'quickfix']
@@ -498,10 +509,25 @@ augroup MyAutoCmd
 
   " Enable omni completion.
   autocmd FileType c setlocal omnifunc=ccomplete#Complete
-  "autocmd FileType python setlocal omnifunc=pythoncomplete#Complete
+  autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
+  autocmd FileType html,markdown setlocal omnifunc=htmlcomplete#CompleteTags
+  autocmd FileType javascript setlocal omnifunc=
+  if has('python3')
+    autocmd FileType python setlocal omnifunc=python3complete#Complete
+  else
+    autocmd FileType python setlocal omnifunc=pythoncomplete#Complete
+  endif
   "autocmd FileType ruby setlocal omnifunc=rubycomplete#Complete
+  autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
 augroup END
 "}}}
+
+" XML
+let g:xml_syntax_folding = 1
+
+" JavaScript
+let g:SimpleJsIndenter_BriefMode = 1
+let g:SimpleJsIndenter_CaseIndentLevel = -1
 
 "-----------------------------------------------------------------------------
 " Plugin: "{{{
@@ -557,8 +583,6 @@ omap <silent> [Alt]b <Plug>CamelCaseMotion_b
 let g:jedi#auto_initialization = 1
 let g:jedi#popup_on_dot = 0
 let g:jedi#rename_command = '<leader>R'
-autocmd MyAutoCmd FileType python*
-      \ NeoBundleSource jedi-vim | let b:did_ftplugin = 1
 "}}}
 
 " alignta.vim "{{{

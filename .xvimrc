@@ -1,0 +1,13 @@
+
+set ignorecase
+set wrap
+set wrapscan
+set incsearch
+set smartcase
+
+nmap <Space>w :write<CR>
+nmap <Space>q :quit<CR>
+
+nmap fr :run<CR>
+nmap fb :make<CR>
+
