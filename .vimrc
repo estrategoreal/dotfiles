@@ -64,6 +64,7 @@ call neobundle#rc(expand('~/.vim/bundle'))
 NeoBundleFetch 'Shougo/neobundle.vim'
 
 " My Bundles here:
+NeoBundle 'altercation/vim-colors-solarized'
 NeoBundleLazy 'anyakichi/vim-surround', {
       \ 'autoload' : {
       \   'mappings' : [
