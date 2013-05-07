@@ -84,6 +84,11 @@ if has('win32') || has('win64')
   augroup END
 endif
 
+" Setting of colorscheme.
+set background=dark
+colorscheme solarized
+"colorscheme macvim
+
 set ch=2		" Make command line two lines high
 
 set mousehide		" Hide the mouse when typing text
@@ -117,17 +122,12 @@ if version >= 500
   " Text below the last line is darker grey
   " Cursor is green, Cyan when ":lmap" mappings are active
   " Constants are not underlined but have a slightly lighter background
-  highlight Normal guibg=grey90
-  highlight Cursor guibg=Green guifg=NONE
-  highlight lCursor guibg=Cyan guifg=NONE
-  highlight NonText guibg=grey80
-  highlight Constant gui=NONE guibg=grey95
-  highlight Special gui=NONE guibg=grey95
-  highlight SpecialKey guifg=grey75
-
-  " Setting of colorscheme.
-  set background=dark
-  colorscheme solarized
-  "colorscheme macvim
+  "highlight Normal guibg=grey90
+  "highlight Cursor guibg=Green guifg=NONE
+  "highlight lCursor guibg=Cyan guifg=NONE
+  "highlight NonText guibg=grey80
+  "highlight Constant gui=NONE guibg=grey95
+  "highlight Special gui=NONE guibg=grey95
+  "highlight SpecialKey guifg=grey75
 
 endif
