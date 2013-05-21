@@ -225,7 +225,7 @@ NeoBundleLazy 'sjl/gundo.vim', { 'autoload' : {
       \ }}
 NeoBundleLazy 'teramako/jscomplete-vim', {
       \ 'autoload' : {
-      \   'filetypes' : ['javascript']
+      \   'filetypes' : 'javascript'
       \ }}
 NeoBundleLazy 'thinca/vim-qfreplace', { 'autoload' : {
       \ 'filetypes' : ['unite', 'quickfix']
@@ -258,7 +258,7 @@ NeoBundleLazy 'vim-jp/autofmt', { 'autoload' : {
       \ 'mappings' : [['x', 'gq']],
       \ }}
 NeoBundleLazy 'vim-jp/cpp-vim', { 'autoload' : {
-      \ 'filetypes' : ['cpp'],
+      \ 'filetypes' : 'cpp',
       \ }}
 NeoBundleLazy 'vim-ruby/vim-ruby', { 'autoload' : {
       \ 'mappings' : '<Plug>(ref-keyword)',
@@ -806,12 +806,12 @@ nnoremap [Tag] <Nop>
 nmap t [Tag]
 " Jump.
 nnoremap [Tag]t <C-]> zv zz
-"nnoremap <silent><expr> [Tag]t  &filetype == 'help' ?  "\<C-]>" :
-      \ ":\<C-u>UniteWithCursorWord -buffer-name=tag -immediately tag tag/include\<CR>"
 " Jump next.
 nnoremap <silent> [Tag]n :<C-u>tnext<CR>
 " Jump previous.
 nnoremap <silent> [Tag]p :<C-u>pop<CR>
+"nnoremap <silent><expr> [Tag]t  &filetype == 'help' ?  "\<C-]>" :
+      \ ":\<C-u>UniteWithCursorWord -buffer-name=tag tag tag/include\<CR>"
 "nnoremap <silent><expr> [Tag]p  &filetype == 'help' ?
       \ ":\<C-u>pop\<CR>" : ":\<C-u>Unite jump\<CR>"
 "}}}
