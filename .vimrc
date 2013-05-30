@@ -355,8 +355,6 @@ autocmd MyAutoCmd BufReadPost * call s:ReCheck_FENC()
 set fileformat=unix
 " Automatic detection of the end-of-line.
 set fileformats=unix,dos,mac
-" Use twice the width of ASCII characters.
-set ambiwidth=double
 
 if has('multi_byte_ime')
   set iminsert=0 imsearch=0
@@ -467,6 +465,12 @@ set wrap
 set whichwrap+=h,l,<,>,[,],b,s,~
 " Always display a status line.
 set laststatus=2
+" Height of command line.
+set cmdheight=2
+" Not show command on statusline.
+set noshowcmd
+" Not show mode.
+set noshowmode
 " Set the content of the status line.
 set statusline=%<%m%r%h%w%y%{'['.(&fenc!=''?&fenc:&enc).':'.&ff.']'}\ %1.40f%=%{fugitive#statusline()}\ \ %l/%L,%c%V%5P
 " Always display the line with tab page labels.

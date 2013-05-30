@@ -129,5 +129,6 @@ if version >= 500
   "highlight Constant gui=NONE guibg=grey95
   "highlight Special gui=NONE guibg=grey95
   "highlight SpecialKey guifg=grey75
+  highlight SpecialKey guifg=grey25
 
 endif
