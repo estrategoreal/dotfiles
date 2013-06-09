@@ -198,7 +198,7 @@ if is_darwin ; then
 elif is_freebsd ; then
   export PATH=$PATH:/sbin:/usr/sbin:/usr/local/sbin
 elif is_linux ; then
-  export PATH="$HOME/.rbenv/bin:$PATH"
+  export PATH="$HOME/.rbenv/bin:$PATH:/sbin:/usr/sbin:/usr/local/sbin"
 elif is_cygwin ; then
   export LC_MESSAGES=C
   export CYGWIN=nodosfilewarning
