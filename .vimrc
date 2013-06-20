@@ -594,7 +594,6 @@ let g:jedi#rename_command = '<leader>R'
 let g:unite_source_alignta_preset_arguments = [
       \ ["Align at '='", '=>\='],
       \ ["Align at '/*' & '*/'",   '<-- /* -> */'  ],
-      \ ["Align at '/**<' & '*/'", '<-- /**< -> */'],
       \ ["Align at ':'", '01 :'],
       \ ["Align at '|'", '|'   ],
       \ ["Align at ')'", '0 )' ],
@@ -626,6 +625,8 @@ function! bundle.hooks.on_source(bundle)
     autocmd FileType vim inoremap <buffer> <expr> . smartchr#loop('.', ' . ', '..', '...')
   augroup END
 endfunction
+
+unlet bundle
 "}}}
 
 " DoxygenToolkit.vim "{{{
@@ -729,6 +730,8 @@ function! bundle.hooks.on_source(bundle)
   let g:neocomplcache_omni_patterns.c = '[^.[:digit:] *\t]\%(\.\|->\)'
   let g:neocomplcache_omni_patterns.cpp = '[^.[:digit:] *\t]\%(\.\|->\)\|\h\w*::'
 endfunction
+
+unlet bundle
 "}}}
 
 " neosnippet.vim"{{{
@@ -749,6 +752,8 @@ function! bundle.hooks.on_source(bundle)
 
   " let g:snippets_dir = '~/.vim/snippets/,~/.vim/bundle/snipmate/snippets/'
 endfunction
+
+unlet bundle
 "}}}
 
 " unite.vim "{{{
@@ -913,6 +918,8 @@ function! bundle.hooks.on_source(bundle)
   let g:unite_build_warning_icon = expand('~/.vim') . '/signs/warn.'
         \ . (s:is_windows ? 'bmp' : 'png')
 endfunction
+
+unlet bundle
 "}}}
 
 " vimfiler.vim "{{{
@@ -951,6 +958,8 @@ function! bundle.hooks.on_source(bundle)
     endif
   endfunction"}}}
 endfunction
+
+unlet bundle
 "}}}
 
 " vimshell.vim "{{{
@@ -992,6 +1001,8 @@ call vimshell#set_alias('ll', 'ls -l')
     call vimshell#set_alias('mv', 'mv -i')
   endfunction"}}}
 endfunction
+
+unlet bundle
 "}}}
 
 " vinarise.vim "{{{
@@ -1036,6 +1047,8 @@ function! s:fugitive_tab(cmd)
   execute 'tabedit ' . expand('%')
   execute a:cmd
 endfunction
+
+unlet bundle
 "}}}
 
 " caw.vim "{{{
