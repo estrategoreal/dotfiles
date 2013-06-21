@@ -152,6 +152,12 @@ NeoBundle 'Shougo/neocomplcache'
 call neobundle#config('neocomplcache', {
       \ 'lazy' : 1,
       \ 'autoload' : {
+      \   'commands' : 'NeoComplCacheEnable',
+      \ }})
+NeoBundle 'Shougo/neocomplete.vim'
+call neobundle#config('neocomplete.vim', {
+      \ 'lazy' : 1,
+      \ 'autoload' : {
       \   'insert' : 1,
       \ }})
 NeoBundle 'Shougo/neobundle-vim-scripts'
@@ -643,7 +649,7 @@ nnoremap gk k
 
 " neocomplcache.vim "{{{
 " Use neocomplcache.
-let g:neocomplcache_enable_at_startup = 1
+let g:neocomplcache_enable_at_startup = 0
 
 let bundle = neobundle#get('neocomplcache')
 function! bundle.hooks.on_source(bundle)
@@ -696,8 +702,6 @@ function! bundle.hooks.on_source(bundle)
   endif
   let g:neocomplcache_keyword_patterns['default'] = '\h\w*'
 
-  let g:neosnippet#snippets_directory = $HOME . '/.vim/snippets'
-
   " <CR>: close popup and save indent.
   inoremap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
   function! s:my_cr_function()
@@ -716,10 +720,6 @@ function! bundle.hooks.on_source(bundle)
   " AutoComplPop like behavior.
   let g:neocomplcache_enable_auto_select = 1
 
-  let g:neocomplcache_omni_functions = {
-        \ 'ruby' : 'rubycomplete#Complete',
-        \ }
-
   " Enable heavy omni completion.
   if !exists('g:neocomplcache_omni_patterns')
     let g:neocomplcache_omni_patterns = {}
@@ -729,6 +729,96 @@ function! bundle.hooks.on_source(bundle)
   let g:neocomplcache_force_omni_patterns.python = '[^. \t]\.\w*'
   let g:neocomplcache_omni_patterns.c = '[^.[:digit:] *\t]\%(\.\|->\)'
   let g:neocomplcache_omni_patterns.cpp = '[^.[:digit:] *\t]\%(\.\|->\)\|\h\w*::'
+endfunction
+
+unlet bundle
+"}}}
+
+" neocomplete.vim "{{{
+" Use neocomplete.
+let g:neocomplete#enable_at_startup = 1
+
+let bundle = neobundle#get('neocomplete.vim')
+function! bundle.hooks.on_source(bundle)
+  " Use smartcase.
+  let g:neocomplete#enable_smart_case = 1
+  " Use fuzzy completion.
+  let g:neocomplete#enable_fuzzy_completion = 1
+  " Set minimum syntax keyword length.
+  let g:neocomplete#sources#syntax#min_keyword_length = 3
+  " Set auto completion length.
+  let g:neocomplete#auto_completion_start_length = 2
+  " Set manual completion length.
+  let g:neocomplete#manual_completion_start_length = 0
+  " Set minimum keyword length.
+  let g:neocomplete#min_keyword_length = 3
+
+  " Define dictionary.
+  let g:neocomplete#sources#dictionary#directories = {
+        \ 'default' : '',
+        \ 'vimshell' : $HOME .'/.vimshell/command-history'
+        \ }
+
+  " Define keyword.
+  if !exists('g:neocomplete#keyword_patterns')
+    let g:neocomplete#keyword_patterns = {}
+  endif
+  let g:neocomplete#keyword_patterns['default'] = '\h\w*'
+
+  " Plugin key-mappings.
+  inoremap <expr><C-g> neocomplete#undo_completion()
+  inoremap <expr><C-l> neocomplete#complete_common_string()
+
+  " <CR>: close popup and save indent.
+  inoremap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
+  function! s:my_cr_function()
+    return neocomplete#smart_close_popup() . "\<CR>"
+  endfunction
+  " <TAB>: completion.
+  inoremap <expr><TAB> pumvisible() ? "\<C-n>" : "\<TAB>"
+  " <C-h>, <BS>: close popup and delete backword char.
+  inoremap <expr><C-h> neocomplete#smart_close_popup()."\<C-h>"
+  inoremap <expr><BS>  neocomplete#smart_close_popup()."\<C-h>"
+  " <C-y>: paste.
+  inoremap <expr><C-y> pumvisible() ? neocomplete#close_popup() : "\<C-r>\""
+  " <C-e>: close popup.
+  inoremap <expr><C-e> pumvisible() ? neocomplete#cancel_popup() : "\<End>"
+
+  " AutoComplPop like behavior.
+  let g:neocomplete#enable_auto_select = 1
+
+  " Enable heavy omni completion.
+  if !exists('g:neocomplete#sources#omni#input_patterns')
+    let g:neocomplete#sources#omni#input_patterns = {}
+  endif
+  if !exists('g:neocomplete#force_omni_input_patterns')
+    let g:neocomplete#force_omni_input_patterns = {}
+  endif
+  let g:neocomplete#sources#omni#input_patterns.c =
+        \ '[^.[:digit:] *\t]\%(\.\|->\)\%(\h\w*\)\?'
+  let g:neocomplete#sources#omni#input_patterns.cpp =
+        \ '[^.[:digit:] *\t]\%(\.\|->\)\%(\h\w*\)\?\|\h\w*::\%(\h\w*\)\?'
+  let g:neocomplete#sources#omni#input_patterns.ruby =
+        \ '[^. *\t]\.\w*\|\h\w*::'
+  let g:neocomplete#force_overwrite_completefunc = 1
+  let g:neocomplete#enable_auto_close_preview = 1
+	let g:neocomplete#force_omni_input_patterns.c =
+	      \ '[^.[:digit:] *\t]\%(\.\|->\)'
+	let g:neocomplete#force_omni_input_patterns.cpp =
+	      \ '[^.[:digit:] *\t]\%(\.\|->\)\|\h\w*::'
+	let g:neocomplete#force_omni_input_patterns.objc =
+	      \ '[^.[:digit:] *\t]\%(\.\|->\)'
+  " let g:neocomplete#force_omni_input_patterns.ruby =
+        \ '[^. *\t]\.\w*\|\h\w*::'
+  let g:neocomplete#force_omni_input_patterns.python =
+        \ '[^. \t]\.\w*'
+  " For clang_complete.
+  let g:clang_auto_select = 0
+  let g:clang_complete_auto = 0
+  let g:clang_use_library = 1
+  if s:is_windows
+    let g:clang_library_path = 'c:/MinGW/msys/1.0/lib'
+  endif
 endfunction
 
 unlet bundle
@@ -751,6 +841,7 @@ function! bundle.hooks.on_source(bundle)
   inoremap <expr><C-l> neocomplcache#complete_common_string()
 
   " let g:snippets_dir = '~/.vim/snippets/,~/.vim/bundle/snipmate/snippets/'
+  let g:neosnippet#snippets_directory = '~/.vim/snippets'
 endfunction
 
 unlet bundle
@@ -1111,7 +1202,7 @@ elseif s:is_freebsd
 else
   let g:w3m#external_browser = 'chromium'
 endif
-let g:w3m#search_engine = 'http://www.google.co.jp/search?ie=' . &encoding . '&q='
+let g:w3m#search_engine = 'http://www.google.co.jp/search?ie=' . &encoding . '&q=%s'
 autocmd MyAutoCmd FileType w3m call s:w3m_settings()
 function! s:w3m_settings()
   nnoremap <buffer> H :<C-u>call w3m#Back()<CR>
