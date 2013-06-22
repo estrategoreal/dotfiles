@@ -152,13 +152,13 @@ NeoBundle 'Shougo/neocomplcache'
 call neobundle#config('neocomplcache', {
       \ 'lazy' : 1,
       \ 'autoload' : {
-      \   'commands' : 'NeoComplCacheEnable',
+      \   'insert' : 1,
       \ }})
 NeoBundle 'Shougo/neocomplete.vim'
 call neobundle#config('neocomplete.vim', {
       \ 'lazy' : 1,
       \ 'autoload' : {
-      \   'insert' : 1,
+      \   'commands' : 'NeoCompleteEnable',
       \ }})
 NeoBundle 'Shougo/neobundle-vim-scripts'
 NeoBundle 'Shougo/neosnippet'
