@@ -86,7 +86,7 @@ function ide() {
   if [[ $# -ge 1 ]] ; then
     gvim +"set columns=179" +"VimFiler -buffer-name=explorer -simple -toggle ~" +"tabedit $1" +TlistOpen +"VimFilerExplorer -winwidth=46" +"wincmd l"
   else
-    gvim +"set columns=179" +"VimFiler -buffer-name=explorer -simple -toggle ~" +tabnew +TlistOpen +"VimFilerExplorer -winwidth=46"
+    gvim +"set columns=179" +"VimFiler -buffer-name=explorer -simple -toggle ~" +tabnew +TlistOpen +"wincmd h" +"VimFilerExplorer -winwidth=46"
   fi
 }
 
