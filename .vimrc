@@ -649,7 +649,7 @@ nnoremap gk k
 
 " neocomplcache.vim "{{{
 " Use neocomplcache.
-let g:neocomplcache_enable_at_startup = 0
+let g:neocomplcache_enable_at_startup = 1
 
 let bundle = neobundle#get('neocomplcache')
 function! bundle.hooks.on_source(bundle)
@@ -736,7 +736,7 @@ unlet bundle
 
 " neocomplete.vim "{{{
 " Use neocomplete.
-let g:neocomplete#enable_at_startup = 1
+let g:neocomplete#enable_at_startup = 0
 
 let bundle = neobundle#get('neocomplete.vim')
 function! bundle.hooks.on_source(bundle)
