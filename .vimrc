@@ -130,14 +130,14 @@ NeoBundleLazy 'osyo-manga/unite-quickfix', { 'autoload' : {
 NeoBundleLazy 'othree/eregex.vim', { 'autoload' : {
       \ 'commands' : 'M'
       \ }}
-if s:is_windows
-NeoBundleLazy 'Rip-Rip/clang_complete'
-else
+if has('python')
 NeoBundleLazy 'Rip-Rip/clang_complete', {
       \ 'autoload' : {
       \     'filetypes' : ['c', 'cpp'],
       \    },
       \ }
+else
+NeoBundleLazy 'Rip-Rip/clang_complete'
 endif
 NeoBundleLazy 'rhysd/accelerated-jk', { 'autoload' : {
       \ 'mappings' : ['<Plug>(accelerated_jk_gj)',
