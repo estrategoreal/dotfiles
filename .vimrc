@@ -116,6 +116,16 @@ NeoBundleLazy 'jiangmiao/simple-javascript-indenter', { 'autoload' : {
 NeoBundleLazy 'jelera/vim-javascript-syntax', { 'autoload' : {
       \ 'filetypes' : 'javascript',
       \ }}
+NeoBundle 'kana/vim-operator-user', {
+      \ 'autoload' : {
+      \   'functions' : 'operator#user#define',
+      \ }}
+NeoBundleLazy 'kana/vim-operator-replace', {
+      \ 'depends' : 'vim-operator-user',
+      \ 'autoload' : {
+      \   'mappings' : [
+      \     ['nx', '<Plug>(operator-replace)']]
+      \ }}
 NeoBundleLazy 'kana/vim-smartchr', { 'autoload' : {
       \ 'insert' : 1,
       \ }}
@@ -573,12 +583,7 @@ function! s:tweetvim_my_settings() "{{{
   nmap <silent><buffer> j <Plug>(accelerated_jk_gj)
 endfunction"}}}
 
-" Complete by neocomplcache.
-if !exists('g:neocomplcache_dictionary_filetype_lists')
-  let g:neocomplcache_dictionary_filetype_lists = {}
-endif
-let g:neocomplcache_dictionary_filetype_lists.tweetvim_say =
-      \ expand('~/.tweetvim/screen_name')
+let g:tweetvim_display_separator = 0
 "}}}
 
 " camelcasemotion.vim "{{{
@@ -612,6 +617,11 @@ xnoremap <silent> [unite]a :<C-u>Unite alignta:arguments<CR>
 
 " vim-versions{{{
 nnoremap <silent> [Space]gs :<C-u>UniteVersions status:!<CR>
+"}}}
+
+" Operator-replace "{{{
+nmap R <Plug>(operator-replace)
+xmap R <Plug>(operator-replace)
 "}}}
 
 " smartchr.vim "{{{
