@@ -183,6 +183,9 @@ fi
 
 [ -f ~/.zshrc.local ] && source ~/.zshrc.local
 
+if is_linux || is_cygwin ; then
+  export PATH=$HOME/.rbenv/bin:$PATH
+fi
 if [ -x "`which rbenv`" ]; then
   eval "$(rbenv init -)"
 fi
@@ -198,13 +201,12 @@ if is_darwin ; then
 elif is_freebsd ; then
   export PATH=$PATH:/sbin:/usr/sbin:/usr/local/sbin
 elif is_linux ; then
-  export PATH="$HOME/.rbenv/bin:$PATH:/sbin:/usr/sbin:/usr/local/sbin"
+  export PATH=$PATH:/sbin:/usr/sbin:/usr/local/sbin
 elif is_cygwin ; then
   export LC_MESSAGES=C
   export CYGWIN=nodosfilewarning
   export PATH=$PATH:/usr/local/share/vim:/usr/local/share/git-svn-clone-externals
   export LIBRARY_PATH=/lib:/lib/w32api:/usr/local/lib
   export TCL_LIBRARY=/usr/share/tcl8.4
-  export PATH="$HOME/.rbenv/bin:$PATH"
 fi
 
