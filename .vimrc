@@ -45,25 +45,39 @@ augroup MyAutoCmd
   autocmd!
 augroup END
 
-if has('vim_starting')
+if filereadable(expand('~/.vimrc.local'))
+  execute 'source' expand('~/.vimrc.local')
+endif
+
+let s:neobundle_dir = expand('~/.vim/bundle')
+
+if has('vim_starting') "{{{
   if s:is_windows
     execute 'set runtimepath+=' . expand('~/.vim')
   endif
+endif
+"}}}
 
-  execute 'set runtimepath+=' . expand('~/.vim/bundle/neobundle.vim')
-
-  if filereadable(expand('~/.vimrc.local'))
-    execute 'source' expand('~/.vimrc.local')
+" Load neobundle.
+if isdirectory('neobundle.vim')
+  set runtimepath^=neobundle.vim
+elseif finddir('neobundle.vim', '.;') != ''
+  execute 'set runtimepath^=' . finddir('neobundle.vim', '.;')
+elseif &runtimepath !~ '/neobundle.vim'
+  if !isdirectory(s:neobundle_dir.'/neobundle.vim')
+    execute printf('!git clone %s://github.com/Shougo/neobundle.vim.git',
+          \ (exists('$http_proxy') ? 'https' : 'git'))
+          \ s:neobundle_dir.'/neobundle.vim'
   endif
+
+  execute 'set runtimepath^=' . s:neobundle_dir.'/neobundle.vim'
 endif
 
 call neobundle#rc(expand('~/.vim/bundle'))
 
 " neobundle.vim "{{{
-" Let NeoBundle manage NeoBundle
 NeoBundleFetch 'Shougo/neobundle.vim'
 
-" My Bundles here:
 NeoBundle 'altercation/vim-colors-solarized'
 NeoBundleLazy 'anyakichi/vim-surround', {
       \ 'autoload' : {
@@ -97,19 +111,9 @@ NeoBundleLazy 'deton/jasegment.vim', { 'autoload' : {
       \ }}
 NeoBundle 'gregsexton/gitv'
 NeoBundle 'h1mesuke/unite-outline'
-call neobundle#config('unite-outline', {
-      \ 'lazy' : 1,
-      \ 'autoload' : {
-      \   'unite_sources' : 'outline'},
-      \ })
 NeoBundle 'h1mesuke/vim-alignta'
 NeoBundleLazy 'hail2u/vim-css3-syntax'
 NeoBundle 'hrsh7th/vim-versions'
-call neobundle#config('vim-versions', {
-      \ 'lazy' : 1,
-      \ 'autoload' : {
-      \   'commands' : 'UniteVersions'},
-      \ })
 NeoBundleLazy 'jiangmiao/simple-javascript-indenter', { 'autoload' : {
       \ 'filetypes' : 'javascript',
       \ }}
@@ -159,33 +163,10 @@ NeoBundleLazy 'rhysd/clever-f.vim', { 'autoload' : {
 NeoBundleLazy 'Shougo/foldCC',
       \  { 'autoload' : { 'filetypes' : 'vim' }}
 NeoBundle 'Shougo/neocomplcache'
-call neobundle#config('neocomplcache', {
-      \ 'lazy' : 1,
-      \ 'autoload' : {
-      \   'insert' : 1,
-      \ }})
 NeoBundle 'Shougo/neocomplete.vim'
-call neobundle#config('neocomplete.vim', {
-      \ 'lazy' : 1,
-      \ 'autoload' : {
-      \   'commands' : 'NeoCompleteEnable',
-      \ }})
 NeoBundle 'Shougo/neobundle-vim-scripts'
 NeoBundle 'Shougo/neosnippet'
-call neobundle#config('neosnippet', {
-      \ 'lazy' : 1,
-      \ 'autoload' : {
-      \   'insert' : 1,
-      \   'filetypes' : 'snippet',
-      \ }})
 NeoBundle 'Shougo/unite.vim'
-call neobundle#config('unite.vim',{
-      \ 'lazy' : 1,
-      \ 'autoload' : {
-      \   'commands' : [{ 'name' : 'Unite',
-      \                   'complete' : 'customlist,unite#complete_source'},
-      \                 'UniteWithCursorWord', 'UniteWithInput']
-      \ }})
 NeoBundle 'Shougo/unite-build'
 NeoBundle 'Shougo/unite-ssh'
 NeoBundle 'Shougo/unite-sudo'
@@ -194,24 +175,6 @@ NeoBundleLazy 'Shougo/vim-vcs', {
       \ 'autoload' : {'commands' : 'Vcs'},
       \   }
 NeoBundle 'Shougo/vimfiler'
-call neobundle#config('vimfiler', {
-      \ 'lazy' : 1,
-      \ 'depends' : 'Shougo/unite.vim',
-      \ 'autoload' : {
-      \    'commands' : [
-      \                  { 'name' : 'VimFiler',
-      \                    'complete' : 'customlist,vimfiler#complete' },
-      \                  { 'name' : 'VimFilerExplorer',
-      \                    'complete' : 'customlist,vimfiler#complete' },
-      \                  { 'name' : 'Edit',
-      \                    'complete' : 'customlist,vimfiler#complete' },
-      \                  { 'name' : 'Write',
-      \                    'complete' : 'customlist,vimfiler#complete' },
-      \                  'Read', 'Source'],
-      \    'mappings' : ['<Plug>(vimfiler_switch)'],
-      \    'explorer' : 1,
-      \ }
-      \ })
 NeoBundle 'Shougo/vimproc', {
       \ 'build' : {
       \     'windows' : 'make -f make_mingw32.mak',
@@ -221,21 +184,7 @@ NeoBundle 'Shougo/vimproc', {
       \    },
       \ }
 NeoBundle 'Shougo/vimshell'
-call neobundle#config('vimshell', {
-      \ 'lazy' : 1,
-      \ 'autoload' : {
-      \   'commands' : [{ 'name' : 'VimShell',
-      \                   'complete' : 'customlist,vimshell#complete'},
-      \                 'VimShellExecute', 'VimShellInteractive',
-      \                 'VimShellTerminal', 'VimShellPop'],
-      \   'mappings' : ['<Plug>(vimshell_switch)']
-      \ }})
 NeoBundle 'Shougo/vinarise'
-call neobundle#config('vinarise', {
-      \ 'lazy' : 1,
-      \ 'autoload' : {
-      \   'commands' : 'Vinarise',
-      \ }})
 NeoBundleLazy 'sjl/gundo.vim', { 'autoload' : {
       \ 'commands' : 'GundoToggle'
       \ }}
@@ -288,6 +237,73 @@ NeoBundleLazy 'yomi322/vim-gitcomplete', { 'autoload' : {
 NeoBundleLazy 'yuratomo/w3m.vim', { 'autoload' : {
       \ 'commands' : 'W3mTab',
       \ }}
+
+" NeoBundle configurations.
+call neobundle#config('unite-outline', {
+      \ 'lazy' : 1,
+      \ 'autoload' : {
+      \   'unite_sources' : 'outline'},
+      \ })
+call neobundle#config('vim-versions', {
+      \ 'lazy' : 1,
+      \ 'autoload' : {
+      \   'commands' : 'UniteVersions'},
+      \ })
+call neobundle#config('neocomplcache', {
+      \ 'lazy' : 1,
+      \ 'autoload' : {
+      \   'insert' : 1,
+      \ }})
+call neobundle#config('neocomplete.vim', {
+      \ 'lazy' : 1,
+      \ 'autoload' : {
+      \   'commands' : 'NeoCompleteEnable',
+      \ }})
+call neobundle#config('neosnippet', {
+      \ 'lazy' : 1,
+      \ 'autoload' : {
+      \   'insert' : 1,
+      \   'filetypes' : 'snippet',
+      \ }})
+call neobundle#config('unite.vim',{
+      \ 'lazy' : 1,
+      \ 'autoload' : {
+      \   'commands' : [{ 'name' : 'Unite',
+      \                   'complete' : 'customlist,unite#complete_source'},
+      \                 'UniteWithCursorWord', 'UniteWithInput']
+      \ }})
+call neobundle#config('vimfiler', {
+      \ 'lazy' : 1,
+      \ 'depends' : 'Shougo/unite.vim',
+      \ 'autoload' : {
+      \    'commands' : [
+      \                  { 'name' : 'VimFiler',
+      \                    'complete' : 'customlist,vimfiler#complete' },
+      \                  { 'name' : 'VimFilerExplorer',
+      \                    'complete' : 'customlist,vimfiler#complete' },
+      \                  { 'name' : 'Edit',
+      \                    'complete' : 'customlist,vimfiler#complete' },
+      \                  { 'name' : 'Write',
+      \                    'complete' : 'customlist,vimfiler#complete' },
+      \                  'Read', 'Source'],
+      \    'mappings' : ['<Plug>(vimfiler_switch)'],
+      \    'explorer' : 1,
+      \ }
+      \ })
+call neobundle#config('vimshell', {
+      \ 'lazy' : 1,
+      \ 'autoload' : {
+      \   'commands' : [{ 'name' : 'VimShell',
+      \                   'complete' : 'customlist,vimshell#complete'},
+      \                 'VimShellExecute', 'VimShellInteractive',
+      \                 'VimShellTerminal', 'VimShellPop'],
+      \   'mappings' : ['<Plug>(vimshell_switch)']
+      \ }})
+call neobundle#config('vinarise', {
+      \ 'lazy' : 1,
+      \ 'autoload' : {
+      \   'commands' : 'Vinarise',
+      \ }})
 
 " Installation check.
 NeoBundleCheck
@@ -446,10 +462,6 @@ set grepprg=grep\ -nH
 
 " Keymapping timeout.
 set timeout timeoutlen=3000 ttimeoutlen=100
-
-" Set tags files.
-" Don't search for tags files in the current directory. And search upward.
-set tags& tags-=tags tags+=./tags;
 
 " Enable automatic C program indenting.
 set cindent
@@ -986,9 +998,9 @@ function! bundle.hooks.on_source(bundle)
     let g:unite_source_grep_recursive_opt = ''
   elseif executable('ack-grep')
     " For ack.
-    "let g:unite_source_grep_command = 'ack-grep'
-    "let g:unite_source_grep_default_opts = '--no-heading --no-color -a'
-    "let g:unite_source_grep_recursive_opt = ''
+    let g:unite_source_grep_command = 'ack-grep'
+    let g:unite_source_grep_default_opts = '--no-heading --no-color -a'
+    let g:unite_source_grep_recursive_opt = ''
   endif
 
   " For unite-alias.
