@@ -999,7 +999,7 @@ function! bundle.hooks.on_source(bundle)
   elseif executable('ack-grep')
     " For ack.
     let g:unite_source_grep_command = 'ack-grep'
-    let g:unite_source_grep_default_opts = '--no-heading --no-color -a'
+    let g:unite_source_grep_default_opts = '--no-heading --no-color -k'
     let g:unite_source_grep_recursive_opt = ''
   endif
 
