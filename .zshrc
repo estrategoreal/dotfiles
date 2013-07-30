@@ -113,8 +113,6 @@ alias cp='cp -i'
 alias rm='rm -i'
 alias mv='mv -i'
 
-alias ack='ack --asm --cc --cpp'
-
 if is_darwin ; then
   alias vim='/Applications/MacVim.app/Contents/MacOS/Vim "$@"'
   alias gvim='/Applications/MacVim.app/Contents/MacOS/Vim -g "$@"'
