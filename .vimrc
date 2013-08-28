@@ -175,14 +175,7 @@ NeoBundleLazy 'Shougo/vim-vcs', {
       \ 'autoload' : {'commands' : 'Vcs'},
       \   }
 NeoBundle 'Shougo/vimfiler'
-NeoBundle 'Shougo/vimproc', {
-      \ 'build' : {
-      \     'windows' : 'make -f make_mingw32.mak',
-      \     'cygwin' : 'make -f make_cygwin.mak',
-      \     'mac' : 'make -f make_mac.mak',
-      \     'unix' : 'make -f make_unix.mak',
-      \    },
-      \ }
+NeoBundle 'Shougo/vimproc'
 NeoBundle 'Shougo/vimshell'
 NeoBundle 'Shougo/vinarise'
 NeoBundleLazy 'sjl/gundo.vim', { 'autoload' : {
@@ -290,6 +283,14 @@ call neobundle#config('vimfiler', {
       \    'explorer' : 1,
       \ }
       \ })
+call neobundle#config('vimproc', {
+      \ 'build' : {
+      \     'windows' : 'make -f make_mingw32.mak',
+      \     'cygwin' : 'make -f make_cygwin.mak',
+      \     'mac' : 'make -f make_mac.mak',
+      \     'unix' : 'make -f make_unix.mak',
+      \    },
+      \ })
 call neobundle#config('vimshell', {
       \ 'lazy' : 1,
       \ 'autoload' : {
@@ -370,7 +371,7 @@ endif
 
 if has('kaoriya')
   " For Kaoriya only.
-  "set fileencodings=guess
+  set fileencodings=guess
 endif
 
 " When any Japanese character is not included, use encoding for fileencoding.
