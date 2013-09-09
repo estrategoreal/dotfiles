@@ -173,8 +173,12 @@ endif
 NeoBundle 'Shougo/neobundle-vim-scripts'
 NeoBundle 'Shougo/neosnippet'
 NeoBundle 'Shougo/unite.vim'
-NeoBundle 'Shougo/unite-build'
-NeoBundle 'Shougo/unite-ssh'
+NeoBundleLazy 'Shougo/unite-build', { 'autoload' : {
+      \ 'unite_sources' : 'build',
+      \ }}
+NeoBundleLazy 'Shougo/unite-ssh', { 'autoload' : {
+      \ 'filetypes' : 'vimfiler',
+      \ }}
 NeoBundle 'Shougo/unite-sudo'
 NeoBundleLazy 'Shougo/vim-vcs', {
       \ 'depends' : 'thinca/vim-openbuf',
@@ -1347,8 +1351,10 @@ nnoremap [Alt]e e
 xnoremap [Alt]e e
 "}}}
 
+" Disable Ex-mode.
+nnoremap Q q
+
 " q: Quickfix "{{{
-"
 " The prefix key.
 nnoremap [Quickfix] <Nop>
 nmap q [Quickfix]
