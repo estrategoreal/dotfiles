@@ -1147,6 +1147,10 @@ nnoremap U :<C-u>GundoToggle<CR>
 autocmd MyAutoCmd FileType qf nnoremap <buffer> r :<C-u>Qfreplace<CR>
 "}}}
 
+" quickrun.vim "{{{
+nmap <silent> <Leader>r <Plug>(quickrun)
+"}}}
+
 " ref.vim "{{{
 let bundle = neobundle#get('vim-ref')
 function! bundle.hooks.on_source(bundle)
