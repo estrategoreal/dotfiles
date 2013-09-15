@@ -142,9 +142,6 @@ NeoBundleLazy 'mrtazz/DoxygenToolkit.vim', {
 NeoBundleLazy 'osyo-manga/unite-quickfix', { 'autoload' : {
       \ 'unite_sources' : 'quickfix',
       \ }}
-NeoBundleLazy 'othree/eregex.vim', { 'autoload' : {
-      \ 'commands' : 'M'
-      \ }}
 if has('python')
 NeoBundleLazy 'Rip-Rip/clang_complete', {
       \ 'autoload' : {
