@@ -184,7 +184,7 @@ NeoBundleLazy 'Shougo/vim-vcs', {
 NeoBundle 'Shougo/vimfiler'
 NeoBundle 'Shougo/vimproc'
 NeoBundle 'Shougo/vimshell'
-NeoBundle 'Shougo/vinarise'
+NeoBundleLazy 'Shougo/vinarise.vim'
 NeoBundleLazy 'sjl/gundo.vim', { 'autoload' : {
       \ 'commands' : 'GundoToggle'
       \ }}
@@ -309,7 +309,7 @@ call neobundle#config('vimshell', {
       \                 'VimShellTerminal', 'VimShellPop'],
       \   'mappings' : ['<Plug>(vimshell_switch)']
       \ }})
-call neobundle#config('vinarise', {
+call neobundle#config('vinarise.vim', {
       \ 'lazy' : 1,
       \ 'autoload' : {
       \   'commands' : 'Vinarise',
@@ -709,7 +709,7 @@ function! bundle.hooks.on_source(bundle)
   if !exists('g:neocomplete#keyword_patterns')
     let g:neocomplete#keyword_patterns = {}
   endif
-  let g:neocomplete#keyword_patterns['default'] = '\h\w*'
+  let g:neocomplete#keyword_patterns._ = '\h\w*'
 
   " Plugin key-mappings.
   inoremap <expr><C-g> neocomplete#undo_completion()
@@ -823,7 +823,7 @@ function! bundle.hooks.on_source(bundle)
   if !exists('g:neocomplcache_keyword_patterns')
     let g:neocomplcache_keyword_patterns = {}
   endif
-  let g:neocomplcache_keyword_patterns['default'] = '\h\w*'
+  let g:neocomplcache_keyword_patterns['default'] = '[0-9a-zA-Z:#_]\+'
 
   " <CR>: close popup and save indent.
   inoremap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
