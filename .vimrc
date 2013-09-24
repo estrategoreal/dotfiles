@@ -1027,7 +1027,7 @@ function! bundle.hooks.on_source(bundle)
   let g:unite_source_menu_menus = {}
 
   let g:unite_source_menu_menus.unite = {
-        \     'description' : 'Start unite sources',
+        \ 'description' : 'Start unite sources',
         \ }
   let g:unite_source_menu_menus.unite.command_candidates = {
         \ 'directory' : 'Unite -buffer-name=files '.
@@ -1119,7 +1119,7 @@ function! bundle.hooks.on_source(bundle)
 
     nnoremap <silent><buffer> J
           \ <C-u>:Unite -buffer-name=files -default-action=lcd directory_mru<CR>
-call vimshell#set_alias('ll', 'ls -l')
+    call vimshell#set_alias('ll', 'ls -l')
     call vimshell#set_alias('la', 'ls -alF')
     call vimshell#set_alias('l', 'ls -CF')
     call vimshell#set_alias('l.', 'ls -d .*')
