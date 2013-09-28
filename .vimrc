@@ -110,7 +110,8 @@ NeoBundleLazy 'deton/jasegment.vim', { 'autoload' : {
       \ ],
       \ }}
 NeoBundle 'gregsexton/gitv'
-NeoBundle 'h1mesuke/unite-outline'
+"NeoBundle 'h1mesuke/unite-outline'
+NeoBundle 'Shougo/unite-outline'
 NeoBundle 'h1mesuke/vim-alignta'
 NeoBundleLazy 'hail2u/vim-css3-syntax'
 NeoBundle 'hewes/unite-gtags'
@@ -554,7 +555,6 @@ augroup MyAutoCmd
   autocmd FileType c setlocal omnifunc=ccomplete#Complete
   autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
   autocmd FileType html,markdown setlocal omnifunc=htmlcomplete#CompleteTags
-  autocmd FileType javascript setlocal omnifunc=
   if has('python3')
     autocmd FileType python setlocal omnifunc=python3complete#Complete
   else
