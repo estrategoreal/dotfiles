@@ -176,6 +176,7 @@ NeoBundleLazy 'Shougo/unite-build', { 'autoload' : {
       \ }}
 NeoBundleLazy 'Shougo/unite-ssh', { 'autoload' : {
       \ 'filetypes' : 'vimfiler',
+      \ 'unite_sources': 'ssh',
       \ }}
 NeoBundle 'Shougo/unite-sudo'
 NeoBundleLazy 'Shougo/vim-vcs', {
@@ -313,7 +314,9 @@ call neobundle#config('vimshell', {
 call neobundle#config('vinarise.vim', {
       \ 'lazy' : 1,
       \ 'autoload' : {
-      \   'commands' : 'Vinarise',
+      \   'commands' : [{
+      \     'name' : 'Vinarise', 'complete' : 'file'
+      \   }]
       \ }})
 
 " Installation check.
@@ -916,7 +919,7 @@ nnoremap <silent> [unite]w
       \ :<C-u>Unite window<CR>
 
 nnoremap <silent> [unite]g
-      \ :<C-u>Unite grep:. -buffer-name=search -auto-preview -no-quit -resume<CR>
+      \ :<C-u>Unite grep:. -buffer-name=search -auto-preview -no-quit -no-empty -resume<CR>
 nnoremap <silent> [unite]G
       \ :<C-u>call <SID>cursor_grep()<CR>
 xnoremap <silent> [unite]G
