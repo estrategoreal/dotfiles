@@ -190,10 +190,6 @@ NeoBundleLazy 'Shougo/vinarise.vim'
 NeoBundleLazy 'sjl/gundo.vim', { 'autoload' : {
       \ 'commands' : 'GundoToggle'
       \ }}
-NeoBundleLazy 'teramako/jscomplete-vim', {
-      \ 'autoload' : {
-      \   'filetypes' : 'javascript'
-      \ }}
 NeoBundleLazy 'thinca/vim-qfreplace', { 'autoload' : {
       \ 'filetypes' : ['unite', 'quickfix']
       \ }}
@@ -595,6 +591,10 @@ function! s:define_surround_keymappings()
     nmap <buffer> yS <Plug>YSurround
   endif
 endfunction
+
+map <silent>sa <Plug>(operator-surround-append)
+map <silent>sd <Plug>(operator-surround-delete)
+map <silent>sr <Plug>(operator-surround-replace)
 "}}}
 
 " TweetVim "{{{
