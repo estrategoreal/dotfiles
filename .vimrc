@@ -153,13 +153,9 @@ else
 NeoBundleLazy 'Rip-Rip/clang_complete'
 endif
 NeoBundleLazy 'rhysd/accelerated-jk', { 'autoload' : {
-      \ 'mappings' : ['<Plug>(accelerated_jk_gj)',
-      \               '<Plug>(accelerated_jk_gk)'],
+      \ 'mappings' : '<Plug>(accelerated_jk_',
       \ }}
-NeoBundleLazy 'rhysd/clever-f.vim', { 'autoload' : {
-      \ 'mappings' : 'f',
-      \ }}
-NeoBundleLazy 'Shougo/foldCC',
+NeoBundleLazy 'LeafCage/foldCC',
       \  { 'autoload' : { 'filetypes' : 'vim' }}
 if has('lua') && (v:version > 703 || (v:version == 703 && has('patch885')))
 NeoBundleFetch 'Shougo/neocomplcache'
@@ -169,7 +165,7 @@ NeoBundle 'Shougo/neocomplcache'
 NeoBundleFetch 'Shougo/neocomplete.vim'
 endif
 NeoBundle 'Shougo/neobundle-vim-scripts'
-NeoBundle 'Shougo/neosnippet'
+NeoBundleLazy 'Shougo/neosnippet.vim'
 NeoBundle 'Shougo/unite.vim'
 NeoBundleLazy 'Shougo/unite-build', { 'autoload' : {
       \ 'unite_sources' : 'build',
@@ -189,6 +185,10 @@ NeoBundle 'Shougo/vimshell'
 NeoBundleLazy 'Shougo/vinarise.vim'
 NeoBundleLazy 'sjl/gundo.vim', { 'autoload' : {
       \ 'commands' : 'GundoToggle'
+      \ }}
+NeoBundleLazy 't9md/vim-smalls', {
+      \ 'autoload' : {
+      \ 'mappings' : ['<Plug>(smalls)', '<Plug>(smalls-)']
       \ }}
 NeoBundleLazy 'thinca/vim-qfreplace', { 'autoload' : {
       \ 'filetypes' : ['unite', 'quickfix']
@@ -259,11 +259,12 @@ call neobundle#config('neocomplcache', {
       \   'insert' : 1,
       \ }})
 endif
-call neobundle#config('neosnippet', {
+call neobundle#config('neosnippet.vim', {
       \ 'lazy' : 1,
       \ 'autoload' : {
       \   'insert' : 1,
       \   'filetypes' : 'snippet',
+      \   'unite_sources' : ['snippet', 'neosnippet/user', 'neosnippet/runtime'],
       \ }})
 call neobundle#config('unite.vim',{
       \ 'lazy' : 1,
@@ -286,7 +287,7 @@ call neobundle#config('vimfiler', {
       \                  { 'name' : 'Write',
       \                    'complete' : 'customlist,vimfiler#complete' },
       \                  'Read', 'Source'],
-      \    'mappings' : ['<Plug>(vimfiler_switch)'],
+      \    'mappings' : '<Plug>(vimfiler_',
       \    'explorer' : 1,
       \ }
       \ })
@@ -518,6 +519,8 @@ set visualbell
 
 " Enable spellchecking.
 set spelllang=en_us
+" Enable CJK support.
+set spelllang+=cjk
 
 " Set options for Insert mode completion.
 set completeopt=menuone
@@ -676,10 +679,14 @@ let g:load_doxygen_syntax = 1
 "}}}
 
 " accelerated-jk "{{{
-nmap <silent>j <Plug>(accelerated_jk_gj)
-nnoremap gj j
-nmap <silent>k <Plug>(accelerated_jk_gk)
-nnoremap gk k
+if neobundle#tap('accelerated-jk') "{{{
+  nmap <silent>j <Plug>(accelerated_jk_gj)
+  nmap gj j
+  nmap <silent>k <Plug>(accelerated_jk_gk)
+  nmap gk k
+
+  call neobundle#untap()
+endif "}}}
 "}}}
 
 if has('lua') && (v:version > 703 || (v:version == 703 && has('patch885')))
@@ -862,7 +869,7 @@ unlet bundle
 endif
 
 " neosnippet.vim "{{{
-let bundle = neobundle#get('neosnippet')
+let bundle = neobundle#get('neosnippet.vim')
 function! bundle.hooks.on_source(bundle)
   imap <C-k> <Plug>(neosnippet_expand_or_jump)
   smap <C-k> <Plug>(neosnippet_expand_or_jump)
@@ -871,7 +878,7 @@ function! bundle.hooks.on_source(bundle)
   xmap <C-l> <Plug>(neosnippet_start_unite_snippet_target)
 
   " Enable snipMate compatibility feature.
-  let g:neosnippet#enable_snipmate_compatibility = 1
+  " let g:neosnippet#enable_snipmate_compatibility = 1
 
   " Plugin key-mappings.
   inoremap <expr><C-g> neocomplcache#undo_completion()
@@ -1053,43 +1060,44 @@ unlet bundle
 "}}}
 
 " vimfiler.vim "{{{
-nnoremap <silent> <C-g> :<C-u>VimFiler -buffer-name=explorer -simple -toggle<CR>
+if neobundle#tap('vimfiler') "{{{
+  nnoremap <silent> <C-g> :<C-u>VimFiler -buffer-name=explorer -simple -toggle<CR>
 
-let bundle = neobundle#get('vimfiler')
-function! bundle.hooks.on_source(bundle)
-  let g:vimfiler_as_default_explorer = 1
+  function! neobundle#tapped.hooks.on_source(bundle)
+    let g:vimfiler_as_default_explorer = 1
 
-  " Enable file operation commands.
-  let g:vimfiler_safe_mode_by_default = 0
+    " Enable file operation commands.
+    let g:vimfiler_safe_mode_by_default = 0
 
-  if s:is_windows
-    " Use trashbox.
-    let g:unite_kind_file_use_trashbox = 1
-  else
-    " Like Textmate icons.
-    let g:vimfiler_tree_leaf_icon = ' '
-    let g:vimfiler_tree_opened_icon = '▾'
-    let g:vimfiler_tree_closed_icon = '▸'
-    let g:vimfiler_file_icon = '-'
-    let g:vimfiler_readonly_file_icon = '✗'
-    let g:vimfiler_marked_file_icon = '✓'
-  endif
-
-  autocmd MyAutoCmd FileType vimfiler call s:vimfiler_my_settings()
-  function! s:vimfiler_my_settings() "{{{
-    " Overwrite settings.
-    nnoremap <silent><buffer> J
-          \ <C-u>:Unite -buffer-name=files -default-action=lcd directory_mru<CR>
-
-    " Migemo search.
-    if !empty(unite#get_filters('matcher_migemo'))
-      nnoremap <silent><buffer><expr> / line('$') > 10000 ? 'g/' :
-            \ ":\<C-u>Unite -buffer-name=search -start-insert line_migemo\<CR>"
+    if s:is_windows
+      " Use trashbox.
+      let g:unite_kind_file_use_trashbox = 1
+    else
+      " Like Textmate icons.
+      let g:vimfiler_tree_leaf_icon = ' '
+      let g:vimfiler_tree_opened_icon = '▾'
+      let g:vimfiler_tree_closed_icon = '▸'
+      let g:vimfiler_file_icon = '-'
+      let g:vimfiler_readonly_file_icon = '✗'
+      let g:vimfiler_marked_file_icon = '✓'
     endif
-  endfunction"}}}
-endfunction
 
-unlet bundle
+    autocmd MyAutoCmd FileType vimfiler call s:vimfiler_my_settings()
+    function! s:vimfiler_my_settings() "{{{
+      " Overwrite settings.
+      nnoremap <silent><buffer> J
+            \ <C-u>:Unite -buffer-name=files -default-action=lcd directory_mru<CR>
+
+      " Migemo search.
+      if !empty(unite#get_filters('matcher_migemo'))
+        nnoremap <silent><buffer><expr> / line('$') > 10000 ? 'g/' :
+              \ ":\<C-u>Unite -buffer-name=search -start-insert line_migemo\<CR>"
+      endif
+    endfunction"}}}
+  endfunction
+
+  call neobundle#untap()
+endif "}}}
 "}}}
 
 " vimshell.vim "{{{
@@ -1141,6 +1149,14 @@ let g:vinarise_enable_auto_detect = 1
 
 " Gundo.vim "{{{
 nnoremap U :<C-u>GundoToggle<CR>
+"}}}
+
+" vim-smalls "{{{
+if neobundle#tap('vim-smalls')
+  nmap S <Plug>(smalls)
+
+  call neobundle#untap()
+endif
 "}}}
 
 " qfreplace.vim "{{{
