@@ -43,6 +43,7 @@ endif
 " Set augroup.
 augroup MyAutoCmd
   autocmd!
+  autocmd FileType * call s:my_on_filetype()
 augroup END
 
 if filereadable(expand('~/.vimrc.local'))
@@ -115,7 +116,6 @@ NeoBundle 'Shougo/unite-outline'
 NeoBundle 'h1mesuke/vim-alignta'
 NeoBundleLazy 'hail2u/vim-css3-syntax'
 NeoBundle 'hewes/unite-gtags'
-NeoBundle 'hrsh7th/vim-versions'
 NeoBundleLazy 'jiangmiao/simple-javascript-indenter', { 'autoload' : {
       \ 'filetypes' : 'javascript',
       \ }}
@@ -240,11 +240,6 @@ call neobundle#config('unite-outline', {
       \ 'lazy' : 1,
       \ 'autoload' : {
       \   'unite_sources' : 'outline'},
-      \ })
-call neobundle#config('vim-versions', {
-      \ 'lazy' : 1,
-      \ 'autoload' : {
-      \   'commands' : 'UniteVersions'},
       \ })
 if has('lua') && (v:version > 703 || (v:version == 703 && has('patch885')))
 call neobundle#config('neocomplete.vim', {
@@ -462,10 +457,6 @@ set commentstring=%s
 if exists('*FoldCCtext')
   " Use FoldCCtext().
   set foldtext=FoldCCtext()
-  autocmd MyAutoCmd FileType *
-        \   if &filetype !=# 'help'
-        \ |   setlocal foldtext=FoldCCtext()
-        \ | endif
 endif
 
 " Use grep.
@@ -548,8 +539,6 @@ augroup MyAutoCmd
   " Close help, git, quickfix, quickrun and reference window by pressing q.
   autocmd FileType help,gitcommit,qf,qfreplace,quickrun,ref
         \ nnoremap <buffer><silent> q :<C-u>call <SID>smart_close()<CR>
-  autocmd FileType * if (&readonly || !&modifiable) && !hasmapto('q', 'n')
-        \ | nnoremap <buffer><silent> q :<C-u>call <SID>smart_close()<CR>| endif
 
   autocmd FileType gitcommit setlocal nofoldenable
 
@@ -641,10 +630,6 @@ let g:unite_source_alignta_preset_arguments = [
       \]
 
 xnoremap <silent> [unite]a :<C-u>Unite alignta:arguments<CR>
-"}}}
-
-" vim-versions "{{{
-nnoremap <silent> [Space]gs :<C-u>UniteVersions status:!<CR>
 "}}}
 
 " Operator-replace "{{{
@@ -1448,6 +1433,21 @@ command! -nargs=1 -complete=file Diff tabedit % | vertical diffsplit <args>
 nnoremap <silent> co :ContinuousNumber <C-a><CR>
 vnoremap <silent> co :ContinuousNumber <C-a><CR>
 command! -count -nargs=1 ContinuousNumber let c = col('.')|for n in range(1, <count>?<count>-line('.'):1)|exec 'normal! j' . n . <q-args>|call cursor('.', c)|endfor
+"}}}
+
+"-----------------------------------------------------------------------------
+" Functions:"{{{
+"
+function! s:my_on_filetype() "{{{
+  if (&readonly || !&modifiable) && !hasmapto('q', 'n')
+    nnoremap <buffer><silent> q :<C-u>call <SID>smart_close()<CR>
+  endif
+
+  " Use FoldCCtext().
+  if &filetype !=# 'help'
+    setlocal foldtext=FoldCCtext()
+  endif
+endfunction "}}}
 "}}}
 
 "-----------------------------------------------------------------------------
