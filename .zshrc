@@ -195,7 +195,7 @@ export PROMPT="%F{magenta}%~
 export RPROMPT="%1(v|%F{green}%1v%f|)"
 
 if is_darwin ; then
-  export PATH=/usr/local/bin:/usr/local/sbin:$PATH
+  export PATH=/usr/local/bin:/usr/local/sbin:/usr/sbin:$PATH
 elif is_freebsd ; then
   export PATH=$PATH:/sbin:/usr/sbin:/usr/local/sbin
 elif is_linux ; then
