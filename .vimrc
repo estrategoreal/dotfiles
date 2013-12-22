@@ -43,7 +43,7 @@ endif
 " Set augroup.
 augroup MyAutoCmd
   autocmd!
-  autocmd FileType * call s:my_on_filetype()
+  autocmd FileType,Syntax * call s:my_on_filetype()
 augroup END
 
 if filereadable(expand('~/.vimrc.local'))
@@ -56,92 +56,71 @@ if has('vim_starting') "{{{
   if s:is_windows
     execute 'set runtimepath+=' . expand('~/.vim')
   endif
+
+  " Load neobundle.
+  if isdirectory('neobundle.vim')
+    set runtimepath^=neobundle.vim
+  elseif finddir('neobundle.vim', '.;') != ''
+    execute 'set runtimepath^=' . finddir('neobundle.vim', '.;')
+  elseif &runtimepath !~ '/neobundle.vim'
+    if !isdirectory(s:neobundle_dir.'/neobundle.vim')
+      execute printf('!git clone %s://github.com/Shougo/neobundle.vim.git',
+            \ (exists('$http_proxy') ? 'https' : 'git'))
+            \ s:neobundle_dir.'/neobundle.vim'
+    endif
+
+    execute 'set runtimepath^=' . s:neobundle_dir.'/neobundle.vim'
+  endif
 endif
 "}}}
 
-" Load neobundle.
-if isdirectory('neobundle.vim')
-  set runtimepath^=neobundle.vim
-elseif finddir('neobundle.vim', '.;') != ''
-  execute 'set runtimepath^=' . finddir('neobundle.vim', '.;')
-elseif &runtimepath !~ '/neobundle.vim'
-  if !isdirectory(s:neobundle_dir.'/neobundle.vim')
-    execute printf('!git clone %s://github.com/Shougo/neobundle.vim.git',
-          \ (exists('$http_proxy') ? 'https' : 'git'))
-          \ s:neobundle_dir.'/neobundle.vim'
-  endif
-
-  execute 'set runtimepath^=' . s:neobundle_dir.'/neobundle.vim'
-endif
-
-call neobundle#rc(expand('~/.vim/bundle'))
+call neobundle#rc(s:neobundle_dir)
 
 " neobundle.vim "{{{
 NeoBundleFetch 'Shougo/neobundle.vim'
 
 NeoBundle 'altercation/vim-colors-solarized'
-NeoBundleLazy 'anyakichi/vim-surround', {
-      \ 'autoload' : {
-      \   'mappings' : [
-      \     ['n', '<Plug>Dsurround'], ['n', '<Plug>Csurround'],
-      \     ['n', '<Plug>Ysurround'], ['n', '<Plug>YSurround']
-      \ ]}}
 NeoBundleLazy 'basyura/TweetVim', { 'depends' :
       \ ['basyura/twibill.vim', 'tyru/open-browser.vim'],
       \ 'autoload' : { 'commands' : 'TweetVimHomeTimeline' }}
-NeoBundleLazy 'bkad/CamelCaseMotion', { 'autoload' : {
-      \ 'mappings' : ['<Plug>CamelCaseMotion_w',
-      \               '<Plug>CamelCaseMotion_b'],
-      \ }}
-NeoBundleLazy 'davidhalter/jedi-vim', {
-      \ 'autoload' : {
-      \     'filetypes' : ['python', 'python3'],
-      \    },
+NeoBundleLazy 'bkad/CamelCaseMotion', {
+      \ 'mappings' : '<Plug>CamelCaseMotion_',
       \ }
-NeoBundleLazy 'deton/jasegment.vim', { 'autoload' : {
-      \ 'mappings' : [['n', '<Plug>JaSegmentMoveNE'],
-      \               ['n', '<Plug>JaSegmentMoveNW'],
-      \               ['n', '<Plug>JaSegmentMoveNB'],
-      \               ['o', '<Plug>JaSegmentMoveOE'],
-      \               ['o', '<Plug>JaSegmentMoveOW'],
-      \               ['o', '<Plug>JaSegmentMoveOB'],
-      \               ['x', '<Plug>JaSegmentMoveVE'],
-      \               ['x', '<Plug>JaSegmentMoveVW'],
-      \               ['x', '<Plug>JaSegmentMoveVB'],
-      \ ],
-      \ }}
+NeoBundleLazy 'chikatoike/concealedyank.vim', {
+      \   'mappings' : [['x', '<Plug>(operator-concealedyank)']]
+      \ }
 NeoBundle 'gregsexton/gitv'
 "NeoBundle 'h1mesuke/unite-outline'
 NeoBundle 'Shougo/unite-outline'
 NeoBundle 'h1mesuke/vim-alignta'
 NeoBundleLazy 'hail2u/vim-css3-syntax'
 NeoBundle 'hewes/unite-gtags'
-NeoBundleLazy 'jiangmiao/simple-javascript-indenter', { 'autoload' : {
+NeoBundleLazy 'jiangmiao/simple-javascript-indenter', {
       \ 'filetypes' : 'javascript',
-      \ }}
-NeoBundleLazy 'jelera/vim-javascript-syntax', { 'autoload' : {
+      \ }
+NeoBundleLazy 'jelera/vim-javascript-syntax', {
       \ 'filetypes' : 'javascript',
-      \ }}
+      \ }
 NeoBundle 'kana/vim-operator-user', {
-      \ 'autoload' : {
-      \   'functions' : 'operator#user#define',
-      \ }}
+      \ 'functions' : 'operator#user#define',
+      \ }
 NeoBundleLazy 'kana/vim-operator-replace', {
       \ 'depends' : 'vim-operator-user',
       \ 'autoload' : {
       \   'mappings' : [
       \     ['nx', '<Plug>(operator-replace)']]
       \ }}
-NeoBundleLazy 'kana/vim-smartchr', { 'autoload' : {
+NeoBundleLazy 'kana/vim-smartchr', {
       \ 'insert' : 1,
-      \ }}
-NeoBundleLazy 'mrtazz/DoxygenToolkit.vim', {
-      \ 'autoload' : {
-      \     'filetypes' : ['c', 'cpp'],
-      \    },
       \ }
-NeoBundleLazy 'osyo-manga/unite-quickfix', { 'autoload' : {
+NeoBundleLazy 'mrtazz/DoxygenToolkit.vim', {
+      \ 'filetypes' : ['c', 'cpp'],
+      \ }
+NeoBundleLazy 'osyo-manga/unite-quickfix', {
       \ 'unite_sources' : 'quickfix',
+      \ }
+NeoBundleLazy 'osyo-manga/vim-over', { 'autoload' : {
+      \ 'commands' : ['OverCommandLine']
       \ }}
 if has('python')
 NeoBundleLazy 'Rip-Rip/clang_complete', {
@@ -152,11 +131,14 @@ NeoBundleLazy 'Rip-Rip/clang_complete', {
 else
 NeoBundleLazy 'Rip-Rip/clang_complete'
 endif
-NeoBundleLazy 'rhysd/accelerated-jk', { 'autoload' : {
+NeoBundleLazy 'rhysd/accelerated-jk', {
       \ 'mappings' : '<Plug>(accelerated_jk_',
-      \ }}
-NeoBundleLazy 'LeafCage/foldCC',
-      \  { 'autoload' : { 'filetypes' : 'vim' }}
+      \ }
+NeoBundle 'rhysd/vim-operator-surround', {
+      \   'mappings' : '<Plug>(operator-surround',
+      \ }
+NeoBundleLazy 'LeafCage/foldCC', {
+      \ 'filetypes' : 'vim' }
 if has('lua') && (v:version > 703 || (v:version == 703 && has('patch885')))
 NeoBundleFetch 'Shougo/neocomplcache'
 NeoBundle 'Shougo/neocomplete.vim'
@@ -167,73 +149,77 @@ endif
 NeoBundle 'Shougo/neobundle-vim-scripts'
 NeoBundleLazy 'Shougo/neosnippet.vim'
 NeoBundle 'Shougo/unite.vim'
-NeoBundleLazy 'Shougo/unite-build', { 'autoload' : {
+NeoBundleLazy 'Shougo/unite-build', {
       \ 'unite_sources' : 'build',
-      \ }}
-NeoBundleLazy 'Shougo/unite-ssh', { 'autoload' : {
+      \ }
+NeoBundleLazy 'Shougo/unite-ssh', {
       \ 'filetypes' : 'vimfiler',
-      \ 'unite_sources': 'ssh',
-      \ }}
+      \ 'unite_sources' : 'ssh',
+      \ }
 NeoBundle 'Shougo/unite-sudo'
 NeoBundleLazy 'Shougo/vim-vcs', {
       \ 'depends' : 'thinca/vim-openbuf',
       \ 'autoload' : {'commands' : 'Vcs'},
-      \   }
+      \ }
 NeoBundle 'Shougo/vimfiler'
 NeoBundle 'Shougo/vimproc'
 NeoBundle 'Shougo/vimshell'
 NeoBundleLazy 'Shougo/vinarise.vim'
-NeoBundleLazy 'sjl/gundo.vim', { 'autoload' : {
+NeoBundleLazy 'sjl/gundo.vim', {
       \ 'commands' : 'GundoToggle'
-      \ }}
+      \ }
 NeoBundleLazy 't9md/vim-smalls', {
-      \ 'autoload' : {
       \ 'mappings' : ['<Plug>(smalls)', '<Plug>(smalls-)']
-      \ }}
-NeoBundleLazy 'thinca/vim-qfreplace', { 'autoload' : {
-      \ 'filetypes' : ['unite', 'quickfix']
-      \ }}
-NeoBundleLazy 'thinca/vim-quickrun', { 'autoload' : {
-      \ 'mappings' : '<Plug>(quickrun)'
-      \ }}
-NeoBundleLazy 'thinca/vim-ref', { 'autoload' : {
+      \ }
+NeoBundleLazy 'thinca/vim-qfreplace', {
+      \ 'filetypes' : ['unite', 'quickfix'],
+      \ }
+NeoBundleLazy 'thinca/vim-quickrun', {
+      \ 'mappings' : [
+      \   ['nxo', '<Plug>(quickrun)']],
+      \ }
+NeoBundleLazy 'thinca/vim-ref', {
       \ 'commands' : 'Ref'
-      \ }}
+      \ }
 NeoBundleLazy 'tpope/vim-endwise'
 NeoBundle 'tpope/vim-fugitive'
-NeoBundleLazy 'tsukkee/unite-help', { 'autoload' : {
+NeoBundleLazy 'Shougo/unite-help', {
       \ 'unite_sources' : 'help'
-      \ }}
-NeoBundleLazy 'tsukkee/unite-tag', { 'autoload' : {
-      \ 'unite_sources' : 'tag'
-      \ }}
-NeoBundleLazy 'tyru/caw.vim', { 'autoload' : {
+      \ }
+NeoBundleLazy 'tsukkee/unite-tag', {
+      \ 'unite_sources' : ['tag', 'tag/include', 'tag/file']
+      \ }
+NeoBundleLazy 'tyru/caw.vim', {
       \ 'mappings' : [
       \   '<Plug>(caw:prefix)', '<Plug>(caw:i:toggle)']
-      \ }}
-NeoBundleLazy 'tyru/open-browser.vim', { 'autoload' : {
-      \ 'mappings' : '<Plug>(openbrowser-smart-search)',
-      \ }}
-NeoBundleLazy 'ujihisa/vimshell-ssh', { 'autoload' : {
+      \ }
+NeoBundleLazy 'tyru/open-browser.vim', {
+      \ 'mappings' : '<Plug>(open-browser-',
+      \ }
+NeoBundleLazy 'ujihisa/vimshell-ssh', {
       \ 'filetypes' : 'vimshell',
-      \ }}
-NeoBundleLazy 'vim-jp/autofmt', { 'autoload' : {
+      \ }
+NeoBundleLazy 'vim-jp/autofmt', {
       \ 'mappings' : [['x', 'gq']],
-      \ }}
-NeoBundleLazy 'vim-jp/cpp-vim', { 'autoload' : {
+      \ }
+NeoBundleLazy 'vim-jp/cpp-vim', {
       \ 'filetypes' : 'cpp',
-      \ }}
-NeoBundleLazy 'vim-ruby/vim-ruby', { 'autoload' : {
-      \ 'mappings' : '<Plug>(ref-keyword)',
+      \ }
+NeoBundleLazy 'vim-ruby/vim-ruby', {
+      \ 'mappings' : '<Plug>(ref-',
       \ 'filetypes' : 'ruby'
-      \ }}
+      \ }
 NeoBundle 'vim-scripts/taglist.vim', { 'type' : 'nosync' }
-NeoBundleLazy 'yomi322/vim-gitcomplete', { 'autoload' : {
+NeoBundleLazy 'yomi322/vim-gitcomplete', {
       \ 'filetype' : 'vimshell'
-      \ }}
-NeoBundleLazy 'yuratomo/w3m.vim', { 'autoload' : {
-      \ 'commands' : 'W3mTab',
-      \ }}
+      \ }
+NeoBundleLazy 'yuratomo/w3m.vim', {
+      \ 'commands' : 'W3m',
+      \ }
+
+if exists(':OverCommandLine')
+  xnoremap :s :OverCommandLine<CR>
+endif
 
 " NeoBundle configurations.
 call neobundle#config('unite-outline', {
@@ -300,8 +286,9 @@ call neobundle#config('vimshell', {
       \   'commands' : [{ 'name' : 'VimShell',
       \                   'complete' : 'customlist,vimshell#complete'},
       \                 'VimShellExecute', 'VimShellInteractive',
+      \                 'VimShellCreate',
       \                 'VimShellTerminal', 'VimShellPop'],
-      \   'mappings' : ['<Plug>(vimshell_switch)']
+      \   'mappings' : '<Plug>(vimshell_'
       \ }})
 call neobundle#config('vinarise.vim', {
       \ 'lazy' : 1,
@@ -536,11 +523,7 @@ endif
 set smartindent
 
 augroup MyAutoCmd
-  " Close help, git, quickfix, quickrun and reference window by pressing q.
-  autocmd FileType help,gitcommit,qf,qfreplace,quickrun,ref
-        \ nnoremap <buffer><silent> q :<C-u>call <SID>smart_close()<CR>
-
-  autocmd FileType gitcommit setlocal nofoldenable
+  autocmd FileType gitcommit,qfreplace setlocal nofoldenable
 
   " Enable omni completion.
   autocmd FileType c setlocal omnifunc=ccomplete#Complete
@@ -566,27 +549,10 @@ let g:SimpleJsIndenter_CaseIndentLevel = -1
 "-----------------------------------------------------------------------------
 " Plugin: "{{{
 "
-" surround.vim "{{{
-let g:surround_no_mappings = 1
-autocmd MyAutoCmd FileType * call s:define_surround_keymappings()
-
-function! s:define_surround_keymappings()
-  if !&l:modifiable
-    silent! nunmap <buffer> ds
-    silent! nunmap <buffer> cs
-    silent! nunmap <buffer> ys
-    silent! nunmap <buffer> yS
-  else
-    nmap <buffer> ds <Plug>Dsurround
-    nmap <buffer> cs <Plug>Csurround
-    nmap <buffer> ys <Plug>Ysurround
-    nmap <buffer> yS <Plug>YSurround
-  endif
-endfunction
-
-map <silent>sa <Plug>(operator-surround-append)
-map <silent>sd <Plug>(operator-surround-delete)
-map <silent>sr <Plug>(operator-surround-replace)
+" vim-operator-surround.vim "{{{
+nmap <silent>sa <Plug>(operator-surround-append)
+nmap <silent>sd <Plug>(operator-surround-delete)
+nmap <silent>sr <Plug>(operator-surround-replace)
 "}}}
 
 " TweetVim "{{{
@@ -611,12 +577,6 @@ nmap <silent> [Alt]b <Plug>CamelCaseMotion_b
 xmap <silent> [Alt]b <Plug>CamelCaseMotion_b
 omap <silent> [Alt]b <Plug>CamelCaseMotion_b
 ""}}}
-
-" jedi-vim "{{{
-let g:jedi#auto_initialization = 1
-let g:jedi#popup_on_dot = 0
-let g:jedi#rename_command = '<leader>R'
-"}}}
 
 " alignta.vim "{{{
 let g:unite_source_alignta_preset_arguments = [
@@ -1113,6 +1073,8 @@ function! bundle.hooks.on_source(bundle)
     imap <silent><buffer> <ESC><ESC> <ESC><C-^>
     imap <buffer><C-k> <Plug>(vimshell_zsh_complete)
 
+    xmap <buffer> y <Plug>(operator-concealedyank)
+
     nnoremap <silent><buffer> J
           \ <C-u>:Unite -buffer-name=files -default-action=lcd directory_mru<CR>
     call vimshell#set_alias('ll', 'ls -l')
@@ -1423,6 +1385,13 @@ inoremap <C-q> <ESC>gUiw`]a
 nnoremap <silent> <ESC><ESC> :<C-u>nohlsearch<CR>
 "}}}
 
+" Search.
+nnoremap ;n  ;
+nnoremap ;m  ,
+
+nnoremap <silent> q :<C-u>call <sid>smart_close()<CR>
+"}}}
+
 "-----------------------------------------------------------------------------
 " Commands: "{{{
 "
@@ -1439,10 +1408,6 @@ command! -count -nargs=1 ContinuousNumber let c = col('.')|for n in range(1, <co
 " Functions:"{{{
 "
 function! s:my_on_filetype() "{{{
-  if (&readonly || !&modifiable) && !hasmapto('q', 'n')
-    nnoremap <buffer><silent> q :<C-u>call <SID>smart_close()<CR>
-  endif
-
   " Use FoldCCtext().
   if &filetype !=# 'help'
     setlocal foldtext=FoldCCtext()
