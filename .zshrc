@@ -185,6 +185,7 @@ if is_linux || is_cygwin ; then
   export PATH=$HOME/.rbenv/bin:$PATH
 fi
 if [ -x "`which rbenv`" ]; then
+  export PATH="$HOME/.rbenv/shims:$PATH"
   eval "$(rbenv init -)"
 fi
 
