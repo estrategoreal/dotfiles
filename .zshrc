@@ -181,14 +181,6 @@ fi
 
 [ -f ~/.zshrc.local ] && source ~/.zshrc.local
 
-if is_linux || is_cygwin ; then
-  export PATH=$HOME/.rbenv/bin:$PATH
-fi
-if [ -x "`which rbenv`" ]; then
-  export PATH="$HOME/.rbenv/shims:$PATH"
-  eval "$(rbenv init -)"
-fi
-
 # Source global definitions
 
 export PROMPT="%F{magenta}%~
@@ -207,5 +199,12 @@ elif is_cygwin ; then
   export PATH=$PATH:/usr/local/share/vim:/usr/local/share/git-svn-clone-externals
   export LIBRARY_PATH=/lib:/lib/w32api:/usr/local/lib
   export TCL_LIBRARY=/usr/share/tcl8.4
+fi
+
+if is_linux || is_cygwin ; then
+  export PATH=$HOME/.rbenv/bin:$PATH
+fi
+if [ -x "`which rbenv`" ]; then
+  eval "$(rbenv init -)"
 fi
 
