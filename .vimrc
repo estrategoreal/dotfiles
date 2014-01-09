@@ -101,6 +101,9 @@ NeoBundleLazy 'jiangmiao/simple-javascript-indenter', {
 NeoBundleLazy 'jelera/vim-javascript-syntax', {
       \ 'filetypes' : 'javascript',
       \ }
+NeoBundle 'kana/vim-niceblock', {
+      \   'mappings' : '<Plug>(niceblock-',
+      \ }
 NeoBundle 'kana/vim-operator-user', {
       \ 'functions' : 'operator#user#define',
       \ }
@@ -260,6 +263,8 @@ call neobundle#config('vimfiler', {
       \ 'autoload' : {
       \    'commands' : [
       \                  { 'name' : 'VimFiler',
+      \                    'complete' : 'customlist,vimfiler#complete' },
+      \                  { 'name' : 'VimFilerTab',
       \                    'complete' : 'customlist,vimfiler#complete' },
       \                  { 'name' : 'VimFilerExplorer',
       \                    'complete' : 'customlist,vimfiler#complete' },
@@ -591,6 +596,11 @@ let g:unite_source_alignta_preset_arguments = [
 
 xnoremap <silent> [unite]a :<C-u>Unite alignta:arguments<CR>
 "}}}
+
+" vim-niceblock
+" Improved visual selection.
+xmap I <Plug>(niceblock-I)
+xmap A <Plug>(niceblock-A)
 
 " Operator-replace "{{{
 nmap R <Plug>(operator-replace)
@@ -1324,7 +1334,6 @@ nnoremap Q q
 " q: Quickfix "{{{
 " The prefix key.
 nnoremap [Quickfix] <Nop>
-nmap q [Quickfix]
 
 " Open the quickfix window automatically if it's not empty.
 autocmd QuickFixCmdPost [^l]* botright cwindow
