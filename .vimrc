@@ -178,6 +178,7 @@ NeoBundleLazy 'thinca/vim-qfreplace', {
       \ 'filetypes' : ['unite', 'quickfix'],
       \ }
 NeoBundleLazy 'thinca/vim-quickrun', {
+      \ 'commands' : 'QuickRun',
       \ 'mappings' : [
       \   ['nxo', '<Plug>(quickrun)']],
       \ }
@@ -875,8 +876,17 @@ nnoremap <silent> [unite]s
       \ :<C-u>Unite source<CR>
 nnoremap <silent> [unite]t
       \ :<C-u>UniteWithCursorWord -buffer-name=tag tag tag/include<CR>
-nnoremap <silent> [unite]v
-      \ :<C-u>Unite -buffer-name=files -no-split -multi-line file_rec/async:!<CR>
+if s:is_windows
+  nnoremap <silent> [unite]v
+        \ :<C-u>Unite -buffer-name=files -no-split -multi-line
+        \ jump_point file_point buffer_tab file_mru
+        \ file_rec:! file file/new<CR>
+else
+  nnoremap <silent> [unite]v
+        \ :<C-u>Unite -buffer-name=files -no-split -multi-line
+        \ jump_point file_point buffer_tab file_mru
+        \ file_rec/async:! file file/new<CR>
+endif
 nnoremap <silent> [unite]w
       \ :<C-u>Unite window<CR>
 
