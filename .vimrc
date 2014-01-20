@@ -246,10 +246,12 @@ call neobundle#config('neocomplcache', {
 endif
 call neobundle#config('neosnippet.vim', {
       \ 'lazy' : 1,
+      \ 'depends' : 'Shougo/neosnippet-snippets',
       \ 'autoload' : {
       \   'insert' : 1,
       \   'filetypes' : 'snippet',
-      \   'unite_sources' : ['snippet', 'neosnippet/user', 'neosnippet/runtime'],
+      \   'unite_sources' : [
+      \      'neosnippet', 'neosnippet/user', 'neosnippet/runtime'],
       \ }})
 call neobundle#config('unite.vim',{
       \ 'lazy' : 1,
@@ -1430,6 +1432,11 @@ function! s:my_on_filetype() "{{{
   " Use FoldCCtext().
   if &filetype !=# 'help'
     setlocal foldtext=FoldCCtext()
+  endif
+
+  if !&l:modifiable
+    setlocal nofoldenable
+    setlocal foldcolumn=0
   endif
 endfunction "}}}
 "}}}
