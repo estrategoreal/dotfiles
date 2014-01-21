@@ -116,6 +116,9 @@ NeoBundleLazy 'kana/vim-operator-replace', {
 NeoBundleLazy 'kana/vim-smartchr', {
       \ 'insert' : 1,
       \ }
+NeoBundleLazy 'majkinetor/unite-cmdmatch' , {
+      \ 'depends':  'Shougo/unite.vim',
+      \ 'mappings' : [['c', '<Plug>(unite_cmdmatch_complete)']] }
 NeoBundleLazy 'mrtazz/DoxygenToolkit.vim', {
       \ 'filetypes' : ['c', 'cpp'],
       \ }
@@ -236,6 +239,7 @@ call neobundle#config('neocomplete.vim', {
       \ 'lazy' : 1,
       \ 'autoload' : {
       \   'insert' : 1,
+      \   'commands' : 'NeoCompleteBufferMakeCache',
       \ }})
 else
 call neobundle#config('neocomplcache', {
@@ -1265,6 +1269,8 @@ cnoremap <C-l> <C-d>
 cnoremap <A-b> <S-Left>
 " <A-f>: forward one word.
 cnoremap <A-f> <S-Right>
+
+cmap <C-o> <Plug>(unite_cmdmatch_complete)
 "}}}
 
 " [Space]: Other useful commands "{{{
