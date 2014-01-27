@@ -171,9 +171,6 @@ NeoBundle 'Shougo/vimfiler'
 NeoBundle 'Shougo/vimproc'
 NeoBundle 'Shougo/vimshell'
 NeoBundleLazy 'Shougo/vinarise.vim'
-NeoBundleLazy 'sjl/gundo.vim', {
-      \ 'commands' : 'GundoToggle'
-      \ }
 NeoBundleLazy 't9md/vim-smalls', {
       \ 'mappings' : ['<Plug>(smalls)', '<Plug>(smalls-)']
       \ }
@@ -221,7 +218,7 @@ NeoBundleLazy 'yomi322/vim-gitcomplete', {
       \ 'filetype' : 'vimshell'
       \ }
 NeoBundleLazy 'yuratomo/w3m.vim', {
-      \ 'commands' : 'W3m',
+      \ 'commands' : 'W3mTab',
       \ }
 
 if exists(':OverCommandLine')
@@ -582,12 +579,12 @@ let g:tweetvim_display_separator = 0
 "}}}
 
 " camelcasemotion.vim "{{{
-nmap <silent> [Alt]w <Plug>CamelCaseMotion_w
-xmap <silent> [Alt]w <Plug>CamelCaseMotion_w
-omap <silent> [Alt]w <Plug>CamelCaseMotion_w
-nmap <silent> [Alt]b <Plug>CamelCaseMotion_b
-xmap <silent> [Alt]b <Plug>CamelCaseMotion_b
-omap <silent> [Alt]b <Plug>CamelCaseMotion_b
+nmap <silent> W <Plug>CamelCaseMotion_w
+xmap <silent> W <Plug>CamelCaseMotion_w
+omap <silent> W <Plug>CamelCaseMotion_w
+nmap <silent> B <Plug>CamelCaseMotion_b
+xmap <silent> B <Plug>CamelCaseMotion_b
+omap <silent> B <Plug>CamelCaseMotion_b
 ""}}}
 
 " alignta.vim "{{{
@@ -883,13 +880,13 @@ nnoremap <silent> [unite]s
 nnoremap <silent> [unite]t
       \ :<C-u>UniteWithCursorWord -buffer-name=tag tag tag/include<CR>
 if s:is_windows
-  nnoremap <silent> [unite]v
-        \ :<C-u>Unite -buffer-name=files -no-split -multi-line
+  nnoremap <silent> [Window]s
+        \ :<C-u>Unite -buffer-name=files -no-split -multi-line -unique
         \ jump_point file_point buffer_tab file_mru
         \ file_rec:! file file/new<CR>
 else
-  nnoremap <silent> [unite]v
-        \ :<C-u>Unite -buffer-name=files -no-split -multi-line
+  nnoremap <silent> [Window]s
+        \ :<C-u>Unite -buffer-name=files -no-split -multi-line -unique
         \ jump_point file_point buffer_tab file_mru
         \ file_rec/async:! file file/new<CR>
 endif
@@ -927,9 +924,9 @@ nnoremap [Tag]t <C-]> zv zz
 nnoremap <silent> [Tag]n :<C-u>tnext<CR>
 " Jump previous.
 nnoremap <silent> [Tag]p :<C-u>pop<CR>
-"nnoremap <silent><expr> [Tag]t  &filetype == 'help' ?  "\<C-]>" :
-      \ ":\<C-u>UniteWithCursorWord -buffer-name=tag tag tag/include\<CR>"
-"nnoremap <silent><expr> [Tag]p  &filetype == 'help' ?
+"nnoremap <silent><expr> [Tag]t &filetype == 'help' ?  "g\<C-]>" :
+      \ ":\<C-u>UniteWithCursorWord -buffer-name=tag -immediately tag tag/include\<CR>"
+"nnoremap <silent><expr> [Tag]p &filetype == 'help' ?
       \ ":\<C-u>pop\<CR>" : ":\<C-u>Unite jump\<CR>"
 "}}}
 
@@ -1120,10 +1117,6 @@ unlet bundle
 let g:vinarise_enable_auto_detect = 1
 "}}}
 
-" Gundo.vim "{{{
-nnoremap U :<C-u>GundoToggle<CR>
-"}}}
-
 " vim-smalls "{{{
 if neobundle#tap('vim-smalls')
   nmap S <Plug>(smalls)
@@ -1217,7 +1210,7 @@ endif
 "}}}
 
 " w3m.vim "{{{
-nnoremap W :<C-u>W3mTab<Space>
+nnoremap [Alt]w :<C-u>W3mTab<Space>
 if has('mac')
   let g:w3m#external_browser = 'open -a "Google Chrome"'
 elseif s:is_windows
@@ -1339,8 +1332,10 @@ endfunction
 " The prefix key.
 nnoremap [Alt] <Nop>
 xnoremap [Alt] <Nop>
+onoremap [Alt] <Nop>
 nmap e [Alt]
 xmap e [Alt]
+omap e [Alt]
 
 nnoremap [Alt]e e
 xnoremap [Alt]e e
