@@ -859,7 +859,7 @@ xmap ; [unite]
 
 nnoremap <expr><silent> [unite]b <SID>unite_build()
 function! s:unite_build()
-  return ':\<C-u>Unite -buffer-name=build' . tabpagenr() . ' -no-quit build\<CR>'
+  return ":\<C-u>Unite -buffer-name=build". tabpagenr() ." -no-quit build\<CR>"
 endfunction
 nnoremap <silent> [unite]c
       \ :<C-u>Unite gtags/context -buffer-name=search -auto-preview -no-quit<CR>
@@ -893,8 +893,8 @@ endif
 nnoremap <silent> [unite]w
       \ :<C-u>Unite window<CR>
 
-nnoremap <silent> [unite]g
-      \ :<C-u>Unite grep:. -buffer-name=search -auto-preview -no-quit -no-empty -resume<CR>
+nnoremap <silent><expr> [unite]g
+      \ ":\<C-u>Unite grep:. -buffer-name=grep%". tabpagenr() ." -auto-preview -no-quit -no-empty -resume\<CR>"
 nnoremap <silent> [unite]G
       \ :<C-u>call <SID>cursor_grep()<CR>
 xnoremap <silent> [unite]G
@@ -988,6 +988,11 @@ function! bundle.hooks.on_source(bundle)
     let g:unite_source_grep_command = 'ag'
     let g:unite_source_grep_default_opts = '--nocolor --nogroup --hidden'
     let g:unite_source_grep_recursive_opt = ''
+  elseif executable('pt')
+    " For pt.
+    let g:unite_source_grep_command = 'pt'
+    let g:unite_source_grep_default_opts = '--nogroup --nocolor'
+    let g:unite_source_grep_recursive_opt = ''
   elseif executable('ack-grep')
     " For ack.
     let g:unite_source_grep_command = 'ack-grep'
@@ -997,9 +1002,7 @@ function! bundle.hooks.on_source(bundle)
 
   " For unite-alias.
   let g:unite_source_alias_aliases = {}
-  let g:unite_source_alias_aliases.line_migemo = {
-        \ 'source' : 'line',
-        \ }
+  let g:unite_source_alias_aliases.line_migemo = 'line'
 
   " For unite-menu.
   let g:unite_source_menu_menus = {}
@@ -1489,6 +1492,11 @@ inoremap <C-U> <C-G>u<C-U>
 " In many terminal emulators the mouse works just fine, thus enable it.
 if has('mouse')
   set mouse=a
+  if has('mouse_sgr')
+    set ttymouse=sgr
+  else
+    set ttymouse=xterm2
+  endif
 endif
 
 " Switch syntax highlighting on, when the terminal has colors
