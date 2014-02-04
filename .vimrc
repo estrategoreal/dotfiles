@@ -122,9 +122,7 @@ NeoBundleLazy 'majkinetor/unite-cmdmatch' , {
 NeoBundleLazy 'mrtazz/DoxygenToolkit.vim', {
       \ 'filetypes' : ['c', 'cpp'],
       \ }
-NeoBundleLazy 'osyo-manga/unite-quickfix', {
-      \ 'unite_sources' : 'quickfix',
-      \ }
+NeoBundleLazy 'osyo-manga/unite-quickfix'
 NeoBundleLazy 'osyo-manga/vim-over', { 'autoload' : {
       \ 'commands' : ['OverCommandLine']
       \ }}
@@ -155,12 +153,9 @@ endif
 NeoBundle 'Shougo/neobundle-vim-scripts'
 NeoBundleLazy 'Shougo/neosnippet.vim'
 NeoBundle 'Shougo/unite.vim'
-NeoBundleLazy 'Shougo/unite-build', {
-      \ 'unite_sources' : 'build',
-      \ }
+NeoBundleLazy 'Shougo/unite-build'
 NeoBundleLazy 'Shougo/unite-ssh', {
       \ 'filetypes' : 'vimfiler',
-      \ 'unite_sources' : 'ssh',
       \ }
 NeoBundle 'Shougo/unite-sudo'
 NeoBundleLazy 'Shougo/vim-vcs', {
@@ -183,13 +178,12 @@ NeoBundleLazy 'thinca/vim-quickrun', {
       \   ['nxo', '<Plug>(quickrun)']],
       \ }
 NeoBundleLazy 'thinca/vim-ref', {
-      \ 'commands' : 'Ref'
+      \ 'commands' : 'Ref',
+      \ 'unite_sources' : 'ref',
       \ }
 NeoBundleLazy 'tpope/vim-endwise'
 NeoBundle 'tpope/vim-fugitive'
-NeoBundleLazy 'Shougo/unite-help', {
-      \ 'unite_sources' : 'help'
-      \ }
+NeoBundleLazy 'Shougo/unite-help'
 NeoBundleLazy 'tsukkee/unite-tag', {
       \ 'unite_sources' : ['tag', 'tag/include', 'tag/file']
       \ }
