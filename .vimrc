@@ -339,23 +339,25 @@ if !exists('did_encoding_settings') && has('iconv')
   " Build encodings.
   let &fileencodings = 'ucs-bom'
   if &encoding !=# 'utf-8'
-    let &fileencodings = &fileencodings . ',' . 'ucs-2le'
-    let &fileencodings = &fileencodings . ',' . 'ucs-2'
+    let &fileencodings .= ',' . 'ucs-2le'
+    let &fileencodings .= ',' . 'ucs-2'
   endif
-  let &fileencodings = &fileencodings . ',' . s:enc_jis
+  let &fileencodings .= ',' . 'utf-8'
+  let &fileencodings .= ',' . s:enc_jis
 
   if &encoding ==# 'utf-8'
-    let &fileencodings = &fileencodings . ',' . s:enc_euc
-    let &fileencodings = &fileencodings . ',' . 'cp932'
+    let &fileencodings = ',' . s:enc_euc
+    let &fileencodings = ',' . 'cp932'
   elseif &encoding =~# '^euc-\%(jp\|jisx0213\)$'
     let &encoding = s:enc_euc
-    let &fileencodings = &fileencodings . ',' . 'utf-8'
-    let &fileencodings = &fileencodings . ',' . 'cp932'
+    let &fileencodings = ',' . 'cp932'
+    let &fileencodings = ',' . &encoding
   else  " cp932
-    let &fileencodings = &fileencodings . ',' . 'utf-8'
-    let &fileencodings = &fileencodings . ',' . s:enc_euc
+    let &fileencodings = ',' . 'utf-8'
+    let &fileencodings = ',' . s:enc_euc
+    let &fileencodings = ',' . &encoding
   endif
-  let &fileencodings = &fileencodings . ',' . &encoding
+  let &fileencodings = ',' . 'cp20932'
 
   unlet s:enc_euc
   unlet s:enc_jis
