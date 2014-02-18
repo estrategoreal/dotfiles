@@ -151,6 +151,7 @@ NeoBundle 'Shougo/neocomplcache'
 NeoBundleFetch 'Shougo/neocomplete.vim'
 endif
 NeoBundle 'Shougo/neobundle-vim-scripts'
+NeoBundle 'Shougo/neomru.vim'
 NeoBundleLazy 'Shougo/neosnippet.vim'
 NeoBundle 'Shougo/unite.vim'
 NeoBundleLazy 'Shougo/unite-build'
@@ -1053,7 +1054,7 @@ if neobundle#tap('vimfiler') "{{{
     function! s:vimfiler_my_settings() "{{{
       " Overwrite settings.
       nnoremap <silent><buffer> J
-            \ <C-u>:Unite -buffer-name=files -default-action=lcd directory_mru<CR>
+            \ :<C-u>Unite -buffer-name=files -default-action=lcd directory_mru<CR>
 
       " Migemo search.
       if !empty(unite#get_filters('matcher_migemo'))
@@ -1098,7 +1099,7 @@ function! bundle.hooks.on_source(bundle)
     xmap <buffer> y <Plug>(operator-concealedyank)
 
     nnoremap <silent><buffer> J
-          \ <C-u>:Unite -buffer-name=files -default-action=lcd directory_mru<CR>
+          \ :<C-u>Unite -buffer-name=files -default-action=lcd directory_mru<CR>
     call vimshell#set_alias('ll', 'ls -l')
     call vimshell#set_alias('la', 'ls -alF')
     call vimshell#set_alias('l', 'ls -CF')
