@@ -144,10 +144,10 @@ NeoBundle 'rhysd/vim-operator-surround', {
 NeoBundleLazy 'LeafCage/foldCC', {
       \ 'filetypes' : 'vim' }
 if has('lua') && (v:version > 703 || (v:version == 703 && has('patch885')))
-NeoBundleFetch 'Shougo/neocomplcache'
+NeoBundleFetch 'Shougo/neocomplcache.vim'
 NeoBundle 'Shougo/neocomplete.vim'
 else
-NeoBundle 'Shougo/neocomplcache'
+NeoBundle 'Shougo/neocomplcache.vim'
 NeoBundleFetch 'Shougo/neocomplete.vim'
 endif
 NeoBundle 'Shougo/neobundle-vim-scripts'
@@ -231,10 +231,9 @@ call neobundle#config('neocomplete.vim', {
       \ 'lazy' : 1,
       \ 'autoload' : {
       \   'insert' : 1,
-      \   'commands' : 'NeoCompleteBufferMakeCache',
       \ }})
 else
-call neobundle#config('neocomplcache', {
+call neobundle#config('neocomplcache.vim', {
       \ 'lazy' : 1,
       \ 'autoload' : {
       \   'insert' : 1,
@@ -343,22 +342,21 @@ if !exists('did_encoding_settings') && has('iconv')
     let &fileencodings .= ',' . 'ucs-2le'
     let &fileencodings .= ',' . 'ucs-2'
   endif
-  let &fileencodings .= ',' . 'utf-8'
   let &fileencodings .= ',' . s:enc_jis
+  let &fileencodings .= ',' . 'utf-8'
 
   if &encoding ==# 'utf-8'
-    let &fileencodings = ',' . s:enc_euc
-    let &fileencodings = ',' . 'cp932'
+    let &fileencodings .= ',' . s:enc_euc
+    let &fileencodings .= ',' . 'cp932'
   elseif &encoding =~# '^euc-\%(jp\|jisx0213\)$'
     let &encoding = s:enc_euc
-    let &fileencodings = ',' . 'cp932'
-    let &fileencodings = ',' . &encoding
+    let &fileencodings .= ',' . 'cp932'
+    let &fileencodings .= ',' . &encoding
   else  " cp932
-    let &fileencodings = ',' . 'utf-8'
-    let &fileencodings = ',' . s:enc_euc
-    let &fileencodings = ',' . &encoding
+    let &fileencodings .= ',' . s:enc_euc
+    let &fileencodings .= ',' . &encoding
   endif
-  let &fileencodings = ',' . 'cp20932'
+  let &fileencodings .= ',' . 'cp20932'
 
   unlet s:enc_euc
   unlet s:enc_jis
@@ -455,6 +453,13 @@ endif
 " Use grep.
 set grepprg=grep\ -nH
 
+" Reload .vimrc and .gvimrc automatically.
+autocmd MyAutoCmd BufWritePost .vimrc,vimrc source $MYVIMRC |
+      \ call s:set_syntax_of_user_defined_commands() |
+      \ if has('gui_running') | source $MYGVIMRC | echo "source $MYVIMRC"
+autocmd MyAutoCmd BufWritePost .gvimrc,gvimrc
+      \ if has('gui_running') | source $MYGVIMRC | echo "source $MYGVIMRC"
+
 " Keymapping timeout.
 set timeout timeoutlen=3000 ttimeoutlen=100
 
@@ -512,6 +517,10 @@ set completeopt=menuone
 set complete=.
 " Set the maximum number of items to show in the popup menu.
 set pumheight=20
+
+" Don't redraw while macro executing.
+set lazyredraw
+set ttyfast
 
 " Enable multibyte format.
 set formatoptions+=mM
@@ -740,7 +749,7 @@ else
 " Use neocomplcache.
 let g:neocomplcache_enable_at_startup = 1
 
-let bundle = neobundle#get('neocomplcache')
+let bundle = neobundle#get('neocomplcache.vim')
 function! bundle.hooks.on_source(bundle)
   " Use smartcase.
   let g:neocomplcache_enable_smart_case = 0
