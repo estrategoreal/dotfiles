@@ -499,10 +499,19 @@ set cmdheight=2
 set noshowcmd
 " Not show mode.
 set noshowmode
-" Set the content of the status line.
-set statusline=%<%m%r%h%w%y%{'['.(&fenc!=''?&fenc:&enc).':'.&ff.']'}\ %1.40f%=%{fugitive#statusline()}\ \ %l/%L,%c%V%5P
 " Always display the line with tab page labels.
 set showtabline=2
+" Set the content of the status line.
+set statusline=%<%m%r%h%w%y%{'['.(&fenc!=''?&fenc:&enc).':'.&ff.']'}\ %1.40f%=%{fugitive#statusline()}\ \ %l/%L,%c%V%5P
+
+" Turn down a long line appointed in 'breakat'
+set linebreak
+set showbreak=>\
+set breakat=\ \	;:,!?
+
+" Do not display greetings message at the time of Vim start.
+set shortmess=aTI
+
 " Use visual bell instead of beeping.
 set visualbell
 
@@ -518,9 +527,18 @@ set complete=.
 " Set the maximum number of items to show in the popup menu.
 set pumheight=20
 
+" Report changes.
+set report=0
+
+" Maintain a current line at the time of movement as much as possible.
+set nostartofline
+
 " Don't redraw while macro executing.
 set lazyredraw
 set ttyfast
+
+" When a line is long, do not omit it in @.
+set display=lastline
 
 " Enable multibyte format.
 set formatoptions+=mM
