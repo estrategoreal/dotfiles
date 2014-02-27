@@ -430,6 +430,11 @@ endif
 
 " Highlight the matching bracket.
 set showmatch
+" Highlight when CursorMoved.
+set cpoptions-=m
+set matchtime=3
+" Highlight <>.
+set matchpairs+=<:>
 
 " Display another buffer even if the current buffer isn't saved.
 set hidden
@@ -506,7 +511,7 @@ set statusline=%<%m%r%h%w%y%{'['.(&fenc!=''?&fenc:&enc).':'.&ff.']'}\ %1.40f%=%{
 
 " Turn down a long line appointed in 'breakat'
 set linebreak
-set showbreak=>\
+set showbreak=>\ 
 set breakat=\ \	;:,!?
 
 " Do not display greetings message at the time of Vim start.
