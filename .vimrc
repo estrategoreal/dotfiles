@@ -89,6 +89,9 @@ NeoBundleLazy 'bkad/CamelCaseMotion', {
 NeoBundleLazy 'chikatoike/concealedyank.vim', {
       \   'mappings' : [['x', '<Plug>(operator-concealedyank)']]
       \ }
+NeoBundleLazy 'gcmt/wildfire.vim', {
+      \ 'mappings' : '<Plug>(wildfire-'
+      \ }
 NeoBundle 'gregsexton/gitv'
 "NeoBundle 'h1mesuke/unite-outline'
 NeoBundle 'Shougo/unite-outline'
@@ -163,9 +166,9 @@ NeoBundleLazy 'Shougo/vim-vcs', {
       \ 'depends' : 'thinca/vim-openbuf',
       \ 'autoload' : {'commands' : 'Vcs'},
       \ }
-NeoBundle 'Shougo/vimfiler'
-NeoBundle 'Shougo/vimproc'
-NeoBundle 'Shougo/vimshell'
+NeoBundle 'Shougo/vimfiler.vim'
+NeoBundle 'Shougo/vimproc.vim'
+NeoBundle 'Shougo/vimshell.vim'
 NeoBundleLazy 'Shougo/vinarise.vim'
 NeoBundleLazy 't9md/vim-smalls', {
       \ 'mappings' : ['<Plug>(smalls)', '<Plug>(smalls-)']
@@ -184,6 +187,9 @@ NeoBundleLazy 'thinca/vim-ref', {
       \ }
 NeoBundleLazy 'tpope/vim-endwise'
 NeoBundle 'tpope/vim-fugitive'
+NeoBundleLazy 'tpope/vim-repeat', {
+      \ 'mappings' : '.',
+      \ }
 NeoBundleLazy 'Shougo/unite-help'
 NeoBundleLazy 'tsukkee/unite-tag', {
       \ 'unite_sources' : ['tag', 'tag/include', 'tag/file']
@@ -255,7 +261,7 @@ call neobundle#config('unite.vim',{
       \                   'complete' : 'customlist,unite#complete_source'},
       \                 'UniteWithCursorWord', 'UniteWithInput']
       \ }})
-call neobundle#config('vimfiler', {
+call neobundle#config('vimfiler.vim', {
       \ 'lazy' : 1,
       \ 'depends' : 'Shougo/unite.vim',
       \ 'autoload' : {
@@ -615,6 +621,24 @@ nmap <silent> B <Plug>CamelCaseMotion_b
 xmap <silent> B <Plug>CamelCaseMotion_b
 omap <silent> B <Plug>CamelCaseMotion_b
 ""}}}
+
+" wildfire
+nmap <Enter>      <Plug>(wildfire-fuel)
+vmap <Enter>      <Plug>(wildfire-fuel)
+vmap <S-Enter>    <Plug>(wildfire-water)
+
+if !exists('g:wildfire_objects')
+  let g:wildfire_objects = [
+        \ 'i''', 'i"', 'i)', 'a)', 'i]', 'a]',
+        \ 'i}', 'a}', 'i>', 'a>', 'ip', 'it',
+        \ 'at'
+        \]
+endif
+
+" gitv.vim "{{{
+nnoremap <silent> [Space]gv :<C-u>Gitv<CR>
+nnoremap <silent> [Space]gf :<C-u>Gitv!<CR>
+"}}}
 
 " alignta.vim "{{{
 let g:unite_source_alignta_preset_arguments = [
@@ -1060,7 +1084,7 @@ unlet bundle
 "}}}
 
 " vimfiler.vim "{{{
-if neobundle#tap('vimfiler') "{{{
+if neobundle#tap('vimfiler.vim') "{{{
   nnoremap <silent> <C-g> :<C-u>VimFiler -buffer-name=explorer -simple -toggle<CR>
 
   function! neobundle#tapped.hooks.on_source(bundle)
@@ -1103,7 +1127,7 @@ endif "}}}
 " vimshell.vim "{{{
 nmap <silent> <C-@> <Plug>(vimshell_switch)
 
-let bundle = neobundle#get('vimshell')
+let bundle = neobundle#get('vimshell.vim')
 function! bundle.hooks.on_source(bundle)
   let g:vimshell_user_prompt = 'fnamemodify(getcwd(), ":~")'
   let g:vimshell_right_prompt = 'vcs#info("(%s)-[%b]%p", "(%s)-[%b|%a]%p")'
@@ -1175,11 +1199,6 @@ function! bundle.hooks.on_source(bundle)
     nmap <buffer> [Tag]p <Plug>(ref-back)
   endfunction"}}}
 endfunction
-"}}}
-
-" gitv.vim "{{{
-nnoremap <silent> [Space]gv :<C-u>Gitv<CR>
-nnoremap <silent> [Space]gf :<C-u>Gitv!<CR>
 "}}}
 
 " fugitive.vim "{{{
