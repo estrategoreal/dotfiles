@@ -93,8 +93,7 @@ NeoBundleLazy 'gcmt/wildfire.vim', {
       \ 'mappings' : '<Plug>(wildfire-'
       \ }
 NeoBundle 'gregsexton/gitv'
-"NeoBundle 'h1mesuke/unite-outline'
-NeoBundle 'Shougo/unite-outline'
+NeoBundleLazy 'Shougo/unite-outline'
 NeoBundle 'h1mesuke/vim-alignta'
 NeoBundleLazy 'hail2u/vim-css3-syntax'
 NeoBundle 'hewes/unite-gtags'
@@ -126,9 +125,6 @@ NeoBundleLazy 'mrtazz/DoxygenToolkit.vim', {
       \ 'filetypes' : ['c', 'cpp'],
       \ }
 NeoBundleLazy 'osyo-manga/unite-quickfix'
-NeoBundleLazy 'osyo-manga/vim-over', { 'autoload' : {
-      \ 'commands' : ['OverCommandLine']
-      \ }}
 if has('python')
 NeoBundleLazy 'Rip-Rip/clang_complete', {
       \ 'autoload' : {
@@ -147,29 +143,84 @@ NeoBundle 'rhysd/vim-operator-surround', {
 NeoBundleLazy 'LeafCage/foldCC', {
       \ 'filetypes' : 'vim' }
 if has('lua') && (v:version > 703 || (v:version == 703 && has('patch885')))
-NeoBundleFetch 'Shougo/neocomplcache.vim'
-NeoBundle 'Shougo/neocomplete.vim'
+NeoBundleFetch 'Shougo/neocomplcache.vim', {
+      \ 'insert' : 1
+      \ }
+NeoBundleLazy 'Shougo/neocomplete.vim', {
+      \ 'insert' : 1
+      \ }
 else
-NeoBundle 'Shougo/neocomplcache.vim'
-NeoBundleFetch 'Shougo/neocomplete.vim'
+NeoBundle 'Shougo/neocomplcache.vim', {
+      \ 'insert' : 1
+      \ }
+NeoBundleFetch 'Shougo/neocomplete.vim', {
+      \ 'insert' : 1
+      \ }
 endif
 NeoBundle 'Shougo/neobundle-vim-scripts'
 NeoBundle 'Shougo/neomru.vim'
-NeoBundleLazy 'Shougo/neosnippet.vim'
-NeoBundle 'Shougo/unite.vim'
+NeoBundleLazy 'Shougo/neosnippet.vim', {
+      \ 'depends' : 'Shougo/neosnippet-snippets',
+      \ 'insert' : 1,
+      \ 'filetypes' : 'snippet',
+      \ 'unite_sources' : [
+      \    'neosnippet', 'neosnippet/user', 'neosnippet/runtime'],
+      \ }
+NeoBundleLazy 'Shougo/unite.vim', {
+      \ 'commands' : [{ 'name' : 'Unite',
+      \                 'complete' : 'customlist,unite#complete_source'},
+      \                 'UniteWithCursorWord', 'UniteWithInput']
+      \ }
 NeoBundleLazy 'Shougo/unite-build'
 NeoBundleLazy 'Shougo/unite-ssh', {
       \ 'filetypes' : 'vimfiler',
+      \ }
+NeoBundleLazy 'ujihisa/vimshell-ssh', {
+      \ 'filetypes' : 'vimshell',
       \ }
 NeoBundle 'Shougo/unite-sudo'
 NeoBundleLazy 'Shougo/vim-vcs', {
       \ 'depends' : 'thinca/vim-openbuf',
       \ 'autoload' : {'commands' : 'Vcs'},
       \ }
-NeoBundle 'Shougo/vimfiler.vim'
-NeoBundle 'Shougo/vimproc.vim'
-NeoBundle 'Shougo/vimshell.vim'
-NeoBundleLazy 'Shougo/vinarise.vim'
+NeoBundleLazy 'Shougo/vimfiler.vim', {
+      \ 'depends' : 'Shougo/unite.vim',
+      \ 'commands' : [
+      \         { 'name' : 'VimFiler',
+      \           'complete' : 'customlist,vimfiler#complete' },
+      \         { 'name' : 'VimFilerTab',
+      \           'complete' : 'customlist,vimfiler#complete' },
+      \         { 'name' : 'VimFilerExplorer',
+      \           'complete' : 'customlist,vimfiler#complete' },
+      \         { 'name' : 'Edit',
+      \           'complete' : 'customlist,vimfiler#complete' },
+      \         { 'name' : 'Write',
+      \           'complete' : 'customlist,vimfiler#complete' },
+      \         'Read', 'Source'],
+      \ 'mappings' : '<Plug>(vimfiler_',
+      \ 'explorer' : 1,
+      \ }
+NeoBundle 'Shougo/vimproc.vim', {
+      \ 'build' : {
+      \     'windows' : 'make -f make_mingw32.mak',
+      \     'cygwin' : 'make -f make_cygwin.mak',
+      \     'mac' : 'make -f make_mac.mak',
+      \     'unix' : 'make -f make_unix.mak',
+      \    }
+      \ }
+NeoBundleLazy 'Shougo/vimshell.vim', {
+      \ 'commands' : [{ 'name' : 'VimShell',
+      \                 'complete' : 'customlist,vimshell#complete'},
+      \               'VimShellExecute', 'VimShellInteractive',
+      \               'VimShellCreate',
+      \               'VimShellTerminal', 'VimShellPop'],
+      \ 'mappings' : '<Plug>(vimshell_'
+      \ }
+NeoBundleLazy 'Shougo/vinarise.vim', {
+      \ 'commands' : [{
+      \   'name' : 'Vinarise', 'complete' : 'file'
+      \ }]
+      \ }
 NeoBundleLazy 't9md/vim-smalls', {
       \ 'mappings' : ['<Plug>(smalls)', '<Plug>(smalls-)']
       \ }
@@ -200,6 +251,8 @@ NeoBundleLazy 'tyru/caw.vim', {
       \ }
 NeoBundleLazy 'tyru/open-browser.vim', {
       \ 'mappings' : '<Plug>(open-browser-',
+      \ 'commands' : ['OpenBrowserSearch', 'OpenBrowser'],
+      \ 'functions' : 'openbrowser#open',
       \ }
 NeoBundleLazy 'ujihisa/vimshell-ssh', {
       \ 'filetypes' : 'vimshell',
@@ -221,91 +274,6 @@ NeoBundleLazy 'yomi322/vim-gitcomplete', {
 NeoBundleLazy 'yuratomo/w3m.vim', {
       \ 'commands' : 'W3mTab',
       \ }
-
-if exists(':OverCommandLine')
-  xnoremap :s :OverCommandLine<CR>
-endif
-
-" NeoBundle configurations.
-call neobundle#config('unite-outline', {
-      \ 'lazy' : 1,
-      \ 'autoload' : {
-      \   'unite_sources' : 'outline'},
-      \ })
-if has('lua') && (v:version > 703 || (v:version == 703 && has('patch885')))
-call neobundle#config('neocomplete.vim', {
-      \ 'lazy' : 1,
-      \ 'autoload' : {
-      \   'insert' : 1,
-      \ }})
-else
-call neobundle#config('neocomplcache.vim', {
-      \ 'lazy' : 1,
-      \ 'autoload' : {
-      \   'insert' : 1,
-      \ }})
-endif
-call neobundle#config('neosnippet.vim', {
-      \ 'lazy' : 1,
-      \ 'depends' : 'Shougo/neosnippet-snippets',
-      \ 'autoload' : {
-      \   'insert' : 1,
-      \   'filetypes' : 'snippet',
-      \   'unite_sources' : [
-      \      'neosnippet', 'neosnippet/user', 'neosnippet/runtime'],
-      \ }})
-call neobundle#config('unite.vim',{
-      \ 'lazy' : 1,
-      \ 'autoload' : {
-      \   'commands' : [{ 'name' : 'Unite',
-      \                   'complete' : 'customlist,unite#complete_source'},
-      \                 'UniteWithCursorWord', 'UniteWithInput']
-      \ }})
-call neobundle#config('vimfiler.vim', {
-      \ 'lazy' : 1,
-      \ 'depends' : 'Shougo/unite.vim',
-      \ 'autoload' : {
-      \    'commands' : [
-      \                  { 'name' : 'VimFiler',
-      \                    'complete' : 'customlist,vimfiler#complete' },
-      \                  { 'name' : 'VimFilerTab',
-      \                    'complete' : 'customlist,vimfiler#complete' },
-      \                  { 'name' : 'VimFilerExplorer',
-      \                    'complete' : 'customlist,vimfiler#complete' },
-      \                  { 'name' : 'Edit',
-      \                    'complete' : 'customlist,vimfiler#complete' },
-      \                  { 'name' : 'Write',
-      \                    'complete' : 'customlist,vimfiler#complete' },
-      \                  'Read', 'Source'],
-      \    'mappings' : '<Plug>(vimfiler_',
-      \    'explorer' : 1,
-      \ }
-      \ })
-call neobundle#config('vimproc', {
-      \ 'build' : {
-      \     'windows' : 'make -f make_mingw32.mak',
-      \     'cygwin' : 'make -f make_cygwin.mak',
-      \     'mac' : 'make -f make_mac.mak',
-      \     'unix' : 'make -f make_unix.mak',
-      \    },
-      \ })
-call neobundle#config('vimshell', {
-      \ 'lazy' : 1,
-      \ 'autoload' : {
-      \   'commands' : [{ 'name' : 'VimShell',
-      \                   'complete' : 'customlist,vimshell#complete'},
-      \                 'VimShellExecute', 'VimShellInteractive',
-      \                 'VimShellCreate',
-      \                 'VimShellTerminal', 'VimShellPop'],
-      \   'mappings' : '<Plug>(vimshell_'
-      \ }})
-call neobundle#config('vinarise.vim', {
-      \ 'lazy' : 1,
-      \ 'autoload' : {
-      \   'commands' : [{
-      \     'name' : 'Vinarise', 'complete' : 'file'
-      \   }]
-      \ }})
 
 " Installation check.
 NeoBundleCheck
