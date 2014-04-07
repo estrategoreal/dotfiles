@@ -442,12 +442,22 @@ autocmd MyAutoCmd BufWritePost .gvimrc,gvimrc
 " Keymapping timeout.
 set timeout timeoutlen=3000 ttimeoutlen=100
 
+" CursorHold time.
+set updatetime=1000
+
 " Enable automatic C program indenting.
 set cindent
 
 " Set a directory for the backup file.
 set backupdir=~/.vim/tmp
 let &directory = &backupdir
+
+" Set undofile.
+set undofile
+let &undodir=&directory
+
+" Enable virtualedit in visual block mode.
+set virtualedit=block
 
 " Use autofmt.
 set formatexpr=autofmt#japanese#formatexpr()
@@ -591,9 +601,9 @@ omap <silent> B <Plug>CamelCaseMotion_b
 ""}}}
 
 " wildfire
-nmap <Enter>      <Plug>(wildfire-fuel)
-vmap <Enter>      <Plug>(wildfire-fuel)
-vmap <S-Enter>    <Plug>(wildfire-water)
+nmap <Enter>   <Plug>(wildfire-fuel)
+vmap <Enter>   <Plug>(wildfire-fuel)
+vmap <S-Enter> <Plug>(wildfire-water)
 
 if !exists('g:wildfire_objects')
   let g:wildfire_objects = [
