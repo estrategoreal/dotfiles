@@ -763,7 +763,7 @@ function! bundle.hooks.on_source(bundle)
   let g:clang_complete_auto = 0
   let g:clang_use_library = 1
   if s:is_windows
-    let g:clang_library_path = 'c:/MinGW/msys/1.0/lib'
+    let g:clang_library_path = 'C:/MinGW64/msys/lib'
   endif
 endfunction
 
@@ -801,7 +801,7 @@ function! bundle.hooks.on_source(bundle)
   let g:clang_complete_auto = 0
   let g:clang_use_library = 1
   if s:is_windows
-    let g:clang_library_path = 'c:/MinGW/msys/1.0/lib'
+    let g:clang_library_path = 'C:/MinGW64/msys/lib'
   endif
   if !exists('g:neocomplcache_force_omni_patterns')
     let g:neocomplcache_force_omni_patterns = {}
@@ -1243,8 +1243,8 @@ nnoremap [Alt]w :<C-u>W3mTab<Space>
 if has('mac')
   let g:w3m#external_browser = 'open -a "Google Chrome"'
 elseif s:is_windows
-  let g:w3m#command = 'c:/MinGW/msys/1.0/local/bin/w3m.exe'
-  let g:w3m#external_browser = '"'.$USERPROFILE.'/Local Settings/Application Data/Google/Chrome/Application/chrome.exe'.'"'
+  let g:w3m#command = 'C:/MinGW64/msys/local/bin/w3m.exe'
+  let g:w3m#external_browser = 'C:/Program\ Files\ (x86)/Google/Chrome/Application/chrome.exe'
 elseif s:is_freebsd
   let g:w3m#external_browser = 'chrome'
 else
@@ -1481,7 +1481,7 @@ if !exists('g:colors_name') && !has('gui_running')
 endif
 
 if s:is_windows
-  set shell=c:/MinGW/msys/1.0/bin/bash
+  set shell=C:/MinGW64/msys/bin/bash
 elseif has('win32unix')
   set shell=bash
 else
