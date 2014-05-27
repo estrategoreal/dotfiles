@@ -49,7 +49,7 @@ else
 endif
 
 " Save the setting of window.
-set columns=89
+set columns=87
 let g:save_window_file = expand('~/.vimwinpos')
 augroup SaveWindow
   autocmd!

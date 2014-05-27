@@ -417,7 +417,7 @@ set infercase
 set foldenable
 set foldmethod=marker
 " Show fold level.
-set foldcolumn=3
+set foldcolumn=1
 set fillchars=vert:\|
 set commentstring=%s
 
