@@ -1423,6 +1423,8 @@ command! -nargs=1 -complete=file Diff tabedit % | vertical diffsplit <args>
 nnoremap <silent> co :ContinuousNumber <C-a><CR>
 vnoremap <silent> co :ContinuousNumber <C-a><CR>
 command! -count -nargs=1 ContinuousNumber let c = col('.')|for n in range(1, <count>?<count>-line('.'):1)|exec 'normal! j' . n . <q-args>|call cursor('.', c)|endfor
+
+command! -nargs=+ Calc :ruby print <args>
 "}}}
 
 "-----------------------------------------------------------------------------
