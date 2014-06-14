@@ -1310,12 +1310,12 @@ function! s:my_tabnew(file)
   if empty(a:file)
     tabnew
     vsplit
-    VimFiler -buffer-name=explorer -simple -toggle
+    VimFiler -buffer-name=explorer -toggle
   else
     execute 'tabedit ' . a:file
     vsplit
     wincmd l
-    VimFiler -buffer-name=explorer -simple -toggle
+    VimFiler -buffer-name=explorer -toggle
   endif
 endfunction
 
