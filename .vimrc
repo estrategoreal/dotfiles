@@ -954,6 +954,8 @@ if neobundle#tap('unite.vim') "{{{
     " Keymapping in unite.vim.
     autocmd MyAutoCmd FileType unite call s:unite_my_settings()
     function! s:unite_my_settings() "{{{
+      call unite#custom#default_action('directory', 'cd')
+
       " Overwrite settings.
       nmap <buffer> <ESC>   <Plug>(unite_exit)
       imap <buffer> jj      <Plug>(unite_insert_leave)
