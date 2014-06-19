@@ -450,7 +450,7 @@ let &directory = &backupdir
 
 " Set undofile.
 set undofile
-let &undodir=&directory
+set undodir=~/.vim/undo
 
 " Enable virtualedit in visual block mode.
 set virtualedit=block
