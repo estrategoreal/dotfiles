@@ -889,17 +889,10 @@ if neobundle#tap('unite.vim') "{{{
         \ :<C-u>Unite source<CR>
   nnoremap <silent> [unite]t
         \ :<C-u>UniteWithCursorWord -buffer-name=tag tag tag/include<CR>
-  if s:is_windows
-    nnoremap <silent> [Window]s
-          \ :<C-u>Unite -buffer-name=files -no-split -multi-line -unique
-          \ jump_point file_point buffer_tab file_mru
-          \ file_rec:! file file/new<CR>
-  else
-    nnoremap <silent> [Window]s
-          \ :<C-u>Unite -buffer-name=files -no-split -multi-line -unique
-          \ jump_point file_point buffer_tab file_mru
-          \ file_rec/async:! file file/new<CR>
-  endif
+  nnoremap <silent> [Window]s
+        \ :<C-u>Unite -buffer-name=files -no-split -multi-line -unique -silent
+        \ jump_point file_point buffer_tab:- file_mru
+        \ file_rec/git file file/new<CR>
   nnoremap <silent> [unite]w
         \ :<C-u>Unite window<CR>
 
@@ -1236,6 +1229,13 @@ endfunction
 "-----------------------------------------------------------------------------
 " Key-mappings: "{{{
 "
+" Indent "{{{
+nnoremap > >>
+nnoremap < <<
+xnoremap > >gv
+xnoremap < <gv
+"}}}
+
 " Command-line mode keymappings: "{{{
 " <C-a>: start of line.
 cnoremap <C-a> <Home>
