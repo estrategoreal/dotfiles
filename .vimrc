@@ -430,10 +430,10 @@ endif
 set grepprg=grep\ -nH
 
 " Reload .vimrc and .gvimrc automatically.
-autocmd MyAutoCmd BufWritePost .vimrc,vimrc source $MYVIMRC |
-      \ if has('gui_running') | source $MYGVIMRC | echo "source $MYVIMRC"
-autocmd MyAutoCmd BufWritePost .gvimrc,gvimrc
-      \ if has('gui_running') | source $MYGVIMRC | echo "source $MYGVIMRC"
+"autocmd MyAutoCmd BufWritePost .vimrc,vimrc source $MYVIMRC |
+"      \ if has('gui_running') | source $MYGVIMRC | echo "source $MYVIMRC"
+"autocmd MyAutoCmd BufWritePost .gvimrc,gvimrc
+"      \ if has('gui_running') | source $MYGVIMRC | echo "source $MYGVIMRC"
 
 " Keymapping timeout.
 set timeout timeoutlen=3000 ttimeoutlen=100
@@ -607,8 +607,8 @@ nnoremap <silent> [Space]gf :<C-u>Gitv!<CR>
 
 " alignta.vim "{{{
 let g:unite_source_alignta_preset_arguments = [
-      \ ["Align at '='", '=>\='],
       \ ["Align at '/*' & '*/'", '<-- /* -> */' ],
+      \ ["Align at '='", '=>\='],
       \ ["Align at ':'", '01 :'],
       \ ["Align at '|'", '|'   ],
       \ ["Align at ')'", '0 )' ],
@@ -1406,7 +1406,9 @@ inoremap <C-q> <ESC>gUiw`]a
 
 " Clear highlight.
 nnoremap <silent> <ESC><ESC> :<C-u>nohlsearch<CR>
-"}}}
+
+" Easily macro.
+nnoremap @@ @a
 
 " Search.
 nnoremap ;n  ;
