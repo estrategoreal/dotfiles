@@ -135,6 +135,7 @@ NeoBundleLazy 'rhysd/accelerated-jk', {
       \ 'mappings' : '<Plug>(accelerated_jk_',
       \ }
 NeoBundleLazy 'rhysd/vim-operator-surround', {
+      \ 'depends' : 'vim-operator-user',
       \   'mappings' : '<Plug>(operator-surround',
       \ }
 NeoBundleLazy 'LeafCage/foldCC', {
@@ -217,9 +218,6 @@ NeoBundleLazy 'Shougo/vinarise.vim', {
       \ 'commands' : [{
       \   'name' : 'Vinarise', 'complete' : 'file'
       \ }]
-      \ }
-NeoBundleLazy 't9md/vim-smalls', {
-      \ 'mappings' : ['<Plug>(smalls)', '<Plug>(smalls-)']
       \ }
 NeoBundleLazy 'thinca/vim-qfreplace', {
       \ 'filetypes' : ['unite', 'quickfix'],
@@ -472,10 +470,6 @@ if s:is_windows
 else
   set listchars=tab:▸\ ,trail:-,extends:»,precedes:«,nbsp:%
 endif
-" Wrap long lines.
-set wrap
-" Wrap conditions.
-set whichwrap+=h,l,<,>,[,],b,s,~
 " Always display a status line.
 set laststatus=2
 " Height of command line.
@@ -491,8 +485,16 @@ set statusline=%<%m%r%h%w%y%{'['.(&fenc!=''?&fenc:&enc).':'.&ff.']'}\ %1.40f%=%{
 
 " Turn down a long line appointed in 'breakat'
 set linebreak
-set showbreak=>\ 
+set showbreak=\ 
 set breakat=\ \	;:,!?
+" Wrap conditions.
+set whichwrap+=h,l,<,>,[,],b,s,~
+if exists('+breakindent')
+  set breakindent
+  set wrap
+else
+  set nowrap
+endif
 
 " Do not display greetings message at the time of Vim start.
 set shortmess=aTI
@@ -567,11 +569,13 @@ let g:SimpleJsIndenter_CaseIndentLevel = -1
 "-----------------------------------------------------------------------------
 " Plugin: "{{{
 "
-" vim-operator-surround.vim "{{{
-nmap <silent>sa <Plug>(operator-surround-append)
-nmap <silent>sd <Plug>(operator-surround-delete)
-nmap <silent>sr <Plug>(operator-surround-replace)
-"}}}
+if neobundle#tap('vim-operator-surround') "{{{
+  nmap <silent>sa <Plug>(operator-surround-append)a
+  nmap <silent>sd <Plug>(operator-surround-delete)a
+  nmap <silent>sr <Plug>(operator-surround-replace)a
+
+  call neobundle#untap()
+endif "}}}
 
 " TweetVim "{{{
 " Start TweetVim.
@@ -587,17 +591,21 @@ endfunction"}}}
 let g:tweetvim_display_separator = 0
 "}}}
 
-" camelcasemotion.vim "{{{
-nmap <silent> W <Plug>CamelCaseMotion_w
-xmap <silent> W <Plug>CamelCaseMotion_w
-omap <silent> W <Plug>CamelCaseMotion_w
-nmap <silent> B <Plug>CamelCaseMotion_b
-xmap <silent> B <Plug>CamelCaseMotion_b
-omap <silent> B <Plug>CamelCaseMotion_b
-""}}}
+if neobundle#tap('camlcasemotion.vim') "{{{
+  nmap <silent> W <Plug>CamelCaseMotion_w
+  xmap <silent> W <Plug>CamelCaseMotion_w
+  omap <silent> W <Plug>CamelCaseMotion_w
+  nmap <silent> B <Plug>CamelCaseMotion_b
+  xmap <silent> B <Plug>CamelCaseMotion_b
+  omap <silent> B <Plug>CamelCaseMotion_b
+
+  call neobundle#untap()
+endif "}}}
 
 if neobundle#tap('concealedyank.vim') "{{{
   xmap Y <Plug>(operator-concealedyank)
+
+  call neobundle#untap()
 endif "}}}
 
 " gitv.vim "{{{
@@ -619,15 +627,18 @@ let g:unite_source_alignta_preset_arguments = [
 xnoremap <silent> [unite]a :<C-u>Unite alignta:arguments<CR>
 "}}}
 
-" vim-niceblock
-" Improved visual selection.
-xmap I <Plug>(niceblock-I)
-xmap A <Plug>(niceblock-A)
+if neobundle#tap('vim-niceblock') "{{{
+  xmap I  <Plug>(niceblock-I)
+  xmap A  <Plug>(niceblock-A)
 
-" Operator-replace "{{{
-nmap R <Plug>(operator-replace)
-xmap R <Plug>(operator-replace)
-"}}}
+  call neobundle#untap()
+endif "}}}
+
+if neobundle#tap('vim-operator-replace') "{{{
+  xmap p <Plug>(operator-replace)
+
+  call neobundle#untap()
+endif "}}}
 
 if neobundle#tap('vim-smartchr') "{{{
   function! neobundle#hooks.on_source(bundle)
@@ -654,7 +665,6 @@ nnoremap <silent> [Space]x :<C-u>Dox<CR>
 let g:load_doxygen_syntax = 1
 "}}}
 
-" accelerated-jk "{{{
 if neobundle#tap('accelerated-jk') "{{{
   nmap <silent>j <Plug>(accelerated_jk_gj)
   nmap gj j
@@ -663,7 +673,6 @@ if neobundle#tap('accelerated-jk') "{{{
 
   call neobundle#untap()
 endif "}}}
-"}}}
 
 if has('lua') && (v:version > 703 || (v:version == 703 && has('patch885')))
 if neobundle#tap('neocomplete.vim') "{{{
@@ -990,17 +999,17 @@ if neobundle#tap('unite.vim') "{{{
     if executable('ag')
       " For ag.
       let g:unite_source_grep_command = 'ag'
-      let g:unite_source_grep_default_opts = '--nocolor --nogroup --hidden'
+      let g:unite_source_grep_default_opts = '-i --nocolor --nogroup --hidden'
       let g:unite_source_grep_recursive_opt = ''
     elseif executable('pt')
       " For pt.
       let g:unite_source_grep_command = 'pt'
-      let g:unite_source_grep_default_opts = '--nogroup --nocolor'
+      let g:unite_source_grep_default_opts = '-i --nogroup --nocolor'
       let g:unite_source_grep_recursive_opt = ''
     elseif executable('ack-grep')
       " For ack.
       let g:unite_source_grep_command = 'ack-grep'
-      let g:unite_source_grep_default_opts = '--no-heading --no-color -k'
+      let g:unite_source_grep_default_opts = '-i --no-heading --no-color -a'
       let g:unite_source_grep_recursive_opt = ''
     endif
 
@@ -1117,23 +1126,23 @@ if neobundle#tap('vimshell.vim') "{{{
   call neobundle#untap()
 endif "}}}
 
-" vinarise.vim "{{{
-let g:vinarise_enable_auto_detect = 1
-"}}}
-
-if neobundle#tap('vim-smalls') "{{{
-  nmap S <Plug>(smalls)
+if neobundle#tap('vinarise.vim') "{{{
+  let g:vinarise_enable_auto_detect = 1
 
   call neobundle#untap()
 endif "}}}
 
-" qfreplace.vim "{{{
-autocmd MyAutoCmd FileType qf nnoremap <buffer> r :<C-u>Qfreplace<CR>
-"}}}
+if neobundle#tap('qfreplace.vim') "{{{
+  autocmd MyAutoCmd FileType qf nnoremap <buffer> r :<C-u>Qfreplace<CR>
 
-" quickrun.vim "{{{
-nmap <silent> <Leader>r <Plug>(quickrun)
-"}}}
+  call neobundle#untap()
+endif "}}}
+
+if neobundle#tap('quickrun.vim') "{{{
+  nmap <silent> <Leader>r <Plug>(quickrun)
+
+  call neobundle#untap()
+endif "}}}
 
 if neobundle#tap('vim-ref') "{{{
   function! neobundle#hooks.on_source(bundle)
@@ -1144,6 +1153,8 @@ if neobundle#tap('vim-ref') "{{{
       nmap <buffer> [Tag]p <Plug>(ref-back)
     endfunction"}}}
   endfunction
+
+  call neobundle#untap()
 endif "}}}
 
 " fugitive.vim "{{{
@@ -1161,30 +1172,32 @@ function! s:fugitive_tab(cmd)
 endfunction
 "}}}
 
-" caw.vim "{{{
-autocmd MyAutoCmd FileType * call s:init_caw()
-function! s:init_caw()
-  if !&l:modifiable
-    silent! nunmap <buffer> gc
-    silent! xunmap <buffer> gc
-    silent! nunmap <buffer> gcc
-    silent! xunmap <buffer> gcc
+if neobundle#tap('caw.vim') "{{{
+  autocmd MyAutoCmd FileType * call s:init_caw()
+  function! s:init_caw()
+    if !&l:modifiable
+      silent! nunmap <buffer> gc
+      silent! xunmap <buffer> gc
+      silent! nunmap <buffer> gcc
+      silent! xunmap <buffer> gcc
+    else
+      nmap <buffer> gc <Plug>(caw:prefix)
+      xmap <buffer> gc <Plug>(caw:prefix)
+      nmap <buffer> gcc <Plug>(caw:i:toggle)
+      xmap <buffer> gcc <Plug>(caw:i:toggle)
+    endif
+  endfunction
 
-    return
-  endif
+  call neobundle#untap()
+endif "}}}
 
-  nmap <buffer> gc <Plug>(caw:prefix)
-  xmap <buffer> gc <Plug>(caw:prefix)
-  nmap <buffer> gcc <Plug>(caw:i:toggle)
-  xmap <buffer> gcc <Plug>(caw:i:toggle)
-endfunction
-"}}}
+if neobundle#tap('open-browser.vim') "{{{
+  let g:netrw_nogx = 1 " disable netrw's gx mapping.
+  nmap gx <Plug>(openbrowser-smart-search)
+  vmap gx <Plug>(openbrowser-smart-search)
 
-" open-browser.vim "{{{
-let g:netrw_nogx = 1 " disable netrw's gx mapping.
-nmap gx <Plug>(openbrowser-smart-search)
-vmap gx <Plug>(openbrowser-smart-search)
-"}}}
+  call neobundle#untap()
+endif "}}}
 
 " taglist.vim "{{{
 if has('mac') || s:is_windows
