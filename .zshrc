@@ -132,9 +132,9 @@ alias formcpp='find . -iregex ".+\.\(c\|cpp\|h\)$" -type f -print0 | xargs -0 un
 
 function ide() {
   if [[ $# -ge 1 ]] ; then
-    gvim +"set columns=179" +"VimFiler -buffer-name=explorer -toggle ~" +"tabedit $1" +TlistOpen +"VimFilerExplorer -winwidth=46" +"wincmd l"
+    gvim +"set columns=177" +"VimFiler -buffer-name=explorer -toggle ~" +"tabedit $1" +TlistOpen +"VimFilerExplorer -winwidth=46" +"wincmd l"
   else
-    gvim +"set columns=179" +"VimFiler -buffer-name=explorer -toggle ~" +tabnew +TlistOpen +"wincmd h" +"VimFilerExplorer -winwidth=46"
+    gvim +"set columns=177" +"VimFiler -buffer-name=explorer -toggle ~" +tabnew +TlistOpen +"wincmd h" +"VimFilerExplorer -winwidth=46"
   fi
 }
 
