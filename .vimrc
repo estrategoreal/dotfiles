@@ -489,12 +489,8 @@ set showbreak=\
 set breakat=\ \	;:,!?
 " Wrap conditions.
 set whichwrap+=h,l,<,>,[,],b,s,~
-if exists('+breakindent')
-  set breakindent
-  set wrap
-else
-  set nowrap
-endif
+" Wrap long lines.
+set wrap
 
 " Do not display greetings message at the time of Vim start.
 set shortmess=aTI
