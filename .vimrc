@@ -122,6 +122,9 @@ NeoBundleLazy 'mrtazz/DoxygenToolkit.vim', {
       \ 'filetypes' : ['c', 'cpp'],
       \ }
 NeoBundleLazy 'osyo-manga/unite-quickfix'
+NeoBundleLazy 'plasticboy/vim-markdown', {
+      \ 'filetypes' : 'mkd'
+      \ }
 if has('python')
 NeoBundleLazy 'Rip-Rip/clang_complete', {
       \ 'autoload' : {
@@ -1414,7 +1417,7 @@ nnoremap gu gUiw`]
 inoremap <C-q> <ESC>gUiw`]a
 
 " Clear highlight.
-nnoremap <silent> <ESC><ESC> :<C-u>nohlsearch<CR>
+nnoremap <ESC><ESC> :nohlsearch<CR>:match<CR>
 
 " Easily macro.
 nnoremap @@ @a
