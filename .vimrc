@@ -89,11 +89,17 @@ NeoBundleLazy 'bkad/CamelCaseMotion', {
 NeoBundleLazy 'chikatoike/concealedyank.vim', {
       \   'mappings' : [['x', '<Plug>(operator-concealedyank)']]
       \ }
-NeoBundle 'gregsexton/gitv'
+NeoBundleLazy 'gregsexton/gitv', {
+      \ 'commands' : 'Gitv',
+      \ }
 NeoBundleLazy 'Shougo/unite-outline'
-NeoBundle 'h1mesuke/vim-alignta'
+NeoBundleLazy 'h1mesuke/vim-alignta', {
+      \ 'insert' : 1,
+      \ }
 NeoBundleLazy 'hail2u/vim-css3-syntax'
-NeoBundle 'hewes/unite-gtags'
+NeoBundleLazy 'hewes/unite-gtags', {
+      \ 'unite_sources' : ['gtags/context']
+      \ }
 NeoBundleLazy 'jiangmiao/simple-javascript-indenter', {
       \ 'filetypes' : 'javascript',
       \ }
@@ -103,7 +109,7 @@ NeoBundleLazy 'jelera/vim-javascript-syntax', {
 NeoBundleLazy 'kana/vim-niceblock', {
       \   'mappings' : '<Plug>(niceblock-',
       \ }
-NeoBundle 'kana/vim-operator-user', {
+NeoBundleLazy 'kana/vim-operator-user', {
       \ 'functions' : 'operator#user#define',
       \ }
 NeoBundleLazy 'kana/vim-operator-replace', {
@@ -235,7 +241,10 @@ NeoBundleLazy 'thinca/vim-ref', {
       \ 'unite_sources' : 'ref',
       \ }
 NeoBundleLazy 'tpope/vim-endwise'
-NeoBundle 'tpope/vim-fugitive'
+NeoBundleLazy 'tpope/vim-fugitive', {
+      \ 'commands' : ['Gdiff', 'Gstatus', 'Glog',
+      \               'Gwrite', 'Gcommit', 'Gblame'],
+      \ }
 NeoBundleLazy 'tpope/vim-repeat', {
       \ 'mappings' : '.',
       \ }
@@ -265,7 +274,10 @@ NeoBundleLazy 'vim-ruby/vim-ruby', {
       \ 'mappings' : '<Plug>(ref-',
       \ 'filetypes' : 'ruby'
       \ }
-NeoBundle 'vim-scripts/taglist.vim', { 'type' : 'nosync' }
+"NeoBundle 'vim-scripts/taglist.vim', { 'type' : 'nosync' }
+NeoBundleLazy 'vim-scripts/taglist.vim', {
+      \ 'commands' : 'TlistOpen',
+      \ }
 NeoBundleLazy 'yomi322/vim-gitcomplete', {
       \ 'filetype' : 'vimshell'
       \ }
@@ -576,21 +588,23 @@ if neobundle#tap('vim-operator-surround') "{{{
   call neobundle#untap()
 endif "}}}
 
-" TweetVim "{{{
-" Start TweetVim.
-nnoremap <silent> [unite]e :<C-u>Unite tweetvim<CR>
-autocmd MyAutoCmd FileType tweetvim call s:tweetvim_my_settings()
-function! s:tweetvim_my_settings() "{{{
-  " Open say buffer.
-  nnoremap <silent><buffer> s :<C-u>TweetVimSay<CR>
-  nnoremap <silent><buffer> q :<C-u>close<CR>
-  nmap <silent><buffer> j <Plug>(accelerated_jk_gj)
-endfunction"}}}
+if neobundle#tap('TweetVim') "{{{
+  " Start TweetVim.
+  nnoremap <silent> [unite]e :<C-u>Unite tweetvim<CR>
+  autocmd MyAutoCmd FileType tweetvim call s:tweetvim_my_settings()
+  function! s:tweetvim_my_settings() "{{{
+    " Open say buffer.
+    nnoremap <silent><buffer> s :<C-u>TweetVimSay<CR>
+    nnoremap <silent><buffer> q :<C-u>close<CR>
+    nmap <silent><buffer> j <Plug>(accelerated_jk_gj)
+  endfunction"}}}
+  
+  let g:tweetvim_display_separator = 0
 
-let g:tweetvim_display_separator = 0
-"}}}
+  call neobundle#untap()
+endif "}}}
 
-if neobundle#tap('camlcasemotion.vim') "{{{
+if neobundle#tap('CamelCaseMotion') "{{{
   nmap <silent> W <Plug>CamelCaseMotion_w
   xmap <silent> W <Plug>CamelCaseMotion_w
   omap <silent> W <Plug>CamelCaseMotion_w
@@ -607,24 +621,29 @@ if neobundle#tap('concealedyank.vim') "{{{
   call neobundle#untap()
 endif "}}}
 
-" gitv.vim "{{{
-nnoremap <silent> [Space]gv :<C-u>Gitv<CR>
-nnoremap <silent> [Space]gf :<C-u>Gitv!<CR>
-"}}}
+if neobundle#tap('gitv') "{{{
+  nnoremap <silent> [Space]gv :<C-u>Gitv<CR>
+  nnoremap <silent> [Space]gf :<C-u>Gitv!<CR>
 
-" alignta.vim "{{{
-let g:unite_source_alignta_preset_arguments = [
-      \ ["Align at '/*' & '*/'", '<-- /* -> */' ],
-      \ ["Align at '='", '=>\='],
-      \ ["Align at ':'", '01 :'],
-      \ ["Align at '|'", '|'   ],
-      \ ["Align at ')'", '0 )' ],
-      \ ["Align at ']'", '0 ]' ],
-      \ ["Align at '}'", '}'   ],
-      \]
+  call neobundle#untap()
+endif "}}}
 
-xnoremap <silent> [unite]a :<C-u>Unite alignta:arguments<CR>
-"}}}
+if neobundle#tap('vim-alignta') "{{{
+  let g:unite_source_alignta_preset_arguments = [
+        \ ["Align at '/*' & '*/'", '<-- /* -> */' ],
+        \ ["Align at '='", '=>\='],
+        \ ["Align at ':'", '01 :'],
+        \ ["Align at '|'", '|'   ],
+        \ ["Align at ')'", '0 )' ],
+        \ ["Align at ']'", '0 ]' ],
+        \ ["Align at '}'", '}'   ],
+        \]
+
+  xnoremap <silent> [unite]a :<C-u>Unite alignta:arguments<CR>
+
+  call neobundle#untap()
+endif "}}}
+
 
 if neobundle#tap('vim-niceblock') "{{{
   xmap I  <Plug>(niceblock-I)
@@ -659,10 +678,12 @@ if neobundle#tap('vim-smartchr') "{{{
   call neobundle#untap()
 endif "}}}
 
-" DoxygenToolkit.vim "{{{
-nnoremap <silent> [Space]x :<C-u>Dox<CR>
-let g:load_doxygen_syntax = 1
-"}}}
+if neobundle#tap('DoxygenToolkit.vim') "{{{
+  nnoremap <silent> [Space]x :<C-u>Dox<CR>
+  let g:load_doxygen_syntax = 1
+
+  call neobundle#untap()
+endif "}}}
 
 if neobundle#tap('accelerated-jk') "{{{
   nmap <silent>j <Plug>(accelerated_jk_gj)
@@ -1131,13 +1152,17 @@ if neobundle#tap('vinarise.vim') "{{{
   call neobundle#untap()
 endif "}}}
 
-if neobundle#tap('qfreplace.vim') "{{{
+if neobundle#tap('vim-qfreplace') "{{{
   autocmd MyAutoCmd FileType qf nnoremap <buffer> r :<C-u>Qfreplace<CR>
 
   call neobundle#untap()
 endif "}}}
 
-if neobundle#tap('quickrun.vim') "{{{
+if neobundle#tap('vim-quickrun') "{{{
+  let g:quickrun_config = {}
+  let g:quickrun_config['markdown'] = {
+        \ 'outputter': 'browser'
+        \ }
   nmap <silent> <Leader>r <Plug>(quickrun)
 
   call neobundle#untap()
@@ -1156,20 +1181,22 @@ if neobundle#tap('vim-ref') "{{{
   call neobundle#untap()
 endif "}}}
 
-" fugitive.vim "{{{
-nnoremap <silent> [Space]gd :<C-u>call <SID>fugitive_tab('Gdiff')<CR>
-nnoremap <silent> [Space]gs :<C-u>Gstatus<CR>
-nnoremap <silent> [Space]gl :<C-u>call <SID>fugitive_tab('Glog')<CR>
-nnoremap <silent> [Space]ga :<C-u>Gwrite<CR>
-nnoremap <silent> [Space]gA :<C-u>Gwrite %<CR>
-nnoremap <silent> [Space]gc :<C-u>Gcommit<CR>
-nnoremap <silent> [Space]gC :<C-u>Gcommit --amend<CR>
-nnoremap <silent> [Space]gb :<C-u>call <SID>fugitive_tab('Gblame')<CR>
-function! s:fugitive_tab(cmd)
-  execute 'tabedit ' . expand('%')
-  execute a:cmd
-endfunction
-"}}}
+if neobundle#tap('vim-fugitive') "{{{
+  nnoremap <silent> [Space]gd :<C-u>call <SID>fugitive_tab('Gdiff')<CR>
+  nnoremap <silent> [Space]gs :<C-u>Gstatus<CR>
+  nnoremap <silent> [Space]gl :<C-u>call <SID>fugitive_tab('Glog')<CR>
+  nnoremap <silent> [Space]ga :<C-u>Gwrite<CR>
+  nnoremap <silent> [Space]gA :<C-u>Gwrite %<CR>
+  nnoremap <silent> [Space]gc :<C-u>Gcommit<CR>
+  nnoremap <silent> [Space]gC :<C-u>Gcommit --amend<CR>
+  nnoremap <silent> [Space]gb :<C-u>call <SID>fugitive_tab('Gblame')<CR>
+  function! s:fugitive_tab(cmd)
+    execute 'tabedit ' . expand('%')
+    execute a:cmd
+  endfunction
+
+  call neobundle#untap()
+endif "}}}
 
 if neobundle#tap('caw.vim') "{{{
   autocmd MyAutoCmd FileType * call s:init_caw()
@@ -1198,44 +1225,48 @@ if neobundle#tap('open-browser.vim') "{{{
   call neobundle#untap()
 endif "}}}
 
-" taglist.vim "{{{
-if has('mac') || s:is_windows
-  let Tlist_Ctags_Cmd = '/usr/local/bin/ctags'
-elseif s:is_freebsd
-  let Tlist_Ctags_Cmd = '/usr/local/bin/exctags'
-else
-  let Tlist_Ctags_Cmd = '/usr/bin/ctags'
-endif
-if has('gui_running')
-  let Tlist_Exit_OnlyWindow = 1
-  let Tlist_GainFocus_On_ToggleOpen = 1
-  let Tlist_Show_One_File = 1
-  let Tlist_Use_Right_Window = 1
-  let Tlist_WinWidth = 42
-endif
-"}}}
+if neobundle#tap('taglist.vim') "{{{
+  if has('mac') || s:is_windows
+    let Tlist_Ctags_Cmd = '/usr/local/bin/ctags'
+  elseif s:is_freebsd
+    let Tlist_Ctags_Cmd = '/usr/local/bin/exctags'
+  else
+    let Tlist_Ctags_Cmd = '/usr/bin/ctags'
+  endif
+  if has('gui_running')
+    let Tlist_Exit_OnlyWindow = 1
+    let Tlist_GainFocus_On_ToggleOpen = 1
+    let Tlist_Show_One_File = 1
+    let Tlist_Use_Right_Window = 1
+    let Tlist_WinWidth = 42
+  endif
 
-" w3m.vim "{{{
-nnoremap [Alt]w :<C-u>W3mTab<Space>
-if has('mac')
-  let g:w3m#external_browser = 'open -a "Google Chrome"'
-elseif s:is_windows
-  let g:w3m#command = 'C:/MinGW64/msys/local/bin/w3m.exe'
-  let g:w3m#external_browser = 'C:/Program\ Files\ (x86)/Google/Chrome/Application/chrome.exe'
-elseif s:is_freebsd
-  let g:w3m#external_browser = 'chrome'
-else
-  let g:w3m#external_browser = 'chromium'
-endif
-let g:w3m#search_engine = 'http://www.google.co.jp/search?ie=' . &encoding . '&q=%s'
-autocmd MyAutoCmd FileType w3m call s:w3m_settings()
-function! s:w3m_settings()
-  nnoremap <buffer> H :<C-u>call w3m#Back()<CR>
-  nnoremap <buffer> L :<C-u>call w3m#Forward()<CR>
-  nnoremap <buffer> E :<C-u>W3mShowExtenalBrowser<CR>
-  nnoremap <buffer> Q :<C-u>W3mClose<CR>
-endfunction
-"}}}
+  call neobundle#untap()
+endif "}}}
+
+if neobundle#tap('w3m.vim') "{{{
+  nnoremap [Alt]w :<C-u>W3mTab<Space>
+  if has('mac')
+    let g:w3m#external_browser = 'open -a "Google Chrome"'
+  elseif s:is_windows
+    let g:w3m#command = 'C:/MinGW64/msys/local/bin/w3m.exe'
+    let g:w3m#external_browser = 'C:/Program\ Files\ (x86)/Google/Chrome/Application/chrome.exe'
+  elseif s:is_freebsd
+    let g:w3m#external_browser = 'chrome'
+  else
+    let g:w3m#external_browser = 'chromium'
+  endif
+  let g:w3m#search_engine = 'http://www.google.co.jp/search?ie=' . &encoding . '&q=%s'
+  autocmd MyAutoCmd FileType w3m call s:w3m_settings()
+  function! s:w3m_settings()
+    nnoremap <buffer> H :<C-u>call w3m#Back()<CR>
+    nnoremap <buffer> L :<C-u>call w3m#Forward()<CR>
+    nnoremap <buffer> E :<C-u>W3mShowExtenalBrowser<CR>
+    nnoremap <buffer> Q :<C-u>W3mClose<CR>
+  endfunction
+
+  call neobundle#untap()
+endif "}}}
 "}}}
 
 "-----------------------------------------------------------------------------
