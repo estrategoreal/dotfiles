@@ -182,9 +182,6 @@ NeoBundleLazy 'Shougo/unite-build'
 NeoBundleLazy 'Shougo/unite-ssh', {
       \ 'filetypes' : 'vimfiler',
       \ }
-NeoBundleLazy 'ujihisa/vimshell-ssh', {
-      \ 'filetypes' : 'vimshell',
-      \ }
 NeoBundle 'Shougo/unite-sudo'
 NeoBundleLazy 'Shougo/vim-vcs', {
       \ 'depends' : 'thinca/vim-openbuf',
@@ -976,7 +973,7 @@ if neobundle#tap('unite.vim') "{{{
     " Keymapping in unite.vim.
     autocmd MyAutoCmd FileType unite call s:unite_my_settings()
     function! s:unite_my_settings() "{{{
-      call unite#custom#default_action('directory', 'cd')
+      call unite#custom#default_action('directory', 'narrow')
 
       " Overwrite settings.
       nmap <buffer> <ESC>   <Plug>(unite_exit)
