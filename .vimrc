@@ -92,7 +92,6 @@ NeoBundleLazy 'chikatoike/concealedyank.vim', {
 NeoBundleLazy 'gregsexton/gitv', {
       \ 'commands' : 'Gitv',
       \ }
-NeoBundleLazy 'Shougo/unite-outline'
 NeoBundleLazy 'h1mesuke/vim-alignta', {
       \ 'insert' : 1,
       \ }
@@ -118,6 +117,10 @@ NeoBundleLazy 'kana/vim-operator-replace', {
       \   'mappings' : [
       \     ['nx', '<Plug>(operator-replace)']]
       \ }}
+NeoBundleLazy 'kannokanno/previm', {
+      \ 'filetypes' : 'markdown',
+      \ 'depends' : 'tyru/open-browser.vim',
+      \ }
 NeoBundleLazy 'kana/vim-smartchr', {
       \ 'insert' : 1,
       \ }
@@ -128,8 +131,8 @@ NeoBundleLazy 'mrtazz/DoxygenToolkit.vim', {
       \ 'filetypes' : ['c', 'cpp'],
       \ }
 NeoBundleLazy 'osyo-manga/unite-quickfix'
-NeoBundleLazy 'plasticboy/vim-markdown', {
-      \ 'filetypes' : 'mkd'
+NeoBundleLazy 'rcmdnk/vim-markdown', {
+      \ 'filetypes' : 'markdown'
       \ }
 if has('python')
 NeoBundleLazy 'Rip-Rip/clang_complete', {
@@ -149,6 +152,10 @@ NeoBundleLazy 'rhysd/vim-operator-surround', {
       \ }
 NeoBundleLazy 'LeafCage/foldCC', {
       \ 'filetypes' : 'vim' }
+NeoBundleLazy 'saihoooooooo/glowshi-ft.vim', {
+      \ 'mappings' : '<Plug>(glowshi-ft-'
+      \ }
+NeoBundle 'Shougo/neobundle-vim-scripts'
 if has('lua') && (v:version > 703 || (v:version == 703 && has('patch885')))
 NeoBundleFetch 'Shougo/neocomplcache.vim', {
       \ 'insert' : 1
@@ -164,7 +171,6 @@ NeoBundleFetch 'Shougo/neocomplete.vim', {
       \ 'insert' : 1
       \ }
 endif
-NeoBundle 'Shougo/neobundle-vim-scripts'
 NeoBundle 'Shougo/neomru.vim'
 NeoBundleLazy 'Shougo/neosnippet.vim', {
       \ 'depends' : 'Shougo/neosnippet-snippets',
@@ -179,6 +185,8 @@ NeoBundleLazy 'Shougo/unite.vim', {
       \                 'UniteWithCursorWord', 'UniteWithInput']
       \ }
 NeoBundleLazy 'Shougo/unite-build'
+NeoBundleLazy 'Shougo/unite-help'
+NeoBundleLazy 'Shougo/unite-outline'
 NeoBundleLazy 'Shougo/unite-ssh', {
       \ 'filetypes' : 'vimfiler',
       \ }
@@ -245,7 +253,6 @@ NeoBundleLazy 'tpope/vim-fugitive', {
 NeoBundleLazy 'tpope/vim-repeat', {
       \ 'mappings' : '.',
       \ }
-NeoBundleLazy 'Shougo/unite-help'
 NeoBundleLazy 'tsukkee/unite-tag', {
       \ 'unite_sources' : ['tag', 'tag/include', 'tag/file']
       \ }
@@ -254,9 +261,8 @@ NeoBundleLazy 'tyru/caw.vim', {
       \   '<Plug>(caw:prefix)', '<Plug>(caw:i:toggle)']
       \ }
 NeoBundleLazy 'tyru/open-browser.vim', {
-      \ 'mappings' : '<Plug>(open-browser-',
-      \ 'commands' : ['OpenBrowserSearch', 'OpenBrowser'],
-      \ 'functions' : 'openbrowser#open',
+      \   'commands' : ['OpenBrowserSearch', 'OpenBrowser'],
+      \   'functions' : 'openbrowser#open',
       \ }
 NeoBundleLazy 'ujihisa/vimshell-ssh', {
       \ 'filetypes' : 'vimshell',
@@ -497,12 +503,15 @@ set statusline=%<%m%r%h%w%y%{'['.(&fenc!=''?&fenc:&enc).':'.&ff.']'}\ %1.40f%=%{
 
 " Turn down a long line appointed in 'breakat'
 set linebreak
-set showbreak=\ 
+set showbreak=\
 set breakat=\ \	;:,!?
 " Wrap conditions.
 set whichwrap+=h,l,<,>,[,],b,s,~
 " Wrap long lines.
 set wrap
+if exists('+breakindent')
+  set breakindent
+endif
 
 " Do not display greetings message at the time of Vim start.
 set shortmess=aTI
@@ -687,6 +696,16 @@ if neobundle#tap('accelerated-jk') "{{{
   nmap gj j
   nmap <silent>k <Plug>(accelerated_jk_gk)
   nmap gk k
+
+  call neobundle#untap()
+endif "}}}
+
+if neobundle#tap('glowshi-ft.vim') "{{{
+  let g:glowshi_ft_no_default_key_mappings = 1
+  map f <Plug>(glowshi-ft-f)
+  map F <Plug>(glowshi-ft-F)
+
+  let g:glowshi_ft_timeoutlen = 1000
 
   call neobundle#untap()
 endif "}}}
@@ -1303,8 +1322,6 @@ cnoremap <C-l> <C-d>
 cnoremap <A-b> <S-Left>
 " <A-f>: forward one word.
 cnoremap <A-f> <S-Right>
-
-cmap <C-o> <Plug>(unite_cmdmatch_complete)
 "}}}
 
 " [Space]: Other useful commands "{{{
@@ -1328,6 +1345,8 @@ nnoremap <silent> [Space]fq :<C-u>quitall!<CR>
 nnoremap <silent> [Space]t2 :<C-u>setlocal shiftwidth=2 softtabstop=2<CR>
 nnoremap <silent> [Space]t4 :<C-u>setlocal shiftwidth=4 softtabstop=4<CR>
 "}}}
+
+nnoremap <silent> q :<C-u>call <SID>smart_close()<CR>
 "}}}
 
 function! s:smart_close()
@@ -1412,20 +1431,19 @@ vnoremap <silent> gc :<C-u>normal gc<CR>
 onoremap <silent> gc :<C-u>normal gc<CR>
 
 " Folding. "{{{
-noremap [Space]n ]z
-noremap [Space]p [z
+" If press h on head, fold close.
+"nnoremap <expr> h col('.') == 1 && foldlevel(line('.')) > 0 ? 'zc' : 'h'
+" If press l on fold, fold open.
+nnoremap <expr> l foldclosed(line('.')) != -1 ? 'zo0' : 'l'
+" If press h on head, range fold close.
+"xnoremap <expr> h col('.') == 1 && foldlevel(line('.')) > 0 ? 'zcgv' : 'h'
+" If press l on fold, range fold open.
+xnoremap <expr> l foldclosed(line('.')) != -1 ? 'zogv0' : 'l'
 noremap [Space]j zj
 noremap [Space]k zk
-noremap [Space]h zc
-noremap [Space]l zo
-noremap [Space]a zA
-noremap [Space]m zM
-noremap [Space]i zMzv
 noremap [Space]r zR
-noremap [Space]f zf
-noremap [Space]d zd
-noremap [Space]u :<C-u>Unite outline:foldings<CR>
-noremap [Space]gg :<C-u>echo FoldCCnavi()<CR>
+noremap [Space]u :<C-u>Unite outline:foldings<CR>"{{{"}}}
+noremap [Space]z za
 "}}}
 
 " Substitute.
@@ -1440,9 +1458,8 @@ inoremap j<Space> j
 onoremap j<Space> j
 "}}}
 
-" Capitalize a word.
+" Capitalize.
 nnoremap gu gUiw`]
-inoremap <C-q> <ESC>gUiw`]a
 
 " Clear highlight.
 nnoremap <ESC><ESC> :nohlsearch<CR>:match<CR>
@@ -1453,8 +1470,6 @@ nnoremap @@ @a
 " Search.
 nnoremap ;n  ;
 nnoremap ;m  ,
-
-nnoremap <silent> q :<C-u>call <sid>smart_close()<CR>
 "}}}
 
 "-----------------------------------------------------------------------------
