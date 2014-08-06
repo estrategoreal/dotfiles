@@ -502,9 +502,9 @@ set showtabline=2
 set statusline=%<%m%r%h%w%y%{'['.(&fenc!=''?&fenc:&enc).':'.&ff.']'}\ %1.40f%=%{fugitive#statusline()}\ \ %l/%L,%c%V%5P
 
 " Turn down a long line appointed in 'breakat'
-set linebreak
-set showbreak=\
-set breakat=\ \	;:,!?
+"set linebreak
+"set showbreak=\
+"set breakat=\ \	;:,!?
 " Wrap conditions.
 set whichwrap+=h,l,<,>,[,],b,s,~
 " Wrap long lines.
