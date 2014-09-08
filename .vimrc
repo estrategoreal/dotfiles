@@ -84,7 +84,7 @@ NeoBundleLazy 'basyura/TweetVim', { 'depends' :
       \ ['basyura/twibill.vim', 'tyru/open-browser.vim'],
       \ 'autoload' : { 'commands' : 'TweetVimHomeTimeline' }}
 NeoBundleLazy 'bkad/CamelCaseMotion', {
-      \ 'mappings' : '<Plug>CamelCaseMotion_',
+      \ 'mappings' : '<Plug>',
       \ }
 NeoBundleLazy 'chikatoike/concealedyank.vim', {
       \   'mappings' : [['x', '<Plug>(operator-concealedyank)']]
@@ -106,7 +106,7 @@ NeoBundleLazy 'jelera/vim-javascript-syntax', {
       \ 'filetypes' : 'javascript',
       \ }
 NeoBundleLazy 'kana/vim-niceblock', {
-      \   'mappings' : '<Plug>(niceblock-',
+      \   'mappings' : '<Plug>',
       \ }
 NeoBundleLazy 'kana/vim-operator-user', {
       \ 'functions' : 'operator#user#define',
@@ -124,13 +124,13 @@ NeoBundleLazy 'kannokanno/previm', {
 NeoBundleLazy 'kana/vim-smartchr', {
       \ 'insert' : 1,
       \ }
-NeoBundleLazy 'majkinetor/unite-cmdmatch' , {
-      \ 'depends':  'Shougo/unite.vim',
-      \ 'mappings' : [['c', '<Plug>(unite_cmdmatch_complete)']] }
 NeoBundleLazy 'mrtazz/DoxygenToolkit.vim', {
       \ 'filetypes' : ['c', 'cpp'],
       \ }
 NeoBundleLazy 'osyo-manga/unite-quickfix'
+NeoBundleLazy 'osyo-manga/vim-jplus', {
+      \ 'mappings' : '<Plug>'
+      \ }
 NeoBundleLazy 'rcmdnk/vim-markdown', {
       \ 'filetypes' : 'markdown'
       \ }
@@ -148,12 +148,12 @@ NeoBundleLazy 'rhysd/accelerated-jk', {
       \ }
 NeoBundleLazy 'rhysd/vim-operator-surround', {
       \ 'depends' : 'vim-operator-user',
-      \   'mappings' : '<Plug>(operator-surround',
+      \   'mappings' : '<Plug>',
       \ }
 NeoBundleLazy 'LeafCage/foldCC', {
       \ 'filetypes' : 'vim' }
 NeoBundleLazy 'saihoooooooo/glowshi-ft.vim', {
-      \ 'mappings' : '<Plug>(glowshi-ft-'
+      \ 'mappings' : '<Plug>'
       \ }
 NeoBundle 'Shougo/neobundle-vim-scripts'
 if has('lua') && (v:version > 703 || (v:version == 703 && has('patch885')))
@@ -209,7 +209,7 @@ NeoBundleLazy 'Shougo/vimfiler.vim', {
       \         { 'name' : 'Write',
       \           'complete' : 'customlist,vimfiler#complete' },
       \         'Read', 'Source'],
-      \ 'mappings' : '<Plug>(vimfiler_',
+      \ 'mappings' : '<Plug>',
       \ 'explorer' : 1,
       \ }
 NeoBundle 'Shougo/vimproc.vim', {
@@ -226,7 +226,7 @@ NeoBundleLazy 'Shougo/vimshell.vim', {
       \               'VimShellExecute', 'VimShellInteractive',
       \               'VimShellCreate',
       \               'VimShellTerminal', 'VimShellPop'],
-      \ 'mappings' : '<Plug>(vimshell_'
+      \ 'mappings' : '<Plug>'
       \ }
 NeoBundleLazy 'Shougo/vinarise.vim', {
       \ 'commands' : [{
@@ -238,8 +238,7 @@ NeoBundleLazy 'thinca/vim-qfreplace', {
       \ }
 NeoBundleLazy 'thinca/vim-quickrun', {
       \ 'commands' : 'QuickRun',
-      \ 'mappings' : [
-      \   ['nxo', '<Plug>(quickrun)']],
+      \ 'mappings' : '<Plug>'
       \ }
 NeoBundleLazy 'thinca/vim-ref', {
       \ 'commands' : 'Ref',
@@ -253,16 +252,12 @@ NeoBundleLazy 'tpope/vim-fugitive', {
 NeoBundleLazy 'tpope/vim-repeat', {
       \ 'mappings' : '.',
       \ }
-NeoBundleLazy 'tsukkee/unite-tag', {
-      \ 'unite_sources' : ['tag', 'tag/include', 'tag/file']
-      \ }
+NeoBundleLazy 'tsukkee/unite-tag'
 NeoBundleLazy 'tyru/caw.vim', {
-      \ 'mappings' : [
-      \   '<Plug>(caw:prefix)', '<Plug>(caw:i:toggle)']
+      \ 'mappings' : '<Plug>'
       \ }
 NeoBundleLazy 'tyru/open-browser.vim', {
-      \   'commands' : ['OpenBrowserSearch', 'OpenBrowser'],
-      \   'functions' : 'openbrowser#open',
+      \ 'mappings' : '<Plug>',
       \ }
 NeoBundleLazy 'ujihisa/vimshell-ssh', {
       \ 'filetypes' : 'vimshell',
@@ -274,7 +269,7 @@ NeoBundleLazy 'vim-jp/cpp-vim', {
       \ 'filetypes' : 'cpp',
       \ }
 NeoBundleLazy 'vim-ruby/vim-ruby', {
-      \ 'mappings' : '<Plug>(ref-',
+      \ 'mappings' : '<Plug>',
       \ 'filetypes' : 'ruby'
       \ }
 "NeoBundle 'vim-scripts/taglist.vim', { 'type' : 'nosync' }
@@ -691,6 +686,13 @@ if neobundle#tap('DoxygenToolkit.vim') "{{{
   call neobundle#untap()
 endif "}}}
 
+if neobundle#tap('vim-jplus') "{{{
+  nmap J <Plug>(jplus)
+  vmap J <Plug>(jplus)
+
+  call neobundle#untap()
+endif "}}}
+
 if neobundle#tap('accelerated-jk') "{{{
   nmap <silent>j <Plug>(accelerated_jk_gj)
   nmap gj j
@@ -912,10 +914,8 @@ if neobundle#tap('unite.vim') "{{{
   nmap ; [unite]
   xmap ; [unite]
 
-  nnoremap <expr><silent> [unite]b <SID>unite_build()
-  function! s:unite_build()
-    return ":\<C-u>Unite -buffer-name=build". tabpagenr() ." -no-quit build\<CR>"
-  endfunction
+  nnoremap <expr><silent> [unite]b
+        \ ":\<C-u>Unite -buffer-name=build". tabpagenr() ." -no-quit build\<CR>"
   nnoremap <silent> [unite]c
         \ :<C-u>Unite gtags/context -buffer-name=search -auto-preview -no-quit<CR>
   nnoremap <silent> [unite]d
