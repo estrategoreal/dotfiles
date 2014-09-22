@@ -92,9 +92,6 @@ NeoBundleLazy 'chikatoike/concealedyank.vim', {
 NeoBundleLazy 'gregsexton/gitv', {
       \ 'commands' : 'Gitv',
       \ }
-NeoBundleLazy 'h1mesuke/vim-alignta', {
-      \ 'insert' : 1,
-      \ }
 NeoBundleLazy 'hail2u/vim-css3-syntax'
 NeoBundleLazy 'hewes/unite-gtags', {
       \ 'unite_sources' : ['gtags/context']
@@ -105,6 +102,9 @@ NeoBundleLazy 'jiangmiao/simple-javascript-indenter', {
 NeoBundleLazy 'jelera/vim-javascript-syntax', {
       \ 'filetypes' : 'javascript',
       \ }
+NeoBundleLazy 'junegunn/vim-easy-align', {
+      \ 'mappings' : '<Plug>(EasyAlign)',
+      \}
 NeoBundleLazy 'kana/vim-niceblock', {
       \   'mappings' : '<Plug>',
       \ }
@@ -272,10 +272,10 @@ NeoBundleLazy 'vim-ruby/vim-ruby', {
       \ 'mappings' : '<Plug>',
       \ 'filetypes' : 'ruby'
       \ }
-"NeoBundle 'vim-scripts/taglist.vim', { 'type' : 'nosync' }
 NeoBundleLazy 'vim-scripts/taglist.vim', {
       \ 'commands' : 'TlistOpen',
       \ }
+NeoBundle 'Yggdroot/indentLine'
 NeoBundleLazy 'yomi322/vim-gitcomplete', {
       \ 'filetype' : 'vimshell'
       \ }
@@ -629,22 +629,15 @@ if neobundle#tap('gitv') "{{{
   call neobundle#untap()
 endif "}}}
 
-if neobundle#tap('vim-alignta') "{{{
-  let g:unite_source_alignta_preset_arguments = [
-        \ ["Align at '/*' & '*/'", '<-- /* -> */' ],
-        \ ["Align at '='", '=>\='],
-        \ ["Align at ':'", '01 :'],
-        \ ["Align at '|'", '|'   ],
-        \ ["Align at ')'", '0 )' ],
-        \ ["Align at ']'", '0 ]' ],
-        \ ["Align at '}'", '}'   ],
-        \]
+if neobundle#tap('vim-easy-align') "{{{
+  " Start interactive EasyAlign in visual mode (e.g. vip<Enter>)
+  xmap <Enter> <Plug>(EasyAlign)
 
-  xnoremap <silent> [unite]a :<C-u>Unite alignta:arguments<CR>
+  " Start interactive EasyAlign for a motion/text object (e.g. <Leader>aip)
+  nmap <Leader>a <Plug>(EasyAlign)
 
   call neobundle#untap()
 endif "}}}
-
 
 if neobundle#tap('vim-niceblock') "{{{
   xmap I  <Plug>(niceblock-I)
@@ -1040,7 +1033,7 @@ if neobundle#tap('unite.vim') "{{{
     elseif executable('pt')
       " For pt.
       let g:unite_source_grep_command = 'pt'
-      let g:unite_source_grep_default_opts = '-i --nogroup --nocolor'
+      let g:unite_source_grep_default_opts = '--nogroup --nocolor'
       let g:unite_source_grep_recursive_opt = ''
     elseif executable('ack-grep')
       " For ack.
@@ -1256,6 +1249,13 @@ if neobundle#tap('taglist.vim') "{{{
     let Tlist_Use_Right_Window = 1
     let Tlist_WinWidth = 42
   endif
+
+  call neobundle#untap()
+endif "}}}
+
+if neobundle#tap('indentLine') "{{{
+  let g:indentLine_faster = 1
+  nmap <silent><Leader>i :<C-u>IndentLinesToggle<CR>
 
   call neobundle#untap()
 endif "}}}
