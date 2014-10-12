@@ -74,7 +74,7 @@ if has('vim_starting') "{{{
 endif
 "}}}
 
-call neobundle#rc(s:neobundle_dir)
+call neobundle#begin(s:neobundle_dir)
 
 " neobundle.vim "{{{
 NeoBundleFetch 'Shougo/neobundle.vim'
@@ -133,6 +133,9 @@ NeoBundleLazy 'mrtazz/DoxygenToolkit.vim', {
 NeoBundleLazy 'osyo-manga/unite-quickfix'
 NeoBundleLazy 'osyo-manga/vim-jplus', {
       \ 'mappings' : '<Plug>'
+      \ }
+NeoBundleLazy 'osyo-manga/vim-monster', {
+      \ 'filetypes' : 'ruby',
       \ }
 NeoBundleLazy 'rcmdnk/vim-markdown', {
       \ 'filetypes' : 'markdown'
@@ -247,7 +250,7 @@ NeoBundleLazy 'thinca/vim-ref', {
       \ 'commands' : 'Ref',
       \ 'unite_sources' : 'ref',
       \ }
-NeoBundleLazy 'tpope/vim-endwise'
+" NeoBundleLazy 'tpope/vim-endwise'
 NeoBundleLazy 'tpope/vim-fugitive', {
       \ 'commands' : ['Gdiff', 'Gstatus', 'Glog',
       \               'Gwrite', 'Gcommit', 'Gblame'],
@@ -285,6 +288,8 @@ NeoBundleLazy 'yomi322/vim-gitcomplete', {
 NeoBundleLazy 'yuratomo/w3m.vim', {
       \ 'commands' : 'W3mTab',
       \ }
+
+call neobundle#end()
 
 " Installation check.
 NeoBundleCheck
