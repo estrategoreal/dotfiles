@@ -43,7 +43,7 @@ endif
 " Set augroup.
 augroup MyAutoCmd
   autocmd!
-  autocmd FileType,Syntax * call s:my_on_filetype()
+  autocmd FileType,Syntax,BufEnter,BufWinEnter * call s:my_on_filetype()
 augroup END
 
 if filereadable(expand('~/.vimrc.local'))
@@ -58,10 +58,9 @@ if has('vim_starting') "{{{
   endif
 
   " Load neobundle.
-  if isdirectory('neobundle.vim')
-    set runtimepath^=neobundle.vim
-  elseif finddir('neobundle.vim', '.;') != ''
-    execute 'set runtimepath^=' . finddir('neobundle.vim', '.;')
+  if finddir('neobundle.vim', '.;') != ''
+    execute 'set runtimepath^=' .
+          \ fnamemodify(finddir('neobundle.vim', '.;'), ':p')
   elseif &runtimepath !~ '/neobundle.vim'
     if !isdirectory(s:neobundle_dir.'/neobundle.vim')
       execute printf('!git clone %s://github.com/Shougo/neobundle.vim.git',
@@ -761,8 +760,8 @@ if neobundle#tap('neocomplete.vim') "{{{
     let g:neocomplete#keyword_patterns._ = '\h\w*'
 
     " Plugin key-mappings.
-    inoremap <expr><C-g> neocomplete#undo_completion()
-    inoremap <expr><C-l> neocomplete#complete_common_string()
+    inoremap <expr> <C-g> neocomplete#undo_completion()
+    inoremap <expr> <C-l> neocomplete#complete_common_string()
 
     " <CR>: close popup and save indent.
     inoremap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
@@ -770,14 +769,14 @@ if neobundle#tap('neocomplete.vim') "{{{
       return neocomplete#smart_close_popup() . "\<CR>"
     endfunction
     " <TAB>: completion.
-    inoremap <expr><TAB> pumvisible() ? "\<C-n>" : "\<TAB>"
+    inoremap <expr> <TAB> pumvisible() ? "\<C-n>" : "\<TAB>"
     " <C-h>, <BS>: close popup and delete backword char.
-    inoremap <expr><C-h> neocomplete#smart_close_popup()."\<C-h>"
-    inoremap <expr><BS>  neocomplete#smart_close_popup()."\<C-h>"
+    inoremap <expr> <C-h> neocomplete#smart_close_popup()."\<C-h>"
+    inoremap <expr> <BS>  neocomplete#smart_close_popup()."\<C-h>"
     " <C-y>: paste.
-    inoremap <expr><C-y> pumvisible() ? neocomplete#close_popup() : "\<C-r>\""
+    inoremap <expr> <C-y> pumvisible() ? neocomplete#close_popup() : "\<C-r>\""
     " <C-e>: close popup.
-    inoremap <expr><C-e> pumvisible() ? neocomplete#cancel_popup() : "\<End>"
+    inoremap <expr> <C-e> pumvisible() ? neocomplete#cancel_popup() : "\<End>"
 
     " AutoComplPop like behavior.
     let g:neocomplete#enable_auto_select = 1
@@ -872,6 +871,7 @@ if neobundle#tap('neocomplcache.vim') "{{{
       let g:neocomplcache_keyword_patterns = {}
     endif
     let g:neocomplcache_keyword_patterns['default'] = '[0-9a-zA-Z:#_]\+'
+    let g:neocomplete#enable_multibyte_completion = 1
 
     " <CR>: close popup and save indent.
     inoremap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
@@ -879,14 +879,14 @@ if neobundle#tap('neocomplcache.vim') "{{{
       return neocomplcache#smart_close_popup() . "\<CR>"
     endfunction
     " <TAB>: completion.
-    inoremap <expr><TAB> pumvisible() ? "\<C-n>" : "\<TAB>"
+    inoremap <expr> <TAB> pumvisible() ? "\<C-n>" : "\<TAB>"
     " <C-h>, <BS>: close popup and delete backword char.
-    inoremap <expr><C-h> neocomplcache#smart_close_popup()."\<C-h>"
-    inoremap <expr><BS>  neocomplcache#smart_close_popup()."\<C-h>"
+    inoremap <expr> <C-h> neocomplcache#smart_close_popup()."\<C-h>"
+    inoremap <expr> <BS>  neocomplcache#smart_close_popup()."\<C-h>"
     " <C-y>: paste.
-    inoremap <expr><C-y> pumvisible() ? neocomplcache#close_popup() : "\<C-r>\""
+    inoremap <expr> <C-y> pumvisible() ? neocomplcache#close_popup() : "\<C-r>\""
     " <C-e>: close popup.
-    inoremap <expr><C-e> pumvisible() ? neocomplcache#cancel_popup() : "\<End>"
+    inoremap <expr> <C-e> pumvisible() ? neocomplcache#cancel_popup() : "\<End>"
 
     " AutoComplPop like behavior.
     let g:neocomplcache_enable_auto_select = 1
@@ -1522,6 +1522,7 @@ function! s:my_on_filetype() "{{{
   if !&l:modifiable
     setlocal nofoldenable
     setlocal foldcolumn=0
+    silent! IndentLinesDisable
   endif
 endfunction "}}}
 "}}}
