@@ -22,6 +22,12 @@ function is_cygwin() {
   return 1
 }
 
+## Msys
+function is_msys() {
+  [[ $OSTYPE == msys* ]] && return 0
+  return 1
+}
+
 export LANG=en_US.UTF-8
 
 # setopt histignorealldups sharehistory
@@ -101,6 +107,8 @@ fi
 
 if is_darwin || is_freebsd ; then
   alias ls='ls -G'
+elif is_msys ; then
+  alias ls='ls --color=auto --show-control-chars'
 else
   alias ls='ls --color=auto'
 fi
@@ -125,6 +133,8 @@ elif is_cygwin ; then
   alias open='cygstart'
   alias vim='/usr/bin/vim'
   alias gvim='cyg-wrapper.sh gvim --binary-opt=-c,--cmd,-T,-t,--servername,--remote-send,--remote-expr --fork=1'
+elif is_msys ; then
+  alias vim='/usr/bin/vim'
 fi
 alias vf='gvim +"VimFiler -buffer-name=explorer -simple -toggle"'
 alias formc='find . -iregex ".+\.\(c\|h\)$" -type f -print0 | xargs -0 uncrustify -c ~/.uncrustify4c.cfg --no-backup'
@@ -203,6 +213,10 @@ elif is_cygwin ; then
   export PATH=$PATH:/usr/local/share/vim:/usr/local/share/git-svn-clone-externals
   export LIBRARY_PATH=/lib:/lib/w32api:/usr/local/lib
   export TCL_LIBRARY=/usr/share/tcl8.4
+elif is_msys ; then
+  export LC_MESSAGES=C
+  #export PS1="\n\[\e[36m\]\u@\h \[\e[35m\]\w$(__git_ps1)\n\[\e[00;37;44m\]How may I serve you, Master?\[\e[00m\]\n$ "
+  export PATH=$PATH:/mingw64/bin:/usr/local/share/vim:/usr/local/share/git-svn-clone-externals:/c/Python:/c/Ruby/bin
 fi
 
 if is_linux || is_cygwin ; then
