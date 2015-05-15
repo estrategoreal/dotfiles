@@ -215,8 +215,11 @@ elif is_cygwin ; then
   export TCL_LIBRARY=/usr/share/tcl8.4
 elif is_msys ; then
   export LC_MESSAGES=C
-  #export PS1="\n\[\e[36m\]\u@\h \[\e[35m\]\w$(__git_ps1)\n\[\e[00;37;44m\]How may I serve you, Master?\[\e[00m\]\n$ "
-  export PATH=$PATH:/mingw64/bin:/usr/local/share/vim:/usr/local/share/git-svn-clone-externals:/c/Python:/c/Ruby/bin
+  export PS1="
+%F{cyan}%n@%m%f %F{magenta}%~%f
+%K{blue}How may I serve you, Master?%k
+$ "
+  export PATH=$PATH:/mingw64/bin:/usr/local/share/vim:/usr/local/share/git-svn-clone-externals:/c/Ruby/bin
 fi
 
 if is_linux || is_cygwin ; then
