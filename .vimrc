@@ -811,7 +811,7 @@ if neobundle#tap('neocomplete.vim') "{{{
     let g:clang_complete_auto = 0
     let g:clang_use_library = 1
     if s:is_windows
-      let g:clang_library_path = 'C:/MinGW64/msys/lib'
+      let g:clang_library_path = 'C:/msys64/usr/local/lib'
     endif
   endfunction
 
@@ -848,7 +848,7 @@ if neobundle#tap('neocomplcache.vim') "{{{
     let g:clang_complete_auto = 0
     let g:clang_use_library = 1
     if s:is_windows
-      let g:clang_library_path = 'C:/MinGW64/msys/lib'
+      let g:clang_library_path = 'C:/msys64/usr/local/lib'
     endif
     if !exists('g:neocomplcache_force_omni_patterns')
       let g:neocomplcache_force_omni_patterns = {}
@@ -1536,13 +1536,7 @@ if !exists('g:colors_name') && !has('gui_running')
   colorscheme elflord
 endif
 
-if s:is_windows
-  set shell=C:/MinGW64/msys/bin/bash
-elseif has('win32unix')
-  set shell=bash
-else
-  set shell=zsh
-endif
+set shell=zsh
 "}}}
 
 "-----------------------------------------------------------------------------
