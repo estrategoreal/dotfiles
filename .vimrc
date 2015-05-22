@@ -250,7 +250,7 @@ NeoBundleLazy 'thinca/vim-ref', {
       \ 'unite_sources' : 'ref',
       \ }
 " NeoBundleLazy 'tpope/vim-endwise'
-NeoBundleLazy 'tpope/vim-fugitive', {
+NeoBundle 'tpope/vim-fugitive', {
       \ 'commands' : ['Gdiff', 'Gstatus', 'Glog',
       \               'Gwrite', 'Gcommit', 'Gblame'],
       \ }
@@ -606,7 +606,7 @@ if neobundle#tap('TweetVim') "{{{
     nnoremap <silent><buffer> q :<C-u>close<CR>
     nmap <silent><buffer> j <Plug>(accelerated_jk_gj)
   endfunction"}}}
-  
+
   let g:tweetvim_display_separator = 0
 
   call neobundle#untap()
@@ -651,16 +651,6 @@ if neobundle#tap('vim-alignta') "{{{
 
   call neobundle#untap()
 endif "}}}
-
-" if neobundle#tap('vim-easy-align') "{{{
-"   " Start interactive EasyAlign in visual mode (e.g. vip<Enter>)
-"   xmap <Enter> <Plug>(EasyAlign)
-"
-"   " Start interactive EasyAlign for a motion/text object (e.g. <Leader>aip)
-"   nmap <Leader>a <Plug>(EasyAlign)
-"
-"   call neobundle#untap()
-" endif "}}}
 
 if neobundle#tap('vim-niceblock') "{{{
   xmap I  <Plug>(niceblock-I)
