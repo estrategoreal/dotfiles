@@ -1279,7 +1279,6 @@ if neobundle#tap('w3m.vim') "{{{
   if has('mac')
     let g:w3m#external_browser = 'open -a "Google Chrome"'
   elseif s:is_windows
-    let g:w3m#command = 'C:/MinGW64/msys/local/bin/w3m.exe'
     let g:w3m#external_browser = 'C:/Program\ Files\ (x86)/Google/Chrome/Application/chrome.exe'
   elseif s:is_freebsd
     let g:w3m#external_browser = 'chrome'
