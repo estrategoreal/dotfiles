@@ -135,6 +135,7 @@ elif is_cygwin ; then
   alias gvim='cyg-wrapper.sh gvim --binary-opt=-c,--cmd,-T,-t,--servername,--remote-send,--remote-expr --fork=1'
 elif is_msys ; then
   alias vim='/usr/bin/vim'
+  alias conv='iconv -f SHIFT_JIS -t UTF-8'
 fi
 alias vf='gvim +"VimFiler -buffer-name=explorer -simple -toggle"'
 alias formc='find . -iregex ".+\.\(c\|h\)$" -type f -print0 | xargs -0 uncrustify -c ~/.uncrustify4c.cfg --no-backup'
