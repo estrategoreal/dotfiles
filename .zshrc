@@ -81,8 +81,8 @@ zle -N history-beginning-search-forward-end history-search-end
 bindkey "^P" history-beginning-search-backward-end
 bindkey "^N" history-beginning-search-forward-end
 
-if [ -d $HOME/.zsh.d/zsh-completions/src ]; then
-    fpath=($HOME/.zsh.d/zsh-completions/src $fpath)
+if [ -d ~/.zsh.d/zsh-completions/src ]; then
+  fpath=(~/.zsh.d/zsh-completions/src $fpath)
 fi
 
 #if [ -f ~/.zsh.d/auto-fu.zsh ]; then
@@ -149,9 +149,9 @@ function ide() {
         name="/msys64$1"
       fi
     fi
-    gvim +"set columns=179" +"VimFiler -buffer-name=explorer -toggle ~" +"tabedit $name" +TlistOpen +"VimFilerCurrentDir -explorer -simple -winwidth=48" +"wincmd l"
+    gvim +"set columns=179" +"VimFiler -buffer-name=explorer -toggle ~" +"tabedit $name" +TlistOpen +"VimFilerCurrentDir -create -explorer -simple -winwidth=48" +"wincmd l"
   else
-    gvim +"set columns=179" +"VimFiler -buffer-name=explorer -toggle ~" +tabnew +TlistOpen +"wincmd h" +"VimFilerCurrentDir -explorer -simple -winwidth=48"
+    gvim +"set columns=179" +"VimFiler -buffer-name=explorer -toggle ~" +tabnew +TlistOpen +"wincmd h" +"VimFilerCurrentDir -create -explorer -simple -winwidth=48"
   fi
 }
 

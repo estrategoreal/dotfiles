@@ -79,24 +79,25 @@ call neobundle#begin(s:neobundle_dir)
 NeoBundleFetch 'Shougo/neobundle.vim'
 
 NeoBundle 'altercation/vim-colors-solarized'
-NeoBundleLazy 'basyura/TweetVim', { 'depends' :
-      \ ['basyura/twibill.vim', 'tyru/open-browser.vim'],
-      \ 'autoload' : { 'commands' : 'TweetVimHomeTimeline' }}
+NeoBundleLazy 'basyura/TweetVim', {
+      \ 'depends' : ['basyura/twibill.vim', 'tyru/open-browser.vim'],
+      \ 'autoload' : {'commands' : 'TweetVimHomeTimeline'},
+      \ }
 NeoBundleLazy 'bkad/CamelCaseMotion', {
       \ 'mappings' : '<Plug>',
       \ }
 NeoBundleLazy 'chikatoike/concealedyank.vim', {
-      \   'mappings' : [['x', '<Plug>(operator-concealedyank)']]
+      \ 'mappings' : [['x', '<Plug>(operator-concealedyank)']],
       \ }
 NeoBundleLazy 'gregsexton/gitv', {
       \ 'commands' : 'Gitv',
       \ }
-NeoBundleLazy 'h1mesuke/vim-alignta', {
-      \ 'insert' : 1,
-      \ }
+" NeoBundleLazy 'h1mesuke/vim-alignta', {
+"       \ 'insert' : 1,
+"       \ }
 NeoBundleLazy 'hail2u/vim-css3-syntax'
 NeoBundleLazy 'hewes/unite-gtags', {
-      \ 'unite_sources' : ['gtags/context']
+      \ 'unite_sources' : ['gtags/context'],
       \ }
 NeoBundleLazy 'jiangmiao/simple-javascript-indenter', {
       \ 'filetypes' : 'javascript',
@@ -104,11 +105,11 @@ NeoBundleLazy 'jiangmiao/simple-javascript-indenter', {
 NeoBundleLazy 'jelera/vim-javascript-syntax', {
       \ 'filetypes' : 'javascript',
       \ }
-" NeoBundleLazy 'junegunn/vim-easy-align', {
-"       \ 'mappings' : '<Plug>(EasyAlign)',
-"       \}
+NeoBundleLazy 'junegunn/vim-easy-align', {
+      \ 'mappings' : '<Plug>(EasyAlign)',
+      \ }
 NeoBundleLazy 'kana/vim-niceblock', {
-      \   'mappings' : '<Plug>',
+      \ 'mappings' : '<Plug>',
       \ }
 NeoBundleLazy 'kana/vim-operator-user', {
       \ 'functions' : 'operator#user#define',
@@ -116,9 +117,9 @@ NeoBundleLazy 'kana/vim-operator-user', {
 NeoBundleLazy 'kana/vim-operator-replace', {
       \ 'depends' : 'vim-operator-user',
       \ 'autoload' : {
-      \   'mappings' : [
-      \     ['nx', '<Plug>(operator-replace)']]
-      \ }}
+      \   'mappings' : [['nx', '<Plug>(operator-replace)']],
+      \   },
+      \ }
 NeoBundleLazy 'kannokanno/previm', {
       \ 'filetypes' : 'markdown',
       \ 'depends' : 'tyru/open-browser.vim',
@@ -131,19 +132,19 @@ NeoBundleLazy 'mrtazz/DoxygenToolkit.vim', {
       \ }
 NeoBundleLazy 'osyo-manga/unite-quickfix'
 NeoBundleLazy 'osyo-manga/vim-jplus', {
-      \ 'mappings' : '<Plug>'
+      \ 'mappings' : '<Plug>',
       \ }
 NeoBundleLazy 'osyo-manga/vim-monster', {
       \ 'filetypes' : 'ruby',
       \ }
 NeoBundleLazy 'rcmdnk/vim-markdown', {
-      \ 'filetypes' : 'markdown'
+      \ 'filetypes' : 'markdown',
       \ }
 if has('python')
 NeoBundleLazy 'Rip-Rip/clang_complete', {
       \ 'autoload' : {
-      \     'filetypes' : ['c', 'cpp'],
-      \    },
+      \   'filetypes' : ['c', 'cpp'],
+      \   },
       \ }
 else
 NeoBundleLazy 'Rip-Rip/clang_complete'
@@ -153,27 +154,28 @@ NeoBundleLazy 'rhysd/accelerated-jk', {
       \ }
 NeoBundleLazy 'rhysd/vim-operator-surround', {
       \ 'depends' : 'vim-operator-user',
-      \   'mappings' : '<Plug>',
+      \ 'mappings' : '<Plug>',
       \ }
 NeoBundleLazy 'LeafCage/foldCC', {
-      \ 'filetypes' : 'vim' }
+      \ 'filetypes' : 'vim',
+      \ }
 NeoBundleLazy 'saihoooooooo/glowshi-ft.vim', {
-      \ 'mappings' : '<Plug>'
+      \ 'mappings' : '<Plug>',
       \ }
 NeoBundle 'Shougo/neobundle-vim-scripts'
 if has('lua') && (v:version > 703 || (v:version == 703 && has('patch885')))
 NeoBundleFetch 'Shougo/neocomplcache.vim', {
-      \ 'insert' : 1
+      \ 'insert' : 1,
       \ }
 NeoBundleLazy 'Shougo/neocomplete.vim', {
-      \ 'insert' : 1
+      \ 'insert' : 1,
       \ }
 else
 NeoBundle 'Shougo/neocomplcache.vim', {
-      \ 'insert' : 1
+      \ 'insert' : 1,
       \ }
 NeoBundleFetch 'Shougo/neocomplete.vim', {
-      \ 'insert' : 1
+      \ 'insert' : 1,
       \ }
 endif
 NeoBundle 'Shougo/neomru.vim'
@@ -185,9 +187,10 @@ NeoBundleLazy 'Shougo/neosnippet.vim', {
       \    'neosnippet', 'neosnippet/user', 'neosnippet/runtime'],
       \ }
 NeoBundleLazy 'Shougo/unite.vim', {
-      \ 'commands' : [{ 'name' : 'Unite',
-      \                 'complete' : 'customlist,unite#complete_source'},
-      \                 'UniteWithCursorWord', 'UniteWithInput']
+      \ 'commands' : [
+      \   {'name' : 'Unite',
+      \     'complete' : 'customlist,unite#complete_source'},
+      \   'UniteWithCursorWord', 'UniteWithInput'],
       \ }
 NeoBundleLazy 'Shougo/unite-build'
 NeoBundleLazy 'Shougo/unite-help'
@@ -203,47 +206,39 @@ NeoBundleLazy 'Shougo/vim-vcs', {
 NeoBundleLazy 'Shougo/vimfiler.vim', {
       \ 'depends' : 'Shougo/unite.vim',
       \ 'commands' : [
-      \         { 'name' : 'VimFiler',
-      \           'complete' : 'customlist,vimfiler#complete' },
-      \         { 'name' : 'VimFilerTab',
-      \           'complete' : 'customlist,vimfiler#complete' },
-      \         { 'name' : 'VimFilerExplorer',
-      \           'complete' : 'customlist,vimfiler#complete' },
-      \         { 'name' : 'Edit',
-      \           'complete' : 'customlist,vimfiler#complete' },
-      \         { 'name' : 'Write',
-      \           'complete' : 'customlist,vimfiler#complete' },
-      \         'Read', 'Source'],
+      \   {'name' : ['VimFiler', 'VimFilerTab',
+      \              'VimFilerExplorer', 'Edit', 'Write'],
+      \     'complete' : 'customlist,vimfiler#complete' },
+      \   'Read', 'Source'],
       \ 'mappings' : '<Plug>',
       \ 'explorer' : 1,
       \ }
 NeoBundle 'Shougo/vimproc.vim', {
       \ 'build' : {
-      \     'windows' : has('win64') ? 'tools\\update-dll-mingw 64' : 'tools\\update-dll-mingw 32',
-      \     'cygwin' : 'make -f make_cygwin.mak',
-      \     'mac' : 'make -f make_mac.mak',
-      \     'unix' : 'make -f make_unix.mak',
-      \    }
+      \   'windows' : has('win64') ? 'tools\\update-dll-mingw 64' : 'tools\\update-dll-mingw 32',
+      \   'cygwin' : 'make -f make_cygwin.mak',
+      \   'mac' : 'make -f make_mac.mak',
+      \   'unix' : 'make -f make_unix.mak',
+      \   },
       \ }
 NeoBundleLazy 'Shougo/vimshell.vim', {
-      \ 'commands' : [{ 'name' : 'VimShell',
-      \                 'complete' : 'customlist,vimshell#complete'},
-      \               'VimShellExecute', 'VimShellInteractive',
-      \               'VimShellCreate',
-      \               'VimShellTerminal', 'VimShellPop'],
-      \ 'mappings' : '<Plug>'
+      \ 'commands' : [
+      \   {'name' : 'VimShell',
+      \    'complete' : 'customlist,vimshell#complete'},
+      \   'VimShellExecute', 'VimShellInteractive',
+      \   'VimShellCreate',
+      \   'VimShellTerminal', 'VimShellPop'],
+      \ 'mappings' : '<Plug>',
       \ }
 NeoBundleLazy 'Shougo/vinarise.vim', {
-      \ 'commands' : [{
-      \   'name' : 'Vinarise', 'complete' : 'file'
-      \ }]
+      \ 'commands' : [{'name' : 'Vinarise', 'complete' : 'file'}],
       \ }
 NeoBundleLazy 'thinca/vim-qfreplace', {
       \ 'filetypes' : ['unite', 'quickfix'],
       \ }
 NeoBundleLazy 'thinca/vim-quickrun', {
       \ 'commands' : 'QuickRun',
-      \ 'mappings' : '<Plug>'
+      \ 'mappings' : '<Plug>',
       \ }
 NeoBundleLazy 'thinca/vim-ref', {
       \ 'commands' : 'Ref',
@@ -259,7 +254,7 @@ NeoBundleLazy 'tpope/vim-repeat', {
       \ }
 NeoBundleLazy 'tsukkee/unite-tag'
 NeoBundleLazy 'tyru/caw.vim', {
-      \ 'mappings' : '<Plug>'
+      \ 'mappings' : '<Plug>',
       \ }
 NeoBundleLazy 'tyru/open-browser.vim', {
       \ 'mappings' : '<Plug>',
@@ -275,14 +270,14 @@ NeoBundleLazy 'vim-jp/cpp-vim', {
       \ }
 NeoBundleLazy 'vim-ruby/vim-ruby', {
       \ 'mappings' : '<Plug>',
-      \ 'filetypes' : 'ruby'
+      \ 'filetypes' : 'ruby',
       \ }
 NeoBundleLazy 'vim-scripts/taglist.vim', {
       \ 'commands' : 'TlistOpen',
       \ }
 NeoBundle 'Yggdroot/indentLine'
 NeoBundleLazy 'yomi322/vim-gitcomplete', {
-      \ 'filetype' : 'vimshell'
+      \ 'filetype' : 'vimshell',
       \ }
 NeoBundleLazy 'yuratomo/w3m.vim', {
       \ 'commands' : 'W3mTab',
@@ -636,25 +631,60 @@ if neobundle#tap('gitv') "{{{
   call neobundle#untap()
 endif "}}}
 
-if neobundle#tap('vim-alignta') "{{{
-  let g:unite_source_alignta_preset_arguments = [
-        \ ["Align at '/*' & '*/'", '<-- /* -> */' ],
-        \ ["Align at '='", '=>\='],
-        \ ["Align at ':'", '01 :'],
-        \ ["Align at '|'", '|'   ],
-        \ ["Align at ')'", '0 )' ],
-        \ ["Align at ']'", '0 ]' ],
-        \ ["Align at '}'", '}'   ],
-        \]
-
-  xnoremap <silent> [unite]a :<C-u>Unite alignta:arguments<CR>
-
-  call neobundle#untap()
-endif "}}}
+" if neobundle#tap('vim-alignta') "{{{
+"   let g:unite_source_alignta_preset_arguments = [
+"         \ ["Align at '/*' & '*/'", '<-- /* -> */' ],
+"         \ ["Align at '='", '=>\='],
+"         \ ["Align at ':'", '01 :'],
+"         \ ["Align at '|'", '|'   ],
+"         \ ["Align at ')'", '0 )' ],
+"         \ ["Align at ']'", '0 ]' ],
+"         \ ["Align at '}'", '}'   ],
+"         \]
+"
+"   xnoremap <silent> [unite]a :<C-u>Unite alignta:arguments<CR>
+"
+"   call neobundle#untap()
+" endif "}}}
 
 if neobundle#tap('vim-niceblock') "{{{
   xmap I  <Plug>(niceblock-I)
   xmap A  <Plug>(niceblock-A)
+
+  call neobundle#untap()
+endif "}}}
+
+if neobundle#tap('vim-easy-align') "{{{
+  let g:easy_align_delimiters = {
+        \ '>': { 'pattern': '>>\|=>\|>' },
+        \ '/': {
+        \     'pattern':         '//\+\|/\*\|\*/',
+        \     'delimiter_align': 'l',
+        \     'ignore_groups':   ['!Comment'] },
+        \ ']': {
+        \     'pattern':       '[[\]]',
+        \     'left_margin':   0,
+        \     'right_margin':  0,
+        \     'stick_to_left': 0
+        \   },
+        \ ')': {
+        \     'pattern':       '[()]',
+        \     'left_margin':   0,
+        \     'right_margin':  0,
+        \     'stick_to_left': 0
+        \   },
+        \ 'd': {
+        \     'pattern':      ' \(\S\+\s*[;=]\)\@=',
+        \     'left_margin':  0,
+        \     'right_margin': 0
+        \   }
+        \ }
+
+  " Start interactive EasyAlign in visual mode (e.g. vip<Enter>)
+  xmap <Enter> <Plug>(EasyAlign)
+
+  " Start interactive EasyAlign for a motion/text object (e.g. <Leader>aip)
+  nmap <Leader>a <Plug>(EasyAlign)
 
   call neobundle#untap()
 endif "}}}
@@ -1214,8 +1244,14 @@ if neobundle#tap('vim-fugitive') "{{{
   nnoremap <silent> [Space]gC :<C-u>Gcommit --amend<CR>
   nnoremap <silent> [Space]gb :<C-u>call <SID>fugitive_tab('Gblame')<CR>
   function! s:fugitive_tab(cmd)
+    if s:is_windows && has('gui_running')
+      setlocal shellpipe=2>\&1\|iconv\ -f\ UTF-8\ -t\ SHIFT_JIS>%s
+    endif
     execute 'tabedit ' . expand('%')
     execute a:cmd
+    if s:is_windows && has('gui_running')
+      setlocal shellpipe&
+    endif
   endfunction
 
   call neobundle#untap()
