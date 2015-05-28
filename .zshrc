@@ -137,6 +137,7 @@ elif is_msys ; then
   alias vim='/usr/bin/vim'
   alias conv='iconv -f SHIFT_JIS -t UTF-8'
 fi
+alias tmux='zsh ~/.dotfiles/.tmux.startup'
 alias vf='gvim +"VimFiler -buffer-name=explorer -simple -toggle"'
 alias formc='find . -iregex ".+\.\(c\|h\)$" -type f -print0 | xargs -0 uncrustify -c ~/.uncrustify4c.cfg --no-backup'
 alias formcpp='find . -iregex ".+\.\(c\|cpp\|h\)$" -type f -print0 | xargs -0 uncrustify -c ~/.uncrustify4cpp.cfg --no-backup'
@@ -201,7 +202,6 @@ elif is_freebsd ; then
 fi
 
 [ -f ~/.zshrc.local ] && source ~/.zshrc.local
-[ -f ~/.zshrc.tmux ] && source ~/.zshrc.tmux
 
 # Source global definitions
 
@@ -236,4 +236,6 @@ fi
 if [ -x "`which rbenv`" ]; then
   eval "$(rbenv init -)"
 fi
+
+[ -f ~/.tmux.startup ] && source ~/.tmux.startup
 
