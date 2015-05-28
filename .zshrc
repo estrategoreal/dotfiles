@@ -237,5 +237,5 @@ if [ -x "`which rbenv`" ]; then
   eval "$(rbenv init -)"
 fi
 
-[ -f ~/.tmux.startup ] && source ~/.tmux.startup
+[ -f ~/.zshrc.tmux ] && source ~/.zshrc.tmux
 
