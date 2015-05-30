@@ -244,7 +244,6 @@ NeoBundleLazy 'thinca/vim-ref', {
       \ 'commands' : 'Ref',
       \ 'unite_sources' : 'ref',
       \ }
-" NeoBundleLazy 'tpope/vim-endwise'
 NeoBundle 'tpope/vim-fugitive', {
       \ 'commands' : ['Gdiff', 'Gstatus', 'Glog',
       \               'Gwrite', 'Gcommit', 'Gblame'],
