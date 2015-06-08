@@ -127,6 +127,10 @@ NeoBundleLazy 'kannokanno/previm', {
 NeoBundleLazy 'kana/vim-smartchr', {
       \ 'insert' : 1,
       \ }
+" NeoBundleLazy 'lambdalisue/vim-gita', {
+"       \ 'autoload': {
+"       \   'commands': ['Gita'],
+"       \}}
 NeoBundleLazy 'mrtazz/DoxygenToolkit.vim', {
       \ 'filetypes' : ['c', 'cpp'],
       \ }
@@ -496,6 +500,7 @@ set noshowmode
 set showtabline=2
 " Set the content of the status line.
 set statusline=%<%m%r%h%w%y%{'['.(&fenc!=''?&fenc:&enc).':'.&ff.']'}\ %1.40f%=%{fugitive#statusline()}\ \ %l/%L,%c%V%5P
+"set statusline=%<%m%r%h%w%y%{'['.(&fenc!=''?&fenc:&enc).':'.&ff.']'}\ %1.40f%=%{gita#statusline#preset('branch')}\ \ %l/%L,%c%V%5P
 
 " Turn down a long line appointed in 'breakat'
 "set linebreak
@@ -720,6 +725,14 @@ if neobundle#tap('DoxygenToolkit.vim') "{{{
 
   call neobundle#untap()
 endif "}}}
+
+" if neobundle#tap('vim-gita') "{{{
+"   nnoremap <silent> [Space]gs  :<C-u>Gita status<CR>
+"   nnoremap <silent> [Space]gc  :<C-u>Gita commit<CR>
+"   nnoremap <silent> [Space]gd  :<C-u>Gita diff<CR>
+"
+"   call neobundle#untap()
+" endif "}}}
 
 if neobundle#tap('vim-jplus') "{{{
   nmap J <Plug>(jplus)
