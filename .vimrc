@@ -127,6 +127,7 @@ NeoBundleLazy 'kannokanno/previm', {
 NeoBundleLazy 'kana/vim-smartchr', {
       \ 'insert' : 1,
       \ }
+NeoBundle 'Kocha/vim-unite-tig'
 " NeoBundleLazy 'lambdalisue/vim-gita', {
 "       \ 'autoload': {
 "       \   'commands': ['Gita'],
@@ -987,6 +988,8 @@ if neobundle#tap('unite.vim') "{{{
         \ :<C-u>Unite -buffer-name=files -no-split -multi-line -unique -silent
         \ jump_point file_point buffer_tab:- file_mru
         \ file_rec/git file file/new<CR>
+  nnoremap <silent> [Window]t
+        \ :<C-u>Unite -start-insert tig<CR>
   nnoremap <silent> [unite]w
         \ :<C-u>Unite window<CR>
 
@@ -1256,12 +1259,12 @@ if neobundle#tap('vim-fugitive') "{{{
   nnoremap <silent> [Space]gC :<C-u>Gcommit --amend<CR>
   nnoremap <silent> [Space]gb :<C-u>call <SID>fugitive_tab('Gblame')<CR>
   function! s:fugitive_tab(cmd)
-    if s:is_windows && has('gui_running')
+    if s:is_windows
       setlocal shellpipe=2>\&1\|iconv\ -f\ UTF-8\ -t\ SHIFT_JIS>%s
     endif
     execute 'tabedit ' . expand('%')
     execute a:cmd
-    if s:is_windows && has('gui_running')
+    if s:is_windows
       setlocal shellpipe&
     endif
   endfunction
@@ -1407,6 +1410,8 @@ nnoremap <silent> [Space]t2 :<C-u>setlocal shiftwidth=2 softtabstop=2<CR>
 nnoremap <silent> [Space]t4 :<C-u>setlocal shiftwidth=4 softtabstop=4<CR>
 "}}}
 
+nnoremap [Window] <Nop>
+nmap s [Window]
 nnoremap <silent> q :<C-u>call <SID>smart_close()<CR>
 "}}}
 
