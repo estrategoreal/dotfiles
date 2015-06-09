@@ -1,0 +1,5 @@
+
+set split-view-height = 80%
+
+set main-view = id date:local author commit-title:graph=yes,refs=yes
+
