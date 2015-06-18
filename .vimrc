@@ -1260,7 +1260,7 @@ if neobundle#tap('vim-fugitive') "{{{
   nnoremap <silent> [Space]gb :<C-u>call <SID>fugitive_tab('Gblame')<CR>
   function! s:fugitive_tab(cmd)
     if s:is_windows
-      setlocal shellpipe=2>\&1\|iconv\ -f\ UTF-8\ -t\ SHIFT_JIS>%s
+      setlocal shellpipe=2>\&1\|iconv\ -f\ UTF-8\ -t\ CP932>%s
     endif
     execute 'tabedit ' . expand('%')
     execute a:cmd
