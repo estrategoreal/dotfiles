@@ -85,19 +85,9 @@ if [ -d ~/.zsh.d/zsh-completions/src ]; then
   fpath=(~/.zsh.d/zsh-completions/src $fpath)
 fi
 
-#if [ -f ~/.zsh.d/auto-fu.zsh ]; then
-#  source ~/.zsh.d/auto-fu.zsh
-#  function zle-line-init () {
-#    auto-fu-init
-#  }
-#  zle -N zle-line-init
-#  zstyle ':completion:*' completer _oldlist _complete
-#  zstyle ':auto-fu:var' postdisplay $''
-#fi
-
-if [ -f ~/.zsh.d/z.sh ]; then
+if [ -f ~/.zsh.d/z/z.sh ]; then
   _Z_CMD=j
-  source ~/.zsh.d/z.sh
+  source ~/.zsh.d/z/z.sh
   function precmd () {
     _z --add "$(pwd -P)"
   }
