@@ -175,10 +175,6 @@ if is_darwin ; then
   function tarbz2() {
     COPYFILE_DISABLE=true tar cjvf $1.tbz --exclude .DS_Store $1
   }
-
-  function catmp4() {
-    ffmpeg -f concat -i <(for f in ${PWD}/*.m4v; do echo "file '$f'"; done) -c copy output.m4v
-  }
 elif is_freebsd ; then
   function udpkg() {
     sudo portsnap fetch update
