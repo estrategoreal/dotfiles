@@ -212,7 +212,7 @@ elif is_msys ; then
 %F{cyan}%n@%m%f %F{magenta}%~%f
 %K{blue}How may I serve you, Master?%k
 $ "
-  export PATH=$PATH:/mingw64/bin:/usr/local/share/vim:/usr/local/share/git-svn-clone-externals:/c/Ruby/bin
+  export PATH=$PATH:/usr/local/share/vim:/usr/local/share/git-svn-clone-externals:/c/Ruby/bin
 fi
 
 if is_linux || is_cygwin ; then
