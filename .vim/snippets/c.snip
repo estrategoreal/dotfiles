@@ -93,6 +93,12 @@ snippet main
         ${0:TARGET}
         return 0;
     }
+snippet main2
+    int main(void)
+    {
+        ${0:TARGET}
+        return 0;
+    }
 
 # #include <...>
 snippet inc
@@ -173,6 +179,10 @@ abbr fopen("...", "...");
     fopen("${1:PATH}", "${2:MODE}");
     ${0:TARGET}
     fclose(${3:FD});
+
+snippet fgets
+abbr fgets(row, length, file);
+    fgets(${0:ROW}, ${1:LENGTH}, ${2:FILE});
 
 snippet header
 abbr header file template
