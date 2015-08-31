@@ -95,7 +95,7 @@ fi
 
 # User specific aliases and functions
 
-if is_darwin || is_freebsd ; then
+if is_freebsd ; then
   alias ls='ls -G'
 elif is_msys ; then
   alias ls='ls --color=auto --show-control-chars'
