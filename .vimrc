@@ -625,7 +625,12 @@ if neobundle#tap('concealedyank.vim') "{{{
 endif "}}}
 
 if neobundle#tap('jedi-vim') "{{{
-  autocmd MyAutoCmd FileType python setlocal omnifunc=jedi#completions
+  autocmd MyAutoCmd FileType python
+        \ if has('python') || has('python3') |
+        \   setlocal omnifunc=jedi#completions |
+        \ else |
+        \   setlocal omnifunc= |
+        \ endif
   let g:jedi#completions_enabled = 0
   let g:jedi#auto_vim_configuration = 0
 
@@ -1095,7 +1100,9 @@ if neobundle#tap('unite.vim') "{{{
     if executable('ag')
       " For ag.
       let g:unite_source_grep_command = 'ag'
-      let g:unite_source_grep_default_opts = '-i --nocolor --nogroup --hidden'
+      let g:unite_source_grep_default_opts =
+        \ '-i --vimgrep --hidden --ignore ' .
+        \  '''.hg'' --ignore ''.svn'' --ignore ''.git'' --ignore ''.bzr'''
       let g:unite_source_grep_recursive_opt = ''
     elseif executable('pt')
       " For pt.
@@ -1105,7 +1112,7 @@ if neobundle#tap('unite.vim') "{{{
     elseif executable('ack-grep')
       " For ack.
       let g:unite_source_grep_command = 'ack-grep'
-      let g:unite_source_grep_default_opts = '-i --no-heading --no-color -a'
+      let g:unite_source_grep_default_opts = '-i --no-heading --no-color -k -H'
       let g:unite_source_grep_recursive_opt = ''
     endif
 
@@ -1557,17 +1564,6 @@ nnoremap @@ @a
 " Search.
 nnoremap ;n  ;
 nnoremap ;m  ,
-
-" Read pdf
-if executable('pdftotext')
-  command! -complete=file -nargs=1 Pdf call s:read_pdf(<q-args>)
-  function! s:read_pdf(file)
-    enew
-    execute 'read !pdftotext -nopgbrk -layout' a:file '-'
-    setlocal nomodifiable
-    setlocal nomodified
-  endfunction
-endif
 "}}}
 
 "-----------------------------------------------------------------------------
