@@ -222,8 +222,10 @@ NeoBundleLazy 'Shougo/vimfiler.vim', {
 NeoBundle 'Shougo/vimproc.vim', {
       \ 'build' : {
       \   'windows' : 'tools\\update-dll-mingw',
-      \   'unix' : 'gmake'
-      \   'others' : 'make',
+      \   'cygwin' : 'make -f make_cygwin.mak',
+      \   'mac' : 'make -f make_mac.mak',
+      \   'linux' : 'make',
+      \   'unix' : 'gmake',
       \   },
       \ }
 NeoBundleLazy 'Shougo/vimshell.vim', {
