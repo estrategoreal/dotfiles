@@ -50,7 +50,7 @@ endif
 
 " Save the setting of window.
 set columns=87
-let g:save_window_file = expand('~/.vimwinpos')
+let g:save_window_file = expand('~/.vim/vimwinpos')
 augroup SaveWindow
   autocmd!
   autocmd VimLeavePre * call s:save_window()
@@ -87,7 +87,6 @@ endif
 " Setting of colorscheme.
 set background=dark
 colorscheme solarized
-"colorscheme macvim
 
 set ch=2		" Make command line two lines high
 

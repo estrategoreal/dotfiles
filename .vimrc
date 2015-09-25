@@ -475,6 +475,9 @@ set virtualedit=block
 
 " Use autofmt.
 set formatexpr=autofmt#japanese#formatexpr()
+
+" Set viminfo.
+set viminfo+=n~/.vim/viminfo
 "}}}
 
 "-----------------------------------------------------------------------------
