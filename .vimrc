@@ -204,7 +204,7 @@ NeoBundleLazy 'Shougo/unite.vim', {
       \ 'depends' : 'Shougo/neomru.vim',
       \ 'commands' : [
       \   {'name' : 'Unite',
-      \     'complete' : 'customlist,unite#complete_source'},
+      \    'complete' : 'customlist,unite#complete_source'},
       \   'UniteWithCursorWord'],
       \ }
 NeoBundleLazy 'Shougo/unite-build'
@@ -215,15 +215,15 @@ NeoBundleLazy 'Shougo/vimfiler.vim', {
       \ 'depends' : 'Shougo/unite.vim',
       \ 'commands' :
       \   {'name' : ['VimFiler', 'VimFilerExplorer', 'Edit', 'Write'],
-      \     'complete' : 'customlist,vimfiler#complete' },
+      \    'complete' : 'customlist,vimfiler#complete' },
       \ 'mappings' : '<Plug>',
       \ 'explorer' : 1,
       \ }
 NeoBundle 'Shougo/vimproc.vim', {
       \ 'build' : {
       \   'windows' : 'tools\\update-dll-mingw',
-      \   'cygwin' : 'make -f make_cygwin.mak',
-      \   'mac' : 'make -f make_mac.mak',
+      \   'cygwin' : 'make',
+      \   'mac' : 'make',
       \   'linux' : 'make',
       \   'unix' : 'gmake',
       \   },
@@ -421,7 +421,7 @@ endif
 set showmatch
 " Highlight when CursorMoved.
 set cpoptions-=m
-set matchtime=3
+set matchtime=1
 " Highlight <>.
 set matchpairs+=<:>
 
@@ -822,6 +822,8 @@ if neobundle#tap('neocomplete.vim') && has('lua') "{{{
     inoremap <expr> <C-y> pumvisible() ? neocomplete#close_popup() : "\<C-r>\""
     " <C-e>: close popup.
     inoremap <expr> <C-e> pumvisible() ? neocomplete#cancel_popup() : "\<End>"
+    " Close popup by <Space>.
+    inoremap <expr><Space> pumvisible() ? "\<C-y>" : "\<Space>"
 
     " AutoComplPop like behavior.
     let g:neocomplete#enable_auto_select = 1
@@ -839,21 +841,21 @@ if neobundle#tap('neocomplete.vim') && has('lua') "{{{
           \ '[^.[:digit:] *\t]\%(\.\|->\)\%(\h\w*\)\?\|\h\w*::\%(\h\w*\)\?'
     " let g:neocomplete#sources#omni#input_patterns.ruby =
     "       \ '[^. *\t]\.\w*\|\h\w*::\w*'
-    let g:neocomplete#force_overwrite_completefunc = 1
     let g:neocomplete#enable_auto_close_preview = 1
     let g:neocomplete#force_omni_input_patterns.c =
-          \ '[^.[:digit:] *\t]\%(\.\|->\)'
+          \ '[^.[:digit:] *\t]\%(\.\|->\)\w*'
     let g:neocomplete#force_omni_input_patterns.cpp =
           \ '[^.[:digit:] *\t]\%(\.\|->\)\|\h\w*::'
     let g:neocomplete#force_omni_input_patterns.objc =
-          \ '[^.[:digit:] *\t]\%(\.\|->\)'
+          \ '\[\h\w*\s\h\?\|\h\w*\%(\.\|->\)'
     let g:neocomplete#force_omni_input_patterns.ruby =
-          \ '[^. *\t]\.\w*\|\h\w*::\w*'
+          \ '[^.[:digit:] *\t]\%(\.\|->\)\w*\|\h\w*::\w*'
     let g:neocomplete#force_omni_input_patterns.python =
-          \ '[^. \t]\.\w*'
+          \ '\h\w*\|[^. \t]\.\w*'
     " For clang_complete.
-    let g:clang_auto_select = 0
     let g:clang_complete_auto = 0
+    let g:clang_auto_select = 0
+    let g:clang_default_keymappings = 0
     let g:clang_use_library = 1
     if s:is_windows
       let g:clang_library_path = 'C:/msys64/usr/local/lib'
