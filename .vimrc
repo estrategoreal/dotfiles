@@ -36,6 +36,12 @@ if s:is_windows
   set shellslash
 endif
 
+let $CACHE = expand('~/.cache')
+
+if !isdirectory(expand($CACHE))
+  call mkdir(expand($CACHE), 'p')
+endif
+
 " Because a value is not set in $MYGVIMRC with the console, set it.
 if !exists($MYGVIMRC)
   let $MYGVIMRC = expand('~/.gvimrc')
@@ -795,7 +801,7 @@ if neobundle#tap('neocomplete.vim') && has('lua') "{{{
     " Define dictionary.
     let g:neocomplete#sources#dictionary#directories = {
           \ 'default' : '',
-          \ 'vimshell' : $HOME .'/.vimshell/command-history'
+          \ 'vimshell' : $CACHE.'/vimshell/command-history'
           \ }
 
     " Define keyword.
@@ -823,7 +829,7 @@ if neobundle#tap('neocomplete.vim') && has('lua') "{{{
     " <C-e>: close popup.
     inoremap <expr> <C-e> pumvisible() ? neocomplete#cancel_popup() : "\<End>"
     " Close popup by <Space>.
-    inoremap <expr><Space> pumvisible() ? "\<C-y>" : "\<Space>"
+    "inoremap <expr><Space> pumvisible() ? "\<C-y>" : "\<Space>"
 
     " AutoComplPop like behavior.
     let g:neocomplete#enable_auto_select = 1
@@ -1052,8 +1058,13 @@ if neobundle#tap('unite.vim') "{{{
   let g:unite_source_history_yank_enable = 1
 
   function! neobundle#hooks.on_source(bundle)
+    " Start insert.
+    call unite#custom#profile('action', 'context', {
+          \ 'start_insert' : 1
+          \ })
+
     " migemo.
-    call unite#custom_source('line_migemo', 'matchers', 'matcher_migemo')
+    call unite#custom#source('line_migemo', 'matchers', 'matcher_migemo')
 
     " Keymapping in unite.vim.
     autocmd MyAutoCmd FileType unite call s:unite_my_settings()
@@ -1099,9 +1110,6 @@ if neobundle#tap('unite.vim') "{{{
     endfunction"}}}
 
     let g:unite_enable_auto_select = 0
-    "let g:unite_enable_start_insert = 0
-    let g:unite_enable_start_insert = 1
-    let g:unite_source_grep_max_candidates = 500
 
     if executable('ag')
       " For ag.
@@ -1222,7 +1230,10 @@ if neobundle#tap('vimshell.vim') "{{{
       " Hide the window in hitting ESC key twice.
       nmap <silent><buffer> <ESC><ESC> <C-^>
       imap <silent><buffer> <ESC><ESC> <ESC><C-^>
+      imap <buffer><BS>  <Plug>(vimshell_another_delete_backward_char)
+      imap <buffer><C-h> <Plug>(vimshell_another_delete_backward_char)
       imap <buffer><C-k> <Plug>(vimshell_zsh_complete)
+      imap <buffer><C-g> <Plug>(vimshell_history_neocomplete)
 
       xmap <buffer> y <Plug>(operator-concealedyank)
 
