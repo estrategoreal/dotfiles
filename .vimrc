@@ -454,10 +454,10 @@ endif
 set grepprg=grep\ -nH
 
 " Reload .vimrc and .gvimrc automatically.
-"autocmd MyAutoCmd BufWritePost .vimrc,vimrc source $MYVIMRC |
-"      \ if has('gui_running') | source $MYGVIMRC | echo "source $MYVIMRC"
-"autocmd MyAutoCmd BufWritePost .gvimrc,gvimrc
-"      \ if has('gui_running') | source $MYGVIMRC | echo "source $MYGVIMRC"
+" autocmd MyAutoCmd BufWritePost .vimrc,vimrc source $MYVIMRC |
+"       \ if has('gui_running') | source $MYGVIMRC | echo "source $MYVIMRC"
+" autocmd MyAutoCmd BufWritePost .gvimrc,gvimrc
+"       \ if has('gui_running') | source $MYGVIMRC | echo "source $MYGVIMRC"
 
 " Keymapping timeout.
 set timeout timeoutlen=3000 ttimeoutlen=100
@@ -514,9 +514,9 @@ set statusline=%<%m%r%h%w%y%{'['.(&fenc!=''?&fenc:&enc).':'.&ff.']'}\ %1.40f%=%{
 "set statusline=%<%m%r%h%w%y%{'['.(&fenc!=''?&fenc:&enc).':'.&ff.']'}\ %1.40f%=%{gita#statusline#preset('branch')}\ \ %l/%L,%c%V%5P
 
 " Turn down a long line appointed in 'breakat'
-"set linebreak
-"set showbreak=\
-"set breakat=\ \	;:,!?
+" set linebreak
+" set showbreak=\
+" set breakat=\ \	;:,!?
 " Wrap conditions.
 set whichwrap+=h,l,<,>,[,],b,s,~
 " Wrap long lines.
@@ -578,7 +578,7 @@ augroup MyAutoCmd
   autocmd FileType c setlocal omnifunc=ccomplete#Complete
   autocmd FileType css setlocal omnifunc=csscomplete#CompleteCSS
   autocmd FileType html,markdown setlocal omnifunc=htmlcomplete#CompleteTags
-  "autocmd FileType ruby setlocal omnifunc=rubycomplete#Complete
+  " autocmd FileType ruby setlocal omnifunc=rubycomplete#Complete
   autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
 augroup END
 "}}}
@@ -829,7 +829,7 @@ if neobundle#tap('neocomplete.vim') && has('lua') "{{{
     " <C-e>: close popup.
     inoremap <expr> <C-e> pumvisible() ? neocomplete#cancel_popup() : "\<End>"
     " Close popup by <Space>.
-    "inoremap <expr><Space> pumvisible() ? "\<C-y>" : "\<Space>"
+    " inoremap <expr><Space> pumvisible() ? "\<C-y>" : "\<Space>"
 
     " AutoComplPop like behavior.
     let g:neocomplete#enable_auto_select = 1
@@ -1021,7 +1021,7 @@ if neobundle#tap('unite.vim') "{{{
         \ :<C-u>call <SID>visual_grep()<CR>
   function! s:cursor_grep()
     let w = expand('<cword>')
-    "call s:my_idenew()
+    " call s:my_idenew()
     execute 'Unite grep:.::' . w . ' -buffer-name=search -auto-preview'
   endfunction
   function! s:visual_grep()
@@ -1029,7 +1029,7 @@ if neobundle#tap('unite.vim') "{{{
     silent normal gvy
     let selected = @@
     let @@ = tmp
-    "call s:my_idenew()
+    " call s:my_idenew()
     execute 'Unite grep:.::' . selected . ' -buffer-name=search -auto-preview'
   endfunction
   nnoremap <silent> [Space]b :<C-u>UniteBookmarkAdd<CR>
@@ -1044,10 +1044,10 @@ if neobundle#tap('unite.vim') "{{{
   nnoremap <silent> [Tag]n :<C-u>tnext<CR>
   " Jump previous.
   nnoremap <silent> [Tag]p :<C-u>pop<CR>
-  "nnoremap <silent><expr> [Tag]t &filetype == 'help' ?  "g\<C-]>" :
-        \ ":\<C-u>UniteWithCursorWord -buffer-name=tag -immediately tag tag/include\<CR>"
-  "nnoremap <silent><expr> [Tag]p &filetype == 'help' ?
-        \ ":\<C-u>pop\<CR>" : ":\<C-u>Unite jump\<CR>"
+  " nnoremap <silent><expr> [Tag]t &filetype == 'help' ?  "g\<C-]>" :
+  "       \ ":\<C-u>UniteWithCursorWord -buffer-name=tag -immediately tag tag/include\<CR>"
+  " nnoremap <silent><expr> [Tag]p &filetype == 'help' ?
+  "       \ ":\<C-u>pop\<CR>" : ":\<C-u>Unite jump\<CR>"
   "}}}
 
   " Execute help.
@@ -1543,11 +1543,11 @@ onoremap <silent> gc :<C-u>normal gc<CR>
 
 " Folding. "{{{
 " If press h on head, fold close.
-"nnoremap <expr> h col('.') == 1 && foldlevel(line('.')) > 0 ? 'zc' : 'h'
+" nnoremap <expr> h col('.') == 1 && foldlevel(line('.')) > 0 ? 'zc' : 'h'
 " If press l on fold, fold open.
 nnoremap <expr> l foldclosed(line('.')) != -1 ? 'zo0' : 'l'
 " If press h on head, range fold close.
-"xnoremap <expr> h col('.') == 1 && foldlevel(line('.')) > 0 ? 'zcgv' : 'h'
+" xnoremap <expr> h col('.') == 1 && foldlevel(line('.')) > 0 ? 'zcgv' : 'h'
 " If press l on fold, range fold open.
 xnoremap <expr> l foldclosed(line('.')) != -1 ? 'zogv0' : 'l'
 noremap [Space]j zj
