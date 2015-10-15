@@ -215,7 +215,19 @@ $ "
   export PATH=$PATH:/usr/local/share/vim:/usr/local/share/git-svn-clone-externals:/c/Ruby/bin
 fi
 
-if is_linux || is_cygwin ; then
+if is_darwin ; then
+  export HOMEBREW_CASK_OPTS=--appdir=/Applications
+  brew_completion=$(brew --prefix 2>/dev/null)/share/zsh/site-functions
+  if [ $? -eq 0 ] && [ -d "$brew_completion" ];then
+    fpath=($brew_completion $fpath)
+  fi
+  autoload -U compinit
+  compinit
+
+  if [ -f $(brew --prefix)/etc/brew-wrap ];then
+    source $(brew --prefix)/etc/brew-wrap
+  fi
+elif is_linux || is_cygwin ; then
   export PATH=$HOME/.rbenv/bin:$PATH
 fi
 if [ -x "`which rbenv`" ]; then
