@@ -129,7 +129,7 @@ NeoBundleLazy 'kana/vim-niceblock', {
       \ }
 NeoBundleLazy 'kana/vim-operator-user'
 NeoBundleLazy 'kana/vim-operator-replace', {
-      \ 'depends' : 'vim-operator-user',
+      \ 'depends' : 'kana/vim-operator-user',
       \ 'mappings' : [['nx', '<Plug>']],
       \ }
 NeoBundleLazy 'kannokanno/previm', {
@@ -150,24 +150,23 @@ NeoBundleLazy 'osyo-manga/unite-quickfix'
 NeoBundleLazy 'osyo-manga/vim-jplus', {
       \ 'mappings' : '<Plug>',
       \ }
+NeoBundleLazy 'osyo-manga/vim-marching', {
+      \ 'filetypes' : ['c', 'cpp'],
+      \ }
 NeoBundleLazy 'osyo-manga/vim-monster', {
       \ 'filetypes' : 'ruby',
       \ }
 NeoBundleLazy 'rcmdnk/vim-markdown', {
       \ 'filetypes' : ['markdown', 'mkd'],
       \ }
-if has('python')
-NeoBundleLazy 'Rip-Rip/clang_complete', {
-      \ 'filetypes' : ['c', 'cpp'],
-      \ }
-else
-NeoBundleFetch 'Rip-Rip/clang_complete'
-endif
 NeoBundleLazy 'rhysd/accelerated-jk', {
       \ 'mappings' : '<Plug>',
       \ }
+NeoBundleLazy 'rhysd/committia',  {
+      \ 'explorer' : 'COMMIT_EDITMSG',
+      \ }
 NeoBundleLazy 'rhysd/vim-operator-surround', {
-      \ 'depends' : 'vim-operator-user',
+      \ 'depends' : 'kana/vim-operator-user',
       \ 'mappings' : '<Plug>',
       \ }
 NeoBundleLazy 'LeafCage/foldCC', {
@@ -192,9 +191,11 @@ NeoBundleLazy 'Shougo/neocomplcache.vim', {
 NeoBundleFetch 'Shougo/neocomplete.vim'
 endif
 NeoBundleLazy 'Shougo/neoinclude.vim', {
-      \ 'insert' : 1,
+      \ 'filetypes' : 'all',
       \ }
-NeoBundle 'Shougo/neomru.vim'
+NeoBundleLazy 'Shougo/neomru.vim', {
+      \ 'filetypes' : 'all',
+      \ }
 NeoBundleLazy 'Shougo/neosnippet.vim', {
       \ 'depends' : ['Shougo/neosnippet-snippets', 'Shougo/context_filetype.vim'],
       \ 'insert' : 1,
@@ -223,7 +224,7 @@ NeoBundleLazy 'Shougo/vimfiler.vim', {
       \   {'name' : ['VimFiler', 'VimFilerExplorer', 'Edit', 'Write'],
       \    'complete' : 'customlist,vimfiler#complete' },
       \ 'mappings' : '<Plug>',
-      \ 'explorer' : 1,
+      \ 'explorer' : '^\h\w*:',
       \ }
 NeoBundle 'Shougo/vimproc.vim', {
       \ 'build' : {
@@ -288,7 +289,7 @@ NeoBundleLazy 'vim-scripts/taglist.vim', {
       \ }
 NeoBundle 'Yggdroot/indentLine'
 NeoBundleLazy 'yomi322/vim-gitcomplete', {
-      \ 'filetype' : 'vimshell',
+      \ 'filetypes' : 'vimshell',
       \ }
 NeoBundleLazy 'yuratomo/w3m.vim', {
       \ 'commands' : 'W3mTab',
@@ -738,13 +739,6 @@ if neobundle#tap('vim-smartchr') "{{{
   call neobundle#untap()
 endif "}}}
 
-if neobundle#tap('DoxygenToolkit.vim') "{{{
-  nnoremap <silent> [Space]x :<C-u>Dox<CR>
-  let g:load_doxygen_syntax = 1
-
-  call neobundle#untap()
-endif "}}}
-
 " if neobundle#tap('vim-gita') "{{{
 "   nnoremap <silent> [Space]gs  :<C-u>Gita status<CR>
 "   nnoremap <silent> [Space]gc  :<C-u>Gita commit<CR>
@@ -753,9 +747,25 @@ endif "}}}
 "   call neobundle#untap()
 " endif "}}}
 
+if neobundle#tap('DoxygenToolkit.vim') "{{{
+  nnoremap <silent> [Space]x :<C-u>Dox<CR>
+  let g:load_doxygen_syntax = 1
+
+  call neobundle#untap()
+endif "}}}
+
 if neobundle#tap('vim-jplus') "{{{
   nmap J <Plug>(jplus)
   vmap J <Plug>(jplus)
+
+  call neobundle#untap()
+endif "}}}
+
+if neobundle#tap('vim-marching') "{{{
+  if s:is_windows
+    let g:marching_clang_command = "C:/msys64/mingw64/bin/clang.exe"
+  endif
+  let g:marching_enable_neocomplete = 1
 
   call neobundle#untap()
 endif "}}}
@@ -858,14 +868,6 @@ if neobundle#tap('neocomplete.vim') && has('lua') "{{{
           \ '[^.[:digit:] *\t]\%(\.\|->\)\w*\|\h\w*::\w*'
     let g:neocomplete#force_omni_input_patterns.python =
           \ '\h\w*\|[^. \t]\.\w*'
-    " For clang_complete.
-    let g:clang_complete_auto = 0
-    let g:clang_auto_select = 0
-    let g:clang_default_keymappings = 0
-    let g:clang_use_library = 1
-    if s:is_windows
-      let g:clang_library_path = 'C:/msys64/usr/local/lib'
-    endif
   endfunction
 
   call neobundle#untap()
@@ -895,14 +897,6 @@ if neobundle#tap('neocomplcache.vim') && !has('lua') "{{{
 
     let g:neocomplcache_enable_auto_close_preview = 1
 
-    " For clang_complete.
-    let g:neocomplcache_force_overwrite_completefunc = 1
-    let g:clang_auto_select = 0
-    let g:clang_complete_auto = 0
-    let g:clang_use_library = 1
-    if s:is_windows
-      let g:clang_library_path = 'C:/msys64/usr/local/lib'
-    endif
     if !exists('g:neocomplcache_force_omni_patterns')
       let g:neocomplcache_force_omni_patterns = {}
     endif
@@ -967,7 +961,7 @@ if neobundle#tap('neosnippet.vim') "{{{
     xmap <C-l> <Plug>(neosnippet_start_unite_snippet_target)
 
     " Enable snipMate compatibility feature.
-    " let g:neosnippet#enable_snipmate_compatibility = 1
+    let g:neosnippet#enable_snipmate_compatibility = 1
 
     " let g:snippets_dir = '~/.vim/snippets/,~/.vim/bundle/snipmate/snippets/'
     let g:neosnippet#snippets_directory = '~/.vim/snippets'
@@ -1055,8 +1049,6 @@ if neobundle#tap('unite.vim') "{{{
   " Execute help by cursor keyword.
   nnoremap <silent> g<C-h>  :<C-u>UniteWithCursorWord help<CR>
 
-  let g:unite_source_history_yank_enable = 1
-
   function! neobundle#hooks.on_source(bundle)
     " Start insert.
     call unite#custom#profile('action', 'context', {
@@ -1111,20 +1103,29 @@ if neobundle#tap('unite.vim') "{{{
 
     let g:unite_enable_auto_select = 0
 
-    if executable('ag')
-      " For ag.
+    if executable('hw')
+      " Use hw(highway)
+      " https://github.com/tkengo/highway
+      let g:unite_source_grep_command = 'hw'
+      let g:unite_source_grep_default_opts = '--no-group --no-color'
+      let g:unite_source_grep_recursive_opt = ''
+    elseif executable('ag')
+      " Use ag(the silver searcher)
+      " https://github.com/ggreer/the_silver_searcher
       let g:unite_source_grep_command = 'ag'
       let g:unite_source_grep_default_opts =
         \ '-i --vimgrep --hidden --ignore ' .
         \  '''.hg'' --ignore ''.svn'' --ignore ''.git'' --ignore ''.bzr'''
       let g:unite_source_grep_recursive_opt = ''
     elseif executable('pt')
-      " For pt.
+      " Use pt(the platinum searcher)
+      " https://github.com/monochromegane/the_platinum_searcher
       let g:unite_source_grep_command = 'pt'
       let g:unite_source_grep_default_opts = '--nogroup --nocolor'
       let g:unite_source_grep_recursive_opt = ''
     elseif executable('ack-grep')
-      " For ack.
+      " For ack
+      " http://beyondgrep.com/
       let g:unite_source_grep_command = 'ack-grep'
       let g:unite_source_grep_default_opts = '-i --no-heading --no-color -k -H'
       let g:unite_source_grep_recursive_opt = ''
@@ -1534,12 +1535,6 @@ function! s:toggle_quickfix_window()
   endif
 endfunction
 "}}}
-
-" Like gv, but select the last changed text.
-nnoremap gc `[v`]
-" Specify the last changed text as {motion}.
-vnoremap <silent> gc :<C-u>normal gc<CR>
-onoremap <silent> gc :<C-u>normal gc<CR>
 
 " Folding. "{{{
 " If press h on head, fold close.
