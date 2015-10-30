@@ -162,7 +162,7 @@ NeoBundleLazy 'rcmdnk/vim-markdown', {
 NeoBundleLazy 'rhysd/accelerated-jk', {
       \ 'mappings' : '<Plug>',
       \ }
-NeoBundleLazy 'rhysd/committia',  {
+NeoBundleLazy 'rhysd/committia.vim',  {
       \ 'explorer' : 'COMMIT_EDITMSG',
       \ }
 NeoBundleLazy 'rhysd/vim-operator-surround', {
