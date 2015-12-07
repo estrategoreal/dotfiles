@@ -140,9 +140,9 @@ NeoBundleLazy 'kana/vim-smartchr', {
       \ 'insert' : 1,
       \ }
 NeoBundleLazy 'Kocha/vim-unite-tig'
-" NeoBundleLazy 'lambdalisue/vim-gita', {
-"       \ 'commands': 'Gita',
-"       \ }
+NeoBundleLazy 'lambdalisue/vim-gita', {
+      \ 'commands': 'Gita',
+      \ }
 NeoBundleLazy 'mrtazz/DoxygenToolkit.vim', {
       \ 'filetypes' : ['c', 'cpp'],
       \ }
@@ -259,10 +259,10 @@ NeoBundleLazy 'thinca/vim-ref', {
 NeoBundleLazy 'todesking/ruby_hl_lvar.vim', {
       \ 'filetypes' : 'ruby',
       \ }
-NeoBundle 'tpope/vim-fugitive', {
-      \ 'commands' : ['Gdiff', 'Gstatus', 'Glog',
-      \               'Gwrite', 'Gcommit', 'Gblame'],
-      \ }
+" NeoBundle 'tpope/vim-fugitive', {
+"       \ 'commands' : ['Gdiff', 'Gstatus', 'Glog',
+"       \               'Gwrite', 'Gcommit', 'Gblame'],
+"       \ }
 NeoBundleLazy 'tsukkee/unite-tag'
 NeoBundleLazy 'tyru/caw.vim', {
       \ 'mappings' : '<Plug>',
@@ -511,8 +511,8 @@ set noshowmode
 " Always display the line with tab page labels.
 set showtabline=2
 " Set the content of the status line.
-set statusline=%<%m%r%h%w%y%{'['.(&fenc!=''?&fenc:&enc).':'.&ff.']'}\ %1.40f%=%{fugitive#statusline()}\ \ %l/%L,%c%V%5P
-"set statusline=%<%m%r%h%w%y%{'['.(&fenc!=''?&fenc:&enc).':'.&ff.']'}\ %1.40f%=%{gita#statusline#preset('branch')}\ \ %l/%L,%c%V%5P
+"set statusline=%<%m%r%h%w%y%{'['.(&fenc!=''?&fenc:&enc).':'.&ff.']'}\ %1.40f%=%{fugitive#statusline()}\ \ %l/%L,%c%V%5P
+set statusline=%<%m%r%h%w%y%{'['.(&fenc!=''?&fenc:&enc).':'.&ff.']'}\ %1.40f%=%{gita#statusline#preset('branch')}\ \ %l/%L,%c%V%5P
 
 " Turn down a long line appointed in 'breakat'
 " set linebreak
@@ -739,13 +739,29 @@ if neobundle#tap('vim-smartchr') "{{{
   call neobundle#untap()
 endif "}}}
 
-" if neobundle#tap('vim-gita') "{{{
-"   nnoremap <silent> [Space]gs  :<C-u>Gita status<CR>
-"   nnoremap <silent> [Space]gc  :<C-u>Gita commit<CR>
-"   nnoremap <silent> [Space]gd  :<C-u>Gita diff<CR>
-"
-"   call neobundle#untap()
-" endif "}}}
+if neobundle#tap('vim-gita') "{{{
+  nnoremap <silent> [Space]gs :<C-u>Gita status<CR>
+  nnoremap <silent> [Space]gc :<C-u>Gita commit<CR>
+  nnoremap <silent> [Space]ga :<C-u>Gita commit --amend<CR>
+  nnoremap <silent> [Space]gd :<C-u>call <SID>gita_tab('diff')<CR>
+  nnoremap <silent> [Space]gb :<C-u>Gita browse<CR>
+  nnoremap <silent> [Space]gl :<C-u>Gita blame<CR>
+
+  let gita#features#commit#enable_default_mappings = 0
+
+  function! s:gita_tab(cmd)
+    if s:is_windows
+      setlocal shellpipe=2>\&1\|iconv\ -f\ UTF-8\ -t\ CP932>%s
+    endif
+    execute 'tabedit ' . expand('%')
+    execute 'Gita ' . a:cmd
+    if s:is_windows
+      setlocal shellpipe&
+    endif
+  endfunction
+
+  call neobundle#untap()
+endif "}}}
 
 if neobundle#tap('DoxygenToolkit.vim') "{{{
   nnoremap <silent> [Space]x :<C-u>Dox<CR>
@@ -1209,9 +1225,9 @@ if neobundle#tap('vimshell.vim') "{{{
 
   function! neobundle#hooks.on_source(bundle)
     let g:vimshell_user_prompt = 'fnamemodify(getcwd(), ":~")'
-    let g:vimshell_right_prompt = 'fugitive#statusline()'
-    " let g:vimshell_right_prompt =
-    "       \ 'gita#statusline#format("%{|/}ln%lb%{ <> |}rn%{/|}rb")'
+    "let g:vimshell_right_prompt = 'fugitive#statusline()'
+    let g:vimshell_right_prompt =
+           \ 'gita#statusline#format("%{|/}ln%lb%{ <> |}rn%{/|}rb")'
     let g:vimshell_prompt = '% '
     let g:vimshell_split_command = ''
 
@@ -1295,28 +1311,28 @@ if neobundle#tap('vim-ref') "{{{
   call neobundle#untap()
 endif "}}}
 
-if neobundle#tap('vim-fugitive') "{{{
-  nnoremap <silent> [Space]gd :<C-u>call <SID>fugitive_tab('Gdiff')<CR>
-  nnoremap <silent> [Space]gs :<C-u>Gstatus<CR>
-  nnoremap <silent> [Space]gl :<C-u>call <SID>fugitive_tab('Glog')<CR>
-  nnoremap <silent> [Space]ga :<C-u>Gwrite<CR>
-  nnoremap <silent> [Space]gA :<C-u>Gwrite %<CR>
-  nnoremap <silent> [Space]gc :<C-u>Gcommit<CR>
-  nnoremap <silent> [Space]gC :<C-u>Gcommit --amend<CR>
-  nnoremap <silent> [Space]gb :<C-u>call <SID>fugitive_tab('Gblame')<CR>
-  function! s:fugitive_tab(cmd)
-    if s:is_windows
-      setlocal shellpipe=2>\&1\|iconv\ -f\ UTF-8\ -t\ CP932>%s
-    endif
-    execute 'tabedit ' . expand('%')
-    execute a:cmd
-    if s:is_windows
-      setlocal shellpipe&
-    endif
-  endfunction
-
-  call neobundle#untap()
-endif "}}}
+" if neobundle#tap('vim-fugitive') "{{{
+"   nnoremap <silent> [Space]gd :<C-u>call <SID>fugitive_tab('Gdiff')<CR>
+"   nnoremap <silent> [Space]gs :<C-u>Gstatus<CR>
+"   nnoremap <silent> [Space]gl :<C-u>call <SID>fugitive_tab('Glog')<CR>
+"   nnoremap <silent> [Space]ga :<C-u>Gwrite<CR>
+"   nnoremap <silent> [Space]gA :<C-u>Gwrite %<CR>
+"   nnoremap <silent> [Space]gc :<C-u>Gcommit<CR>
+"   nnoremap <silent> [Space]gC :<C-u>Gcommit --amend<CR>
+"   nnoremap <silent> [Space]gb :<C-u>call <SID>fugitive_tab('Gblame')<CR>
+"   function! s:fugitive_tab(cmd)
+"     if s:is_windows
+"       setlocal shellpipe=2>\&1\|iconv\ -f\ UTF-8\ -t\ CP932>%s
+"     endif
+"     execute 'tabedit ' . expand('%')
+"     execute a:cmd
+"     if s:is_windows
+"       setlocal shellpipe&
+"     endif
+"   endfunction
+"
+"   call neobundle#untap()
+" endif "}}}
 
 if neobundle#tap('caw.vim') "{{{
   autocmd MyAutoCmd FileType * call s:init_caw()
