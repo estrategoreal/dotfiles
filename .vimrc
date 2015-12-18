@@ -86,12 +86,15 @@ call neobundle#begin(s:neobundle_dir)
 NeoBundleFetch 'Shougo/neobundle.vim'
 
 NeoBundle 'altercation/vim-colors-solarized'
+NeoBundleLazy 'AndrewRadev/sideways.vim', {
+      \ 'mappings' : [['ox', '<Plug>']],
+      \ }
 NeoBundleLazy 'basyura/TweetVim', {
       \ 'depends' : ['basyura/twibill.vim', 'tyru/open-browser.vim'],
       \ 'commands' : 'TweetVimHomeTimeline',
       \ }
 NeoBundleLazy 'bkad/CamelCaseMotion', {
-      \ 'mappings' : '<Plug>',
+      \ 'mappings' : ['<Plug>CamelCaseMotion_w', '<Plug>CamelCaseMotion_b'],
       \ }
 NeoBundleLazy 'chikatoike/concealedyank.vim', {
       \ 'mappings' : [['x', '<Plug>(operator-concealedyank)']],
@@ -140,6 +143,12 @@ NeoBundleLazy 'kana/vim-smartchr', {
       \ 'insert' : 1,
       \ }
 NeoBundleLazy 'Kocha/vim-unite-tig'
+NeoBundleLazy 'Konfekt/FastFold', {
+      \ 'explorer' : '.*',
+      \ }
+NeoBundleLazy 'lambdalisue/vim-findent', {
+      \ 'explorer' : '.*',
+      \ }
 NeoBundleLazy 'lambdalisue/vim-gita', {
       \ 'commands': 'Gita',
       \ }
@@ -155,6 +164,10 @@ NeoBundleLazy 'osyo-manga/vim-marching', {
       \ }
 NeoBundleLazy 'osyo-manga/vim-monster', {
       \ 'filetypes' : 'ruby',
+      \ }
+NeoBundleLazy 'osyo-manga/vim-textobj-multiblock', {
+      \ 'depends' : 'kana/vim-textobj-user',
+      \ 'mappings' : [['ox', '<Plug>']],
       \ }
 NeoBundleLazy 'rcmdnk/vim-markdown', {
       \ 'filetypes' : ['markdown', 'mkd'],
@@ -195,6 +208,9 @@ NeoBundleLazy 'Shougo/neoinclude.vim', {
       \ }
 NeoBundleLazy 'Shougo/neomru.vim', {
       \ 'filetypes' : 'all',
+      \ }
+NeoBundleLazy 'Shougo/neopairs.vim', {
+      \ 'insert' : 1,
       \ }
 NeoBundleLazy 'Shougo/neosnippet.vim', {
       \ 'depends' : ['Shougo/neosnippet-snippets', 'Shougo/context_filetype.vim'],
@@ -243,6 +259,9 @@ NeoBundleLazy 'Shougo/vimshell.vim', {
       \ }
 NeoBundleLazy 'Shougo/vinarise.vim', {
       \ 'commands' : [{'name' : 'Vinarise', 'complete' : 'file'}],
+      \ }
+NeoBundleLazy 't9md/vim-choosewin', {
+      \ 'mappings' : '<Plug>',
       \ }
 NeoBundleLazy 'terryma/vim-expand-region', {
       \ 'mappings' : [['x', '<Plug>']],
@@ -594,10 +613,13 @@ let g:SimpleJsIndenter_CaseIndentLevel = -1
 "-----------------------------------------------------------------------------
 " Plugin: "{{{
 "
-if neobundle#tap('vim-operator-surround') "{{{
-  nmap <silent>sa <Plug>(operator-surround-append)a
-  nmap <silent>sd <Plug>(operator-surround-delete)a
-  nmap <silent>sr <Plug>(operator-surround-replace)a
+if neobundle#tap('sideways.vim') "{{{
+  nnoremap <silent> " :SidewaysJumpLeft<CR>
+  nnoremap <silent> ' :SidewaysJumpRight<CR>
+  omap a, <Plug>SidewaysArgumentTextobjA
+  xmap a, <Plug>SidewaysArgumentTextobjA
+  omap i, <Plug>SidewaysArgumentTextobjI
+  xmap i, <Plug>SidewaysArgumentTextobjI
 
   call neobundle#untap()
 endif "}}}
@@ -619,11 +641,11 @@ if neobundle#tap('TweetVim') "{{{
 endif "}}}
 
 if neobundle#tap('CamelCaseMotion') "{{{
-  nmap <silent> W <Plug>CamelCaseMotion_w
-  xmap <silent> W <Plug>CamelCaseMotion_w
+  nmap <silent> w <Plug>CamelCaseMotion_w
+  xmap <silent> w <Plug>CamelCaseMotion_w
   omap <silent> W <Plug>CamelCaseMotion_w
-  nmap <silent> B <Plug>CamelCaseMotion_b
-  xmap <silent> B <Plug>CamelCaseMotion_b
+  nmap <silent> b <Plug>CamelCaseMotion_b
+  xmap <silent> b <Plug>CamelCaseMotion_b
   omap <silent> B <Plug>CamelCaseMotion_b
 
   call neobundle#untap()
@@ -722,7 +744,6 @@ endif "}}}
 if neobundle#tap('vim-smartchr') "{{{
   function! neobundle#hooks.on_source(bundle)
     inoremap <expr> , smartchr#one_of(', ', ',')
-    inoremap <expr> ? smartchr#one_of(' ? ', '?')
 
     " Smart =.
     inoremap <expr> =
@@ -735,6 +756,38 @@ if neobundle#tap('vim-smartchr') "{{{
       autocmd FileType vim inoremap <buffer> <expr> . smartchr#loop('.', ' . ', '..', '...')
     augroup END
   endfunction
+
+  call neobundle#untap()
+endif "}}}
+
+if neobundle#tap('FastFold') "{{{
+  " Folding
+
+  let g:tex_fold_enabled = 1
+
+  " Vim script
+  " augroup: a
+  " function: f
+  " lua: l
+  " perl: p
+  " ruby: r
+  " python: P
+  " tcl: t
+  " mzscheme: m
+  let g:vimsyn_folding = 'af'
+
+  let g:xml_syntax_folding = 1
+  let g:php_folding = 1
+  let g:perl_fold = 1
+
+  call neobundle#untap()
+endif "}}}
+
+if neobundle#tap('vim-findent') "{{{
+  augroup findent
+    autocmd!
+    autocmd BufRead * Findent!
+  augroup END
 
   call neobundle#untap()
 endif "}}}
@@ -786,11 +839,28 @@ if neobundle#tap('vim-marching') "{{{
   call neobundle#untap()
 endif "}}}
 
+if neobundle#tap('vim-textobj-user') "{{{
+  omap ab <Plug>(textobj-multiblock-a)
+  omap ib <Plug>(textobj-multiblock-i)
+  xmap ab <Plug>(textobj-multiblock-a)
+  xmap ib <Plug>(textobj-multiblock-i)
+
+  call neobundle#untap()
+endif "}}}
+
 if neobundle#tap('accelerated-jk') "{{{
   nmap <silent>j <Plug>(accelerated_jk_gj)
   nmap gj j
   nmap <silent>k <Plug>(accelerated_jk_gk)
   nmap gk k
+
+  call neobundle#untap()
+endif "}}}
+
+if neobundle#tap('vim-operator-surround') "{{{
+  nmap <silent>sa <Plug>(operator-surround-append)a
+  nmap <silent>sd <Plug>(operator-surround-delete)a
+  nmap <silent>sr <Plug>(operator-surround-replace)a
 
   call neobundle#untap()
 endif "}}}
@@ -834,7 +904,7 @@ if neobundle#tap('neocomplete.vim') && has('lua') "{{{
     if !exists('g:neocomplete#keyword_patterns')
       let g:neocomplete#keyword_patterns = {}
     endif
-    let g:neocomplete#keyword_patterns._ = '\h\w*'
+    let g:neocomplete#keyword_patterns._ = '\h\k*(\?'
 
     " Plugin key-mappings.
     inoremap <expr> <C-g> neocomplete#undo_completion()
@@ -867,23 +937,20 @@ if neobundle#tap('neocomplete.vim') && has('lua') "{{{
     if !exists('g:neocomplete#force_omni_input_patterns')
       let g:neocomplete#force_omni_input_patterns = {}
     endif
+    let g:neocomplete#enable_auto_close_preview = 1
+
     let g:neocomplete#sources#omni#input_patterns.c =
           \ '[^.[:digit:] *\t]\%(\.\|->\)\%(\h\w*\)\?'
     let g:neocomplete#sources#omni#input_patterns.cpp =
           \ '[^.[:digit:] *\t]\%(\.\|->\)\%(\h\w*\)\?\|\h\w*::\%(\h\w*\)\?'
     " let g:neocomplete#sources#omni#input_patterns.ruby =
     "       \ '[^. *\t]\.\w*\|\h\w*::\w*'
-    let g:neocomplete#enable_auto_close_preview = 1
-    let g:neocomplete#force_omni_input_patterns.c =
-          \ '[^.[:digit:] *\t]\%(\.\|->\)\w*'
-    let g:neocomplete#force_omni_input_patterns.cpp =
-          \ '[^.[:digit:] *\t]\%(\.\|->\)\|\h\w*::'
+    let g:neocomplete#sources#omni#input_patterns.python =
+          \ '[^. *\t]\.\w*\|\h\w*'
     let g:neocomplete#force_omni_input_patterns.objc =
           \ '\[\h\w*\s\h\?\|\h\w*\%(\.\|->\)'
     let g:neocomplete#force_omni_input_patterns.ruby =
           \ '[^.[:digit:] *\t]\%(\.\|->\)\w*\|\h\w*::\w*'
-    let g:neocomplete#force_omni_input_patterns.python =
-          \ '\h\w*\|[^. \t]\.\w*'
   endfunction
 
   call neobundle#untap()
@@ -968,6 +1035,12 @@ if neobundle#tap('neocomplcache.vim') && !has('lua') "{{{
   call neobundle#untap()
 endif "}}}
 
+if neobundle#tap('neopairs.vim') "{{{
+  let g:neopairs#auto_delimiter = 1
+
+  call neobundle#untap()
+endif "}}}
+
 if neobundle#tap('neosnippet.vim') "{{{
   function! neobundle#hooks.on_source(bundle)
     imap <C-k> <Plug>(neosnippet_expand_or_jump)
@@ -978,6 +1051,7 @@ if neobundle#tap('neosnippet.vim') "{{{
 
     " Enable snipMate compatibility feature.
     let g:neosnippet#enable_snipmate_compatibility = 1
+    let g:neosnippet#enable_complete_done = 1
 
     " let g:snippets_dir = '~/.vim/snippets/,~/.vim/bundle/snipmate/snippets/'
     let g:neosnippet#snippets_directory = '~/.vim/snippets'
@@ -1021,7 +1095,7 @@ if neobundle#tap('unite.vim') "{{{
   nnoremap <silent> [Window]t
         \ :<C-u>Unite -start-insert tig<CR>
   nnoremap <silent> [Window]w
-        \ :<C-u>Unite window:all:no-current<CR>
+        \ :<C-u>Unite -force-immediately window:all:no-current<CR>
 
   nnoremap <silent><expr> [unite]g
         \ :<C-u>Unite grep:. -buffer-name=grep`tabpagenr()` -auto-preview -no-quit -no-empty -resume<CR>
@@ -1275,6 +1349,15 @@ if neobundle#tap('vinarise.vim') "{{{
   call neobundle#untap()
 endif "}}}
 
+if neobundle#tap('vim-choosewin') "{{{
+  nmap g<C-w>  <Plug>(choosewin)
+  let g:choosewin_overlay_enable = 1
+  let g:choosewin_overlay_clear_multibyte = 1
+  let g:choosewin_blink_on_land = 0
+
+  call neobundle#untap()
+endif "}}}
+
 if neobundle#tap('vim-expand-region') "{{{
   xmap v <Plug>(expand_region_expand)
   xmap <C-v> <Plug>(expand_region_shrink)
@@ -1465,11 +1548,6 @@ nnoremap <silent> [Space]fw :<C-u>write!<CR>
 nnoremap <silent> [Space]q  :<C-u>quit<CR>
 nnoremap <silent> [Space]aq :<C-u>quitall<CR>
 nnoremap <silent> [Space]fq :<C-u>quitall!<CR>
-"}}}
-
-" Change tab width. "{{{
-nnoremap <silent> [Space]t2 :<C-u>setlocal shiftwidth=2 softtabstop=2<CR>
-nnoremap <silent> [Space]t4 :<C-u>setlocal shiftwidth=4 softtabstop=4<CR>
 "}}}
 
 nnoremap [Window] <Nop>
