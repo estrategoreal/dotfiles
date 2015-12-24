@@ -786,7 +786,7 @@ endif "}}}
 if neobundle#tap('vim-findent') "{{{
   augroup findent
     autocmd!
-    autocmd BufRead * Findent!
+    autocmd BufRead * Findent! --no-warnings
   augroup END
 
   call neobundle#untap()
@@ -1036,7 +1036,7 @@ if neobundle#tap('neocomplcache.vim') && !has('lua') "{{{
 endif "}}}
 
 if neobundle#tap('neopairs.vim') "{{{
-  let g:neopairs#auto_delimiter = 1
+  let g:neopairs#enable = 1
 
   call neobundle#untap()
 endif "}}}
