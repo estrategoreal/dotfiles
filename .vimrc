@@ -386,7 +386,7 @@ if has('kaoriya')
 endif
 
 " When any Japanese character is not included, use encoding for fileencoding.
-function! s:ReCheck_FENC() "{{{
+function! s:ReCheck_FENC() abort "{{{
   let is_multi_byte = search("[^\x01-\x7e]", 'n', 100, 100)
   if &fileencoding =~# 'iso-2022-jp' && !is_multi_byte
     let &fileencoding = &encoding
@@ -569,8 +569,7 @@ set report=0
 " Maintain a current line at the time of movement as much as possible.
 set nostartofline
 
-" Don't redraw while macro executing.
-set lazyredraw
+" Enable fast terminal connection
 set ttyfast
 
 " When a line is long, do not omit it in @.
@@ -628,7 +627,7 @@ if neobundle#tap('TweetVim') "{{{
   " Start TweetVim.
   nnoremap <silent> [unite]e :<C-u>Unite tweetvim<CR>
   autocmd MyAutoCmd FileType tweetvim call s:tweetvim_my_settings()
-  function! s:tweetvim_my_settings() "{{{
+  function! s:tweetvim_my_settings() abort "{{{
     " Open say buffer.
     nnoremap <silent><buffer> s :<C-u>TweetVimSay<CR>
     nnoremap <silent><buffer> q :<C-u>close<CR>
@@ -742,7 +741,7 @@ if neobundle#tap('vim-operator-replace') "{{{
 endif "}}}
 
 if neobundle#tap('vim-smartchr') "{{{
-  function! neobundle#hooks.on_source(bundle)
+  function! neobundle#hooks.on_source(bundle) abort
     inoremap <expr> , smartchr#one_of(', ', ',')
 
     " Smart =.
@@ -802,7 +801,7 @@ if neobundle#tap('vim-gita') "{{{
 
   let gita#features#commit#enable_default_mappings = 0
 
-  function! s:gita_tab(cmd)
+  function! s:gita_tab(cmd) abort
     if s:is_windows
       setlocal shellpipe=2>\&1\|iconv\ -f\ UTF-8\ -t\ CP932>%s
     endif
@@ -879,7 +878,7 @@ if neobundle#tap('neocomplete.vim') && has('lua') "{{{
   " Use neocomplete.
   let g:neocomplete#enable_at_startup = 1
 
-  function! neobundle#hooks.on_source(bundle)
+  function! neobundle#hooks.on_source(bundle) abort
     " Use smartcase.
     let g:neocomplete#enable_smart_case = 1
     let g:neocomplete#enable_camel_case = 1
@@ -912,7 +911,7 @@ if neobundle#tap('neocomplete.vim') && has('lua') "{{{
 
     " <CR>: close popup and save indent.
     inoremap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
-    function! s:my_cr_function()
+    function! s:my_cr_function() abort
       return neocomplete#smart_close_popup() . "\<CR>"
     endfunction
     " <TAB>: completion.
@@ -960,7 +959,7 @@ if neobundle#tap('neocomplcache.vim') && !has('lua') "{{{
   " Use neocomplcache.
   let g:neocomplcache_enable_at_startup = 1
 
-  function! neobundle#hooks.on_source(bundle)
+  function! neobundle#hooks.on_source(bundle) abort
     " Use smartcase.
     let g:neocomplcache_enable_smart_case = 0
     " Use camel case completion.
@@ -1005,7 +1004,7 @@ if neobundle#tap('neocomplcache.vim') && !has('lua') "{{{
 
     " <CR>: close popup and save indent.
     inoremap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
-    function! s:my_cr_function()
+    function! s:my_cr_function() abort
       return neocomplcache#smart_close_popup() . "\<CR>"
     endfunction
     " <TAB>: completion.
@@ -1036,13 +1035,13 @@ if neobundle#tap('neocomplcache.vim') && !has('lua') "{{{
 endif "}}}
 
 if neobundle#tap('neopairs.vim') "{{{
-  let g:neopairs#enable = 1
+  let g:neopairs#enable = 0
 
   call neobundle#untap()
 endif "}}}
 
 if neobundle#tap('neosnippet.vim') "{{{
-  function! neobundle#hooks.on_source(bundle)
+  function! neobundle#hooks.on_source(bundle) abort
     imap <C-k> <Plug>(neosnippet_expand_or_jump)
     smap <C-k> <Plug>(neosnippet_expand_or_jump)
     xmap <C-k> <Plug>(neosnippet_expand_target)
@@ -1052,6 +1051,7 @@ if neobundle#tap('neosnippet.vim') "{{{
     " Enable snipMate compatibility feature.
     let g:neosnippet#enable_snipmate_compatibility = 1
     let g:neosnippet#enable_complete_done = 1
+    let g:neosnippet#expand_word_boundary = 1
 
     " let g:snippets_dir = '~/.vim/snippets/,~/.vim/bundle/snipmate/snippets/'
     let g:neosnippet#snippets_directory = '~/.vim/snippets'
@@ -1097,23 +1097,17 @@ if neobundle#tap('unite.vim') "{{{
   nnoremap <silent> [Window]w
         \ :<C-u>Unite -force-immediately window:all:no-current<CR>
 
-  nnoremap <silent><expr> [unite]g
+  nnoremap <silent> [unite]g
         \ :<C-u>Unite grep:. -buffer-name=grep`tabpagenr()` -auto-preview -no-quit -no-empty -resume<CR>
   nnoremap <silent> [unite]G
-        \ :<C-u>call <SID>cursor_grep()<CR>
+        \ :<C-u>Unite grep:.::`expand('<cword>')` -buffer-name=search -auto-preview<CR>
   xnoremap <silent> [unite]G
         \ :<C-u>call <SID>visual_grep()<CR>
-  function! s:cursor_grep()
-    let w = expand('<cword>')
-    " call s:my_idenew()
-    execute 'Unite grep:.::' . w . ' -buffer-name=search -auto-preview'
-  endfunction
-  function! s:visual_grep()
+  function! s:visual_grep() abort
     let tmp = @@
     silent normal gvy
     let selected = @@
     let @@ = tmp
-    " call s:my_idenew()
     execute 'Unite grep:.::' . selected . ' -buffer-name=search -auto-preview'
   endfunction
   nnoremap <silent> [Space]b :<C-u>UniteBookmarkAdd<CR>
@@ -1137,9 +1131,9 @@ if neobundle#tap('unite.vim') "{{{
   " Execute help.
   nnoremap <silent> <C-h> :<C-u>Unite -buffer-name=help help<CR>
   " Execute help by cursor keyword.
-  nnoremap <silent> g<C-h>  :<C-u>UniteWithCursorWord help<CR>
+  nnoremap <silent> g<C-h> :<C-u>UniteWithCursorWord help<CR>
 
-  function! neobundle#hooks.on_source(bundle)
+  function! neobundle#hooks.on_source(bundle) abort
     " Start insert.
     call unite#custom#profile('action', 'context', {
           \ 'start_insert' : 1
@@ -1150,7 +1144,7 @@ if neobundle#tap('unite.vim') "{{{
 
     " Keymapping in unite.vim.
     autocmd MyAutoCmd FileType unite call s:unite_my_settings()
-    function! s:unite_my_settings() "{{{
+    function! s:unite_my_settings() abort "{{{
       call unite#custom#default_action('directory', 'narrow')
 
       " Overwrite settings.
@@ -1254,7 +1248,7 @@ endif "}}}
 if neobundle#tap('vimfiler.vim') "{{{
   nnoremap <silent> <C-g> :<C-u>VimFiler -buffer-name=explorer -simple -toggle<CR>
 
-  function! neobundle#hooks.on_source(bundle)
+  function! neobundle#hooks.on_source(bundle) abort
     let g:vimfiler_as_default_explorer = 1
 
     " Enable file operation commands.
@@ -1274,7 +1268,7 @@ if neobundle#tap('vimfiler.vim') "{{{
     endif
 
     autocmd MyAutoCmd FileType vimfiler call s:vimfiler_my_settings()
-    function! s:vimfiler_my_settings() "{{{
+    function! s:vimfiler_my_settings() abort "{{{
       " Overwrite settings.
       nnoremap <silent><buffer> J
             \ :<C-u>Unite -buffer-name=files -default-action=lcd directory_mru<CR>
@@ -1297,7 +1291,7 @@ endif "}}}
 if neobundle#tap('vimshell.vim') "{{{
   nmap <silent> <C-@> <Plug>(vimshell_switch)
 
-  function! neobundle#hooks.on_source(bundle)
+  function! neobundle#hooks.on_source(bundle) abort
     let g:vimshell_user_prompt = 'fnamemodify(getcwd(), ":~")'
     "let g:vimshell_right_prompt = 'fugitive#statusline()'
     let g:vimshell_right_prompt =
@@ -1306,7 +1300,7 @@ if neobundle#tap('vimshell.vim') "{{{
     let g:vimshell_split_command = ''
 
     autocmd MyAutoCmd FileType vimshell call s:vimshell_settings()
-    function! s:vimshell_settings() "{{{
+    function! s:vimshell_settings() abort "{{{
       if !s:is_windows
         " Use zsh history.
         let g:vimshell_external_history_path = expand('~/.zsh_history')
@@ -1382,9 +1376,9 @@ if neobundle#tap('vim-quickrun') "{{{
 endif "}}}
 
 if neobundle#tap('vim-ref') "{{{
-  function! neobundle#hooks.on_source(bundle)
+  function! neobundle#hooks.on_source(bundle) abort
     autocmd MyAutoCmd FileType ref call s:ref_my_settings()
-    function! s:ref_my_settings() "{{{
+    function! s:ref_my_settings() abort "{{{
       " Overwrite settings.
       nmap <buffer> [Tag]t <Plug>(ref-keyword)
       nmap <buffer> [Tag]p <Plug>(ref-back)
@@ -1403,7 +1397,7 @@ endif "}}}
 "   nnoremap <silent> [Space]gc :<C-u>Gcommit<CR>
 "   nnoremap <silent> [Space]gC :<C-u>Gcommit --amend<CR>
 "   nnoremap <silent> [Space]gb :<C-u>call <SID>fugitive_tab('Gblame')<CR>
-"   function! s:fugitive_tab(cmd)
+"   function! s:fugitive_tab(cmd) abort
 "     if s:is_windows
 "       setlocal shellpipe=2>\&1\|iconv\ -f\ UTF-8\ -t\ CP932>%s
 "     endif
@@ -1419,7 +1413,7 @@ endif "}}}
 
 if neobundle#tap('caw.vim') "{{{
   autocmd MyAutoCmd FileType * call s:init_caw()
-  function! s:init_caw()
+  function! s:init_caw() abort
     if !&l:modifiable
       silent! nunmap <buffer> gc
       silent! xunmap <buffer> gc
@@ -1483,7 +1477,7 @@ if neobundle#tap('w3m.vim') "{{{
   endif
   let g:w3m#search_engine = 'http://www.google.co.jp/search?ie=' . &encoding . '&q=%s'
   autocmd MyAutoCmd FileType w3m call s:w3m_settings()
-  function! s:w3m_settings()
+  function! s:w3m_settings() abort
     nnoremap <buffer> H :<C-u>call w3m#Back()<CR>
     nnoremap <buffer> L :<C-u>call w3m#Forward()<CR>
     nnoremap <buffer> E :<C-u>W3mShowExtenalBrowser<CR>
@@ -1555,7 +1549,7 @@ nmap s [Window]
 nnoremap <silent> q :<C-u>call <SID>smart_close()<CR>
 "}}}
 
-function! s:smart_close()
+function! s:smart_close() abort
   if winnr('$') != 1
     close
   endif
@@ -1573,7 +1567,7 @@ nnoremap <silent> [Tabbed]i :<C-u>call <SID>my_idenew()<CR>
 nnoremap <silent> [Tabbed]d :<C-u>tabclose<CR>
 nnoremap <silent> [Tabbed]<C-t> :<C-u>Unite tab<CR>
 
-function! s:my_tabnew(file)
+function! s:my_tabnew(file) abort
   if empty(a:file)
     tabnew
     vsplit
@@ -1586,7 +1580,7 @@ function! s:my_tabnew(file)
   endif
 endfunction
 
-function! s:my_idenew()
+function! s:my_idenew() abort
   tabnew
   TlistOpen
   VimFilerExplorer -winwidth=46
@@ -1619,7 +1613,7 @@ autocmd QuickFixCmdPost [^l]* botright cwindow
 
 " Toggle quickfix window.
 nnoremap <silent> [Quickfix]<Space> :<C-u>call <SID>toggle_quickfix_window()<CR>
-function! s:toggle_quickfix_window()
+function! s:toggle_quickfix_window() abort
   let _ = winnr('$')
   cclose
   if _ == winnr('$')
@@ -1668,8 +1662,8 @@ nnoremap <ESC><ESC> :nohlsearch<CR>:match<CR>
 nnoremap @@ @a
 
 " Search.
-nnoremap ;n  ;
-nnoremap ;m  ,
+nnoremap ;n ;
+nnoremap ;m ,
 "}}}
 
 "-----------------------------------------------------------------------------
@@ -1689,7 +1683,7 @@ command! -nargs=+ Calc :ruby print <args>
 "-----------------------------------------------------------------------------
 " Functions:"{{{
 "
-function! s:my_on_filetype() "{{{
+function! s:my_on_filetype() abort "{{{
   " Use FoldCCtext().
   if &filetype !=# 'help'
     setlocal foldtext=FoldCCtext()
