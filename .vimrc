@@ -118,6 +118,9 @@ NeoBundleLazy 'hewes/unite-gtags', {
 NeoBundleLazy 'hynek/vim-python-pep8-indent', {
       \ 'on_ft' : 'python',
       \ }
+NeoBundleLazy 'haya14busa/vim-operator-flashy', {
+      \ 'on_map' : '<Plug>',
+      \ }
 NeoBundleLazy 'jiangmiao/simple-javascript-indenter', {
       \ 'on_ft' : 'javascript',
       \ }
@@ -530,9 +533,11 @@ set statusline=%<%m%r%h%w%y%{'['.(&fenc!=''?&fenc:&enc).':'.&ff.']'}\ %1.40f%=%{
 " Wrap conditions.
 set whichwrap+=h,l,<,>,[,],b,s,~
 " Wrap long lines.
-set wrap
 if exists('+breakindent')
   set breakindent
+  set wrap
+else
+  set nowrap
 endif
 
 " Do not display greetings message at the time of Vim start.
@@ -681,6 +686,11 @@ endif "}}}
 "
 "   call neobundle#untap()
 " endif "}}}
+
+if neobundle#tap('vim-operator-flashy') "{{{
+  map y <Plug>(operator-flashy)
+  nmap Y <Plug>(operator-flashy)$
+endif"}}}
 
 if neobundle#tap('vim-niceblock') "{{{
   xmap I <Plug>(niceblock-I)
@@ -987,7 +997,7 @@ if neobundle#tap('neocomplcache.vim') && !has('lua') "{{{
     " Define dictionary.
     let g:neocomplcache_dictionary_filetype_lists = {
           \ 'default' : '',
-          \ 'vimshell' : $HOME .'/.vimshell/command-history'
+          \ 'vimshell' : $CACHE .'/.vimshell/command-history'
           \ }
 
     " Define keyword.

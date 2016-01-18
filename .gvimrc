@@ -67,13 +67,8 @@ if filereadable(g:save_window_file)
   execute 'source' g:save_window_file
 endif
 
-" Hide toolbar and menus.
-set guioptions-=T
-set guioptions-=m
-" Scrollbar is always off.
-set guioptions-=rL
-" Not guitablabel.
-set guioptions-=e
+" Disable menu.vim
+set guioptions=Mc
 
 if has('win32') || has('win64')
   gui
