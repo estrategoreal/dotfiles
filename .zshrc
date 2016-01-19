@@ -213,6 +213,7 @@ elif is_msys ; then
 %K{blue}How may I serve you, Master?%k
 $ "
   export PATH=$PATH:/usr/local/share/vim:/usr/local/share/git-svn-clone-externals:/c/Ruby/bin
+  export XDG_CONFIG_HOME=$HOME/.config  # for neovim
 fi
 
 if is_darwin ; then
