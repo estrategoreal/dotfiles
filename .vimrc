@@ -58,26 +58,21 @@ if filereadable(expand('~/.vimrc.local'))
   execute 'source' expand('~/.vimrc.local')
 endif
 
-let s:neobundle_dir = expand('~/.vim/bundle')
-
 if has('vim_starting') "{{{
   " Load neobundle.
-  if finddir('neobundle.vim', '.;') != ''
-    execute 'set runtimepath^=' .
-          \ fnamemodify(finddir('neobundle.vim', '.;'), ':p')
-  elseif &runtimepath !~ '/neobundle.vim'
-    if !isdirectory(s:neobundle_dir.'/neobundle.vim')
-      execute printf('!git clone %s://github.com/Shougo/neobundle.vim.git',
-            \ (exists('$http_proxy') ? 'https' : 'git'))
-            \ s:neobundle_dir.'/neobundle.vim'
-    endif
+  let s:neobundle_dir = expand('$CACHE/neobundle').'/neobundle.vim'
 
-    execute 'set runtimepath^=' . s:neobundle_dir.'/neobundle.vim'
+  if !isdirectory(s:neobundle_dir)
+    execute printf('!git clone %s://github.com/Shougo/neobundle.vim.git',
+          \ (exists('$http_proxy') ? 'https' : 'git'))
+          \ s:neobundle_dir
   endif
+
+  execute 'set runtimepath^=' . s:neobundle_dir
 endif
 "}}}
 
-call neobundle#begin(s:neobundle_dir)
+call neobundle#begin(expand('$CACHE/neobundle'))
 
 " neobundle.vim "{{{
 NeoBundleFetch 'Shougo/neobundle.vim'
@@ -199,6 +194,12 @@ NeoBundleLazy 'Rykka/riv.vim', {
 NeoBundleLazy 'saihoooooooo/glowshi-ft.vim', {
       \ 'on_map' : '<Plug>',
       \ }
+if has('nvim')
+NeoBundleLazy 'Shougo/deoplete.nvim', {
+      \ 'depends' : 'Shougo/context_filetype.vim',
+      \ 'on_i' : 1,
+      \ }
+else
 NeoBundleLazy 'Shougo/neocomplcache.vim', {
       \ 'on_i' : 1,
       \ 'disabled' : has('lua'),
@@ -208,6 +209,7 @@ NeoBundleLazy 'Shougo/neocomplete.vim', {
       \ 'on_i' : 1,
       \ 'disabled' : !has('lua'),
       \ }
+endif
 NeoBundleLazy 'Shougo/neoinclude.vim', {
       \ 'on_ft' : 'all',
       \ }
@@ -467,10 +469,7 @@ endif
 set grepprg=grep\ -nH
 
 " Reload .vimrc and .gvimrc automatically.
-" autocmd MyAutoCmd BufWritePost .vimrc,vimrc source $MYVIMRC |
-"       \ if has('gui_running') | source $MYGVIMRC | echo "source $MYVIMRC"
-" autocmd MyAutoCmd BufWritePost .gvimrc,gvimrc
-"       \ if has('gui_running') | source $MYGVIMRC | echo "source $MYGVIMRC"
+" autocmd MyAutoCmd BufWritePost .vimrc,vimrc source $MYVIMRC | redraw
 
 " Keymapping timeout.
 set timeout timeoutlen=3000 ttimeoutlen=100
@@ -580,7 +579,7 @@ endif
 "}}}
 
 "-----------------------------------------------------------------------------
-" Syntax: "{{{
+" FileType: "{{{
 "
 " Enable smart autoindenting.
 set smartindent
@@ -597,12 +596,31 @@ augroup MyAutoCmd
 augroup END
 "}}}
 
-" XML
-let g:xml_syntax_folding = 1
+" Python
+let g:python_highlight_all = 1
 
 " JavaScript
 let g:SimpleJsIndenter_BriefMode = 1
 let g:SimpleJsIndenter_CaseIndentLevel = -1
+
+" Markdown
+let g:markdown_fenced_languages = [
+      \  'coffee',
+      \  'css',
+      \  'erb=eruby',
+      \  'javascript',
+      \  'js=javascript',
+      \  'json=javascript',
+      \  'ruby',
+      \  'sass',
+      \  'xml',
+      \  'vim',
+      \]
+
+" Go
+if $GOROOT != ''
+  set runtimepath+=$GOROOT/misc/vim
+endif
 
 "-----------------------------------------------------------------------------
 " Plugin: "{{{
@@ -871,6 +889,57 @@ if neobundle#tap('glowshi-ft.vim') "{{{
 
   let g:glowshi_ft_timeoutlen = 1000
 
+  call neobundle#untap()
+endif "}}}
+
+if neobundle#tap('deoplete.vim') && has('nvim') "{{{
+  " Use deoplete.
+  let g:deoplete#enable_at_startup = 1
+
+  function! neobundle#hooks.on_source(bundle) abort
+    " Use smartcase.
+    let g:deoplete#enable_smart_case = 1
+
+    set completeopt+=noinsert
+
+    " <TAB>: completion.
+    imap <silent><expr> <TAB>
+          \ pumvisible() ? "\<C-n>" :
+          \ <SID>check_back_space() ? "\<TAB>" :
+          \ deoplete#mappings#manual_complete()
+    function! s:check_back_space() abort "{{{
+      let col = col('.') - 1
+      return !col || getline('.')[col - 1]  =~ '\s'
+    endfunction"}}}
+
+    " <S-TAB>: completion back.
+    inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
+
+    " <C-h>, <BS>: close popup and delete backword char.
+    inoremap <expr><C-h> deolete#mappings#smart_close_popup()."\<C-h>"
+    inoremap <expr><BS> deoplete#mappings#smart_close_popup()."\<C-h>"
+
+    inoremap <expr><C-g> deoplete#mappings#undo_completion()
+    " <C-l>: redraw candidates
+    inoremap <C-l> a<BS>
+
+    " <CR>: close popup and save indent.
+    inoremap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
+    function! s:my_cr_function() abort
+      return deoplete#mappings#close_popup() . "\<CR>"
+    endfunction
+
+    " Use auto delimiter
+    call deoplete#custom#set('_', 'converters',
+          \ ['converter_auto_paren',
+          \  'converter_auto_delimiter', 'remove_overlap'])
+
+    let g:deoplete#omni#input_patterns = {}
+    let g:deoplete#omni#input_patterns.ruby =
+          \ ['[^. *\t]\.\w*', '[a-zA-Z_]\w*::']
+  endfunction
+
+  " inoremap <silent><expr> <C-t> deoplete#mappings#manual_complete('file')
   call neobundle#untap()
 endif "}}}
 
@@ -1474,7 +1543,7 @@ if neobundle#tap('w3m.vim') "{{{
   else
     let g:w3m#external_browser = 'chromium'
   endif
-  let g:w3m#search_engine = 'http://www.google.co.jp/search?ie=' . &encoding . '&q=%s'
+  let g:w3m#search_engine = 'https://www.google.co.jp/search?ie=' . &encoding . '&q=%s'
   autocmd MyAutoCmd FileType w3m call s:w3m_settings()
   function! s:w3m_settings() abort
     nnoremap <buffer> H :<C-u>call w3m#Back()<CR>
@@ -1699,6 +1768,21 @@ endfunction "}}}
 "-----------------------------------------------------------------------------
 " Platform depends: "{{{
 "
+if has('nvim')
+  tnoremap <ESC><ESC> <C-\><C-n>
+
+  " Share the histories
+  augroup MyAutoCmd
+    autocmd CursorHold * if exists(':rshada') | rshada | wshada | endif
+  augroup END
+
+  " Use cursor shape feature
+  let $NVIM_TUI_ENABLE_CURSOR_SHAPE = 1
+
+  " Use true color feature
+  let $NVIM_TUI_ENABLE_TRUE_COLOR = 1
+endif
+
 " Change colorscheme.
 " Don't override colorscheme.
 if !exists('g:colors_name') && !has('gui_running')
