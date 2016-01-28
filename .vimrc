@@ -148,8 +148,9 @@ NeoBundleLazy 'Konfekt/FastFold', {
 NeoBundleLazy 'lambdalisue/vim-findent', {
       \ 'on_path' : '.*',
       \ }
-NeoBundleLazy 'lambdalisue/vim-gita', {
-      \ 'on_cmd' : 'Gita',
+NeoBundle 'lambdalisue/vim-gita'
+NeoBundleLazy 'majutsushi/tagbar', {
+      \ 'on_cmd' : 'TagbarOpen',
       \ }
 NeoBundleLazy 'mrtazz/DoxygenToolkit.vim', {
       \ 'on_ft' : ['c', 'cpp'],
@@ -299,9 +300,9 @@ NeoBundleLazy 'vim-ruby/vim-ruby', {
       \ 'on_map' : '<Plug>',
       \ 'on_ft' : 'ruby',
       \ }
-NeoBundleLazy 'vim-scripts/taglist.vim', {
-      \ 'on_cmd' : 'TlistOpen',
-      \ }
+" NeoBundleLazy 'vim-scripts/taglist.vim', {
+"       \ 'on_cmd' : 'TlistOpen',
+"       \ }
 NeoBundleLazy 'yomi322/vim-gitcomplete', {
       \ 'on_ft' : 'vimshell',
       \ }
@@ -833,6 +834,24 @@ if neobundle#tap('vim-gita') "{{{
   call neobundle#untap()
 endif "}}}
 
+if neobundle#tap('tagbar') "{{{
+  if s:is_windows
+    let g:tagbar_ctags_bin = 'C:/msys64/usr/local/bin/ctags'
+  elseif s:is_msys || s:is_mac
+    let g:tagbar_ctags_bin = '/usr/local/bin/ctags'
+  elseif s:is_freebsd
+    let g:tagbar_ctags_bin = '/usr/local/bin/exctags'
+  else
+    let g:tagbar_ctags_bin = '/usr/bin/ctags'
+  endif
+  if has('gui_running')
+    let g:tabgar_autofocus = 1
+    let g:tagbar_width = 42
+  endif
+
+  call neobundle#untap()
+endif "}}}
+
 if neobundle#tap('DoxygenToolkit.vim') "{{{
   nnoremap <silent> [Space]x :<C-u>Dox<CR>
   let g:load_doxygen_syntax = 1
@@ -1281,7 +1300,11 @@ if neobundle#tap('unite.vim') "{{{
       let g:unite_source_grep_command = 'pt'
       let g:unite_source_grep_default_opts = '--nogroup --nocolor'
       let g:unite_source_grep_recursive_opt = ''
-      let g:unite_source_grep_encoding = 'utf-8'
+      if s:is_windows
+        let g:unite_source_grep_encoding = 'cp932'
+      else
+        let g:unite_source_grep_encoding = 'utf-8'
+      endif
     elseif executable('ack-grep')
       " For ack
       " http://beyondgrep.com/
@@ -1513,24 +1536,24 @@ if neobundle#tap('open-browser.vim') "{{{
   call neobundle#untap()
 endif "}}}
 
-if neobundle#tap('taglist.vim') "{{{
-  if s:is_windows || s:is_msys || s:is_mac
-    let Tlist_Ctags_Cmd = '/usr/local/bin/ctags'
-  elseif s:is_freebsd
-    let Tlist_Ctags_Cmd = '/usr/local/bin/exctags'
-  else
-    let Tlist_Ctags_Cmd = '/usr/bin/ctags'
-  endif
-  if has('gui_running')
-    let Tlist_Exit_OnlyWindow = 1
-    let Tlist_GainFocus_On_ToggleOpen = 1
-    let Tlist_Show_One_File = 1
-    let Tlist_Use_Right_Window = 1
-    let Tlist_WinWidth = 42
-  endif
-
-  call neobundle#untap()
-endif "}}}
+" if neobundle#tap('taglist.vim') "{{{
+"   if s:is_windows || s:is_msys || s:is_mac
+"     let Tlist_Ctags_Cmd = '/usr/local/bin/ctags'
+"   elseif s:is_freebsd
+"     let Tlist_Ctags_Cmd = '/usr/local/bin/exctags'
+"   else
+"     let Tlist_Ctags_Cmd = '/usr/bin/ctags'
+"   endif
+"   if has('gui_running')
+"     let Tlist_Exit_OnlyWindow = 1
+"     let Tlist_GainFocus_On_ToggleOpen = 1
+"     let Tlist_Show_One_File = 1
+"     let Tlist_Use_Right_Window = 1
+"     let Tlist_WinWidth = 42
+"   endif
+"
+"   call neobundle#untap()
+" endif "}}}
 
 if neobundle#tap('w3m.vim') "{{{
   nnoremap [Alt]w :<C-u>W3mTab<Space>
