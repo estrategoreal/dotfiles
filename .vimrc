@@ -159,7 +159,9 @@ NeoBundleLazy 'nsf/gocode', {
       \ 'rtp' : 'vim',
       \ 'on_ft' : 'go',
       \ }
-NeoBundleLazy 'osyo-manga/unite-quickfix'
+NeoBundleLazy 'osyo-manga/unite-quickfix', {
+      \ 'on_unite' : 'quickfix',
+      \ }
 NeoBundleLazy 'osyo-manga/vim-jplus', {
       \ 'on_map' : '<Plug>',
       \ }
@@ -234,10 +236,18 @@ NeoBundleLazy 'Shougo/unite.vim', {
       \ 'depends' : 'Shougo/neomru.vim',
       \ 'on_cmd' : 'Unite',
       \ }
-NeoBundleLazy 'Shougo/unite-build'
-NeoBundleLazy 'Shougo/unite-help'
-NeoBundleLazy 'Shougo/unite-outline'
-NeoBundleLazy 'Shougo/unite-sudo'
+NeoBundleLazy 'Shougo/unite-build', {
+      \ 'on_unite' : 'build',
+      \ }
+NeoBundleLazy 'Shougo/unite-help', {
+      \ 'on_unite' : 'help',
+      \ }
+NeoBundleLazy 'Shougo/unite-outline', {
+      \ 'on_unite' : 'outline',
+      \ }
+NeoBundleLazy 'Shougo/unite-sudo', {
+      \ 'on_unite' : 'sudo',
+      \ }
 NeoBundleLazy 'Shougo/vimfiler.vim', {
       \ 'depends' : 'Shougo/unite.vim',
       \ 'on_map' : '<Plug>',
@@ -282,7 +292,9 @@ NeoBundleLazy 'todesking/ruby_hl_lvar.vim', {
 "       \ 'on_cmd' : ['Gdiff', 'Gstatus', 'Glog',
 "       \               'Gwrite', 'Gcommit', 'Gblame'],
 "       \ }
-NeoBundleLazy 'tsukkee/unite-tag'
+NeoBundleLazy 'tsukkee/unite-tag', {
+      \ 'on_unite' : 'tag',
+      \ }
 NeoBundleLazy 'tyru/caw.vim', {
       \ 'on_map' : '<Plug>',
       \ }
@@ -300,9 +312,6 @@ NeoBundleLazy 'vim-ruby/vim-ruby', {
       \ 'on_map' : '<Plug>',
       \ 'on_ft' : 'ruby',
       \ }
-" NeoBundleLazy 'vim-scripts/taglist.vim', {
-"       \ 'on_cmd' : 'TlistOpen',
-"       \ }
 NeoBundleLazy 'yomi322/vim-gitcomplete', {
       \ 'on_ft' : 'vimshell',
       \ }
@@ -1300,11 +1309,6 @@ if neobundle#tap('unite.vim') "{{{
       let g:unite_source_grep_command = 'pt'
       let g:unite_source_grep_default_opts = '--nogroup --nocolor'
       let g:unite_source_grep_recursive_opt = ''
-      if s:is_windows
-        let g:unite_source_grep_encoding = 'cp932'
-      else
-        let g:unite_source_grep_encoding = 'utf-8'
-      endif
     elseif executable('ack-grep')
       " For ack
       " http://beyondgrep.com/
@@ -1536,25 +1540,6 @@ if neobundle#tap('open-browser.vim') "{{{
   call neobundle#untap()
 endif "}}}
 
-" if neobundle#tap('taglist.vim') "{{{
-"   if s:is_windows || s:is_msys || s:is_mac
-"     let Tlist_Ctags_Cmd = '/usr/local/bin/ctags'
-"   elseif s:is_freebsd
-"     let Tlist_Ctags_Cmd = '/usr/local/bin/exctags'
-"   else
-"     let Tlist_Ctags_Cmd = '/usr/bin/ctags'
-"   endif
-"   if has('gui_running')
-"     let Tlist_Exit_OnlyWindow = 1
-"     let Tlist_GainFocus_On_ToggleOpen = 1
-"     let Tlist_Show_One_File = 1
-"     let Tlist_Use_Right_Window = 1
-"     let Tlist_WinWidth = 42
-"   endif
-"
-"   call neobundle#untap()
-" endif "}}}
-
 if neobundle#tap('w3m.vim') "{{{
   nnoremap [Alt]w :<C-u>W3mTab<Space>
   if s:is_windows || s:is_msys
@@ -1673,7 +1658,7 @@ endfunction
 
 function! s:my_idenew() abort
   tabnew
-  TlistOpen
+  TagbarOpen
   VimFilerExplorer -winwidth=46
   wincmd l
 endfunction
