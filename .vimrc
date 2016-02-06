@@ -32,6 +32,12 @@ else
   language message C
 endif
 
+" Use ',' instead of '\'.
+" Use <Leader> in global plugin.
+let g:mapleader = ','
+" Use <LocalLeader> in filetype plugin.
+let g:maplocalleader = 'm'
+
 if s:is_windows
   " Exchange path separator.
   set shellslash
@@ -85,14 +91,14 @@ NeoBundleLazy 'basyura/TweetVim', {
       \ 'depends' : ['basyura/twibill.vim', 'tyru/open-browser.vim'],
       \ 'on_cmd' : 'TweetVimHomeTimeline',
       \ }
-NeoBundleLazy 'bkad/CamelCaseMotion', {
-      \ 'on_map' : ['<Plug>CamelCaseMotion_w', '<Plug>CamelCaseMotion_b'],
-      \ }
 NeoBundleLazy 'chikatoike/concealedyank.vim', {
       \ 'on_map' : [['x', '<Plug>(operator-concealedyank)']],
       \ }
 NeoBundleLazy 'davidhalter/jedi-vim', {
       \ 'on_ft' : 'python',
+      \ }
+NeoBundleLazy 'easymotion/vim-easymotion', {
+      \ 'on_map' : '<Plug>',
       \ }
 NeoBundleLazy 'elzr/vim-json', {
       \ 'on_ft' : 'json',
@@ -662,17 +668,6 @@ if neobundle#tap('TweetVim') "{{{
   call neobundle#untap()
 endif "}}}
 
-if neobundle#tap('CamelCaseMotion') "{{{
-  nmap <silent> w <Plug>CamelCaseMotion_w
-  xmap <silent> w <Plug>CamelCaseMotion_w
-  omap <silent> W <Plug>CamelCaseMotion_w
-  nmap <silent> b <Plug>CamelCaseMotion_b
-  xmap <silent> b <Plug>CamelCaseMotion_b
-  omap <silent> B <Plug>CamelCaseMotion_b
-
-  call neobundle#untap()
-endif "}}}
-
 if neobundle#tap('concealedyank.vim') "{{{
   xmap Y <Plug>(operator-concealedyank)
 
@@ -691,6 +686,19 @@ if neobundle#tap('jedi-vim') "{{{
 
   call neobundle#untap()
 endif "}}}
+
+if neobundle#tap('vim-easymotion') "{{{
+  nmap w <Plug>(easymotion-lineforward)
+  nnoremap W w
+  nmap b <Plug>(easymotion-linebackward)
+  nnoremap B b
+  nmap [Alt]j <Plug>(easymotion-j)
+  nmap [Alt]k <Plug>(easymotion-k)
+
+  let g:EasyMotion_startofline = 0
+  let g:EasyMotion_show_prompt = 0
+  let g:EasyMotion_verbose = 0
+endif"}}}
 
 if neobundle#tap('gitv') "{{{
   nnoremap <silent> [Space]gv :<C-u>Gitv<CR>
@@ -941,15 +949,15 @@ if neobundle#tap('deoplete.vim') && has('nvim') "{{{
     endfunction"}}}
 
     " <S-TAB>: completion back.
-    inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
+    inoremap <expr><S-TAB>  pumvisible() ? "\<C-p>" : "\<C-h>"
 
     " <C-h>, <BS>: close popup and delete backword char.
-    inoremap <expr><C-h> deolete#mappings#smart_close_popup()."\<C-h>"
+    inoremap <expr><C-h> deoplete#mappings#smart_close_popup()."\<C-h>"
     inoremap <expr><BS> deoplete#mappings#smart_close_popup()."\<C-h>"
 
     inoremap <expr><C-g> deoplete#mappings#undo_completion()
     " <C-l>: redraw candidates
-    inoremap <C-l> a<BS>
+    inoremap <expr><C-l>       deoplete#mappings#refresh()
 
     " <CR>: close popup and save indent.
     inoremap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
@@ -957,17 +965,21 @@ if neobundle#tap('deoplete.vim') && has('nvim') "{{{
       return deoplete#mappings#close_popup() . "\<CR>"
     endfunction
 
-    " Use auto delimiter
-    call deoplete#custom#set('_', 'converters',
-          \ ['converter_auto_paren',
-          \  'converter_auto_delimiter', 'remove_overlap'])
+    inoremap <expr> '  pumvisible() ? deoplete#mappings#close_popup() : "'"
+
+    call deoplete#custom#set('_', 'converters', ['converter_remove_paren'])
+
+    let g:deoplete#keyword_patterns = {}
+    let g:deoplete#keyword_patterns._ = '[a-zA-Z_]\k*\(?'
 
     let g:deoplete#omni#input_patterns = {}
     let g:deoplete#omni#input_patterns.ruby =
           \ ['[^. *\t]\.\w*', '[a-zA-Z_]\w*::']
+    let g:deoplete#omni#input_patterns.python = ''
+
+    let g:deoplete#enable_refresh_always = 1
   endfunction
 
-  " inoremap <silent><expr> <C-t> deoplete#mappings#manual_complete('file')
   call neobundle#untap()
 endif "}}}
 
