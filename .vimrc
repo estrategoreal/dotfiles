@@ -338,7 +338,7 @@ NeoBundleCheck
 
 " Setting of the encoding to use for a save and reading.
 " Make it normal in UTF-8 in Unix.
-if has('vim_starting') && !s:is_windows
+if has('vim_starting')
   set encoding=utf-8
 endif
 
