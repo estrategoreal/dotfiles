@@ -338,7 +338,7 @@ NeoBundleCheck
 
 " Setting of the encoding to use for a save and reading.
 " Make it normal in UTF-8 in Unix.
-if has('vim_starting')
+if has('vim_starting') && !s:is_windows
   set encoding=utf-8
 endif
 
@@ -1204,7 +1204,7 @@ if neobundle#tap('unite.vim') "{{{
   nnoremap <silent> [Window]s
         \ :<C-u>Unite -buffer-name=files -no-split -multi-line -unique -silent
         \ jump_point file_point buffer_tab:- file_mru
-        \ `finddir('.git', ';') != '' ? 'file_rec/git' : 'file_rec/async'`
+        \ `finddir('.git', ';') != '' ? 'file_rec/git' : ''`
         \ buffer_tab:- file file/new<CR>
   nnoremap <silent> [Window]t
         \ :<C-u>Unite -start-insert tig<CR>
