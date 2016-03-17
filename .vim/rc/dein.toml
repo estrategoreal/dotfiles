@@ -1,0 +1,52 @@
+[[plugins]]
+repo = 'Shougo/dein.vim'
+
+[[plugins]]
+repo = 'altercation/vim-colors-solarized'
+force = 1
+
+[[plugins]]
+repo = 'hail2u/vim-css3-syntax'
+
+[[plugins]]
+repo = 'hewes/unite-gtags'
+
+[[plugins]]
+repo = 'kana/vim-operator-user'
+
+[[plugins]]
+repo = 'kana/vim-textobj-user'
+
+[[plugins]]
+repo = 'Kocha/vim-unite-tig'
+
+[[plugins]]
+repo = 'lambdalisue/vim-gita'
+force = 1
+
+[[plugins]]
+repo = 'osyo-manga/unite-quickfix'
+
+[[plugins]]
+repo = 'Shougo/neosnippet-snippets'
+
+[[plugins]]
+repo = 'Shougo/unite-build'
+
+[[plugins]]
+repo = 'Shougo/unite-sudo'
+
+[[plugins]]
+repo = 'Shougo/vimproc.vim'
+force = 1
+
+  [plugins.build]
+  windows = 'tools\\update-dll-mingw'
+  cygwin = 'make'
+  mac = 'make'
+  linux = 'make'
+  unix = 'gmake'
+
+[[plugins]]
+repo = 'vim-jp/autofmt'
+
