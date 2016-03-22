@@ -82,6 +82,10 @@ repo = 'lambdalisue/vim-findent'
 on_path = '.*'
 
 [[plugins]]
+repo = 'lambdalisue/vim-protocol'
+on_path = '^https\?://'
+
+[[plugins]]
 repo = 'majutsushi/tagbar'
 on_cmd = 'TagbarOpen'
 
@@ -183,6 +187,11 @@ on_ft = 'snippet'
 [[plugins]]
 repo = 'Shougo/neossh.vim'
 on_ft = ['vimfiler', 'vimshell']
+
+[[plugins]]
+repo = 'Shougo/neoyank.vim'
+on_path = '.*'
+on_source = 'unite.vim'
 
 [[plugins]]
 repo = 'Shougo/unite.vim'

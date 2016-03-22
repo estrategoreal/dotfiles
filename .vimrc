@@ -77,26 +77,27 @@ if has('vim_starting') "{{{
       endif
     endif
 
-    execute ' set runtimepath^=' . substitute(
+    execute 'set runtimepath^=' . substitute(
           \ fnamemodify(s:dein_dir, ':p') , '/$', '', '')
   endif
 endif
 "}}}
 
-call dein#begin(expand('$CACHE/dein'))
+let s:path = expand('$CACHE/dein')
+if dein#load_state(s:path)
+  let s:toml = '~/.vim/rc/dein.toml'
+  let s:toml_lazy = '~/.vim/rc/deinlazy.toml'
 
-let s:toml = '~/.vim/rc/dein.toml'
-let s:toml_lazy = '~/.vim/rc/deinlazy.toml'
-if dein#load_cache([expand('<sfile>'), s:toml, s:toml_lazy])
+  call dein#begin(s:path, [expand('<sfile>'), s:toml, s:toml_lazy])
+
   call dein#load_toml(s:toml, {'lazy': 0})
   call dein#load_toml(s:toml_lazy, {'lazy' : 1})
 
-  call dein#save_cache()
+  call dein#end()
+  call dein#save_state()
 endif
 
-call dein#end()
-
-if dein#check_install()
+if has('vim_starting') && dein#check_install()
   " Installation check.
   call dein#install()
 endif
@@ -109,8 +110,12 @@ endif
 
 " Setting of the encoding to use for a save and reading.
 " Make it normal in UTF-8 in Unix.
-if has('vim_starting') && !s:is_windows
-  set encoding=utf-8
+if has('vim_starting') && &encoding !=# 'utf-8'
+  if s:is_windows && has('gui_running')
+    set encoding=cp932
+  else
+    set encoding=utf-8
+  endif
 endif
 
 " Setting of terminal encoding. "{{{
@@ -382,6 +387,9 @@ augroup MyAutoCmd
   autocmd FileType html,markdown setlocal omnifunc=htmlcomplete#CompleteTags
   " autocmd FileType ruby setlocal omnifunc=rubycomplete#Complete
   autocmd FileType xml setlocal omnifunc=xmlcomplete#CompleteTags
+
+  autocmd FileType go highlight default link goErr WarningMsg |
+        \ match goErr /\<err\>/
 augroup END
 "}}}
 
@@ -532,7 +540,7 @@ if dein#tap('vim-operator-replace') "{{{
 endif "}}}
 
 if dein#tap('vim-smartchr') "{{{
-  function! s:open_browser_on_source() abort
+  function! s:smartchr_on_source() abort
     inoremap <expr> , smartchr#one_of(', ', ',')
 
     " Smart =.
@@ -546,13 +554,12 @@ if dein#tap('vim-smartchr') "{{{
       autocmd FileType vim inoremap <buffer> <expr> . smartchr#loop('.', ' . ', '..', '...')
     augroup END
   endfunction
-  autocmd MyAutoCmd User dein#source#vim-smartchr
-        \ call s:open_browser_on_source()
+  execute 'autocmd MyAutoCmd User' 'dein#source#'.g:dein#name
+        \ 'call s:smartchr_on_source()'
 endif "}}}
 
 if dein#tap('FastFold') "{{{
   " Folding
-
   let g:tex_fold_enabled = 1
 
   " Vim script
@@ -724,8 +731,8 @@ if dein#tap('deoplete.vim') && has('nvim') "{{{
     let g:deoplete#sources#clang#flags = ['-x', 'c++', '-std=c++11']
     "}}}
   endfunction
-  autocmd MyAutoCmd User dein#source#deoplete.vim
-        \ call s:deoplete_on_source()
+  execute 'autocmd MyAutoCmd User' 'dein#source#'.g:dein#name
+        \ 'call s:deoplete_on_source()'
 endif "}}}
 
 if dein#tap('neocomplete.vim') && has('lua') "{{{
@@ -810,8 +817,8 @@ if dein#tap('neocomplete.vim') && has('lua') "{{{
     let g:neocomplete#sources#omni#functions.go =
           \ 'gocomplete#Complete'
   endfunction
-  autocmd MyAutoCmd User dein#source#neocomplete.vim
-        \ call s:neocomplete_on_source()
+  execute 'autocmd MyAutoCmd User' 'dein#source#'.g:dein#name
+        \ 'call s:neocomplete_on_source()'
 endif "}}}
 
 if dein#tap('neocomplcache.vim') && !has('lua') "{{{
@@ -889,8 +896,8 @@ if dein#tap('neocomplcache.vim') && !has('lua') "{{{
     let g:neocomplcache_omni_patterns.c = '[^.[:digit:] *\t]\%(\.\|->\)'
     let g:neocomplcache_omni_patterns.cpp = '[^.[:digit:] *\t]\%(\.\|->\)\|\h\w*::'
   endfunction
-  autocmd MyAutoCmd User dein#source#neocomplcache.vim
-        \ call s:neocomplcache_on_source()
+  execute 'autocmd MyAutoCmd User' 'dein#source#'.g:dein#name
+        \ 'call s:neocomplcache_on_source()'
 endif "}}}
 
 if dein#tap('neopairs.vim') "{{{
@@ -913,8 +920,8 @@ if dein#tap('neosnippet.vim') "{{{
     " let g:snippets_dir = '~/.vim/snippets/,~/.vim/bundle/snipmate/snippets/'
     let g:neosnippet#snippets_directory = '~/.vim/snippets'
   endfunction
-  autocmd MyAutoCmd User dein#source#neosnippet.vim
-        \ call s:neosnippet_on_source()
+  execute 'autocmd MyAutoCmd User' 'dein#source#'.g:dein#name
+        \ 'call s:neosnippet_on_source()'
 endif "}}}
 
 if dein#tap('unite.vim') "{{{
@@ -1098,8 +1105,8 @@ if dein#tap('unite.vim') "{{{
     let g:unite_build_warning_icon = expand('~/.vim') . '/signs/warn.'
           \ . (s:is_windows ? 'bmp' : 'png')
   endfunction
-  autocmd MyAutoCmd User dein#source#unite.vim
-        \ call s:unite_on_source()
+  execute 'autocmd MyAutoCmd User' 'dein#source#'.g:dein#name
+        \ 'call s:unite_on_source()'
 endif "}}}
 
 if dein#tap('vimfiler.vim') "{{{
@@ -1141,8 +1148,8 @@ if dein#tap('vimfiler.vim') "{{{
       endif
     endfunction"}}}
   endfunction
-  autocmd MyAutoCmd User dein#source#vimfiler.vim
-        \ call s:vimfiler_on_source()
+  execute 'autocmd MyAutoCmd User' 'dein#source#'.g:dein#name
+        \ 'call s:vimfiler_on_source()'
 endif "}}}
 
 if dein#tap('vimshell.vim') "{{{
@@ -1155,6 +1162,8 @@ if dein#tap('vimshell.vim') "{{{
            \ 'gita#statusline#format("%{|/}ln%lb%{ <> |}rn%{/|}rb")'
     let g:vimshell_prompt = '% '
     let g:vimshell_split_command = ''
+    let g:vimshell_enable_transient_user_prompt = 1
+    let g:vimshell_force_overwrite_statusline = 1
 
     autocmd MyAutoCmd FileType vimshell call s:vimshell_settings()
     function! s:vimshell_settings() abort "{{{
@@ -1179,8 +1188,10 @@ if dein#tap('vimshell.vim') "{{{
 
       xmap <buffer> y <Plug>(operator-concealedyank)
 
-      nnoremap <silent><buffer> J
-            \ :<C-u>Unite -buffer-name=files -default-action=lcd directory_mru<CR>
+      nnoremap <silent><buffer> <C-j>
+            \ :<C-u>Unite -buffer-name=files
+            \ -default-action=lcd directory_mru<CR>
+
       call vimshell#set_alias('ll', 'ls -l')
       call vimshell#set_alias('la', 'ls -alF')
       call vimshell#set_alias('l', 'ls -CF')
@@ -1190,8 +1201,8 @@ if dein#tap('vimshell.vim') "{{{
       call vimshell#set_alias('mv', 'mv -i')
     endfunction"}}}
   endfunction
-  autocmd MyAutoCmd User dein#source#vimshell.vim
-        \ call s:vimshell_on_source()
+  execute 'autocmd MyAutoCmd User' 'dein#source#'.g:dein#name
+        \ 'call s:vimshell_on_source()'
 endif "}}}
 
 if dein#tap('vinarise.vim') "{{{
@@ -1224,15 +1235,22 @@ endif "}}}
 
 if dein#tap('vim-ref') "{{{
   function! s:ref_on_source(bundle) abort
+    let g:ref_cache_dir = expand('$CACHE/ref')
+    let g:ref_use_vimproc = 1
+    if s:is_windows
+      let g:ref_refe_encoding = 'cp932'
+    endif
+
     autocmd MyAutoCmd FileType ref call s:ref_my_settings()
     function! s:ref_my_settings() abort "{{{
       " Overwrite settings.
       nmap <buffer> [Tag]t <Plug>(ref-keyword)
       nmap <buffer> [Tag]p <Plug>(ref-back)
+      nnoremap <buffer> <TAB> <C-w>w
     endfunction"}}}
   endfunction
-  autocmd MyAutoCmd User dein#source#vim-ref
-        \ call s:ref_on_source()
+  execute 'autocmd MyAutoCmd User' 'dein#source#'.g:dein#name
+        \ 'call s:ref_on_source()'
 endif "}}}
 
 " if dein#tap('vim-fugitive') "{{{
@@ -1409,13 +1427,8 @@ endfunction
 " The prefix key.
 nnoremap [Alt] <Nop>
 xnoremap [Alt] <Nop>
-onoremap [Alt] <Nop>
 nmap e [Alt]
 xmap e [Alt]
-omap e [Alt]
-
-nnoremap [Alt]e e
-xnoremap [Alt]e e
 "}}}
 
 " Disable Ex-mode.
@@ -1529,18 +1542,23 @@ endfunction "}}}
 " Platform depends: "{{{
 "
 if has('nvim')
-  tnoremap <ESC><ESC> <C-\><C-n>
+  tnoremap <ESC>    <C-\><C-n>
+  tnoremap jj       <C-\><C-n>
+  tnoremap j<Space> j
 
-  " Share the histories
-  augroup MyAutoCmd
-    autocmd CursorHold * if exists(':rshada') | rshada | wshada | endif
-  augroup END
+  nnoremap <Leader>t :<C-u>terminal<CR>
+  nnoremap !         :<C-u>terminal<Space>
 
   " Use cursor shape feature
   let $NVIM_TUI_ENABLE_CURSOR_SHAPE = 1
 
   " Use true color feature
   let $NVIM_TUI_ENABLE_TRUE_COLOR = 1
+
+  " Share the histories
+  augroup MyAutoCmd
+    autocmd CursorHold * if exists(':rshada') | rshada | wshada | endif
+  augroup END
 endif
 
 " Change colorscheme.
@@ -1549,7 +1567,7 @@ if !exists('g:colors_name') && !has('gui_running')
   colorscheme elflord
 endif
 
-set shell=zsh
+set shell=sh
 "}}}
 
 "-----------------------------------------------------------------------------
