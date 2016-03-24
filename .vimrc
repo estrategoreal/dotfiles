@@ -364,7 +364,7 @@ set ttyfast
 set display=lastline
 
 " Enable multibyte format.
-set formatoptions+=mM
+set formatoptions+=mMB
 
 if has('conceal')
   " Set concealing.
@@ -375,7 +375,7 @@ endif
 "-----------------------------------------------------------------------------
 " FileType: "{{{
 "
-" Enable smart autoindenting.
+" Enable smart indent.
 set smartindent
 
 augroup MyAutoCmd
@@ -400,6 +400,11 @@ let g:python_highlight_all = 1
 let g:SimpleJsIndenter_BriefMode = 1
 let g:SimpleJsIndenter_CaseIndentLevel = -1
 
+" Go
+if $GOROOT != ''
+  set runtimepath+=$GOROOT/misc/vim
+endif
+
 " Markdown
 let g:markdown_fenced_languages = [
       \  'coffee',
@@ -414,10 +419,21 @@ let g:markdown_fenced_languages = [
       \  'vim',
       \]
 
-" Go
-if $GOROOT != ''
-  set runtimepath+=$GOROOT/misc/vim
-endif
+function! s:my_on_filetype() abort "{{{
+  " Disable automatically insert comment.
+  setlocal formatoptions-=ro
+
+  " Use FoldCCtext().
+  if &filetype !=# 'help'
+    setlocal foldtext=FoldCCtext()
+  endif
+
+  if !&l:modifiable
+    setlocal nofoldenable
+    setlocal foldcolumn=0
+    silent! IndentLinesDisable
+  endif
+endfunction "}}}
 
 "-----------------------------------------------------------------------------
 " Plugin: "{{{
@@ -565,16 +581,9 @@ if dein#tap('FastFold') "{{{
   " Vim script
   " augroup: a
   " function: f
-  " lua: l
-  " perl: p
-  " ruby: r
-  " python: P
-  " tcl: t
-  " mzscheme: m
   let g:vimsyn_folding = 'af'
 
   let g:xml_syntax_folding = 1
-  let g:php_folding = 1
   let g:perl_fold = 1
 endif "}}}
 
@@ -1322,16 +1331,22 @@ endif "}}}
 "-----------------------------------------------------------------------------
 " Key-mappings: "{{{
 "
-" Indent "{{{
+" Visual mode keymappings: "{{{
+" <TAB>: indent.
+xnoremap <TAB> >
+" <S-TAB>: unindent.
+xnoremap <S-TAB> <
+
+" Indent
 nnoremap > >>
 nnoremap < <<
 xnoremap > >gv
 xnoremap < <gv
-"}}}
 
 if (!has('nvim') || $DISPLAY != '') && has('clipboard')
   xnoremap <silent> y "*y:let [@+,@"]=[@*,@*]<CR>
 endif
+"}}}
 
 " Command-line mode keymappings: "{{{
 " <C-a>: start of line.
@@ -1369,6 +1384,12 @@ nmap <Space> [Space]
 xmap <Space> [Space]
 nnoremap [Space] <Nop>
 xnoremap [Space] <Nop>
+
+" Easily edit .vimrc "{{{
+nnoremap <silent> [Space]ve  :<C-u>edit $MYVIMRC<CR>
+nnoremap <silent> [Space]vr :<C-u>source $MYVIMRC \|
+      \ echo "source $MYVIMRC"<CR>
+"}}}
 
 " Useful save mappings. "{{{
 "nnoremap <silent> <Leader><Leader> :<C-u>update<CR>
@@ -1434,6 +1455,15 @@ xmap e [Alt]
 " Disable Ex-mode.
 nnoremap Q q
 
+" Disable ZZ.
+nnoremap ZZ <Nop>
+
+" Select rectangle.
+xnoremap r <C-v>
+
+" Redraw.
+nnoremap <silent> <C-l> :<C-u>redraw!<CR>
+
 " q: Quickfix "{{{
 " The prefix key.
 nnoremap [Quickfix] <Nop>
@@ -1466,7 +1496,7 @@ xnoremap <expr> l foldclosed(line('.')) != -1 ? 'zogv0' : 'l'
 noremap [Space]j zj
 noremap [Space]k zk
 noremap [Space]r zR
-noremap [Space]u :<C-u>Unite outline:foldings<CR>"{{{"}}}
+noremap zu :<C-u>Unite outline:foldings<CR>"{{{"}}}
 noremap [Space]z za
 "}}}
 
@@ -1476,24 +1506,45 @@ xnoremap s :s//g<Left><Left>
 " Easy escape. "{{{
 inoremap jj <ESC>
 cnoremap <expr> j getcmdline()[getcmdpos()-2] ==# 'j' ? "\<BS>\<C-c>" : 'j'
-onoremap jj <ESC>
 
 inoremap j<Space> j
-onoremap j<Space> j
 "}}}
+
+" a>, i], etc... "{{{
+" <angle>
+onoremap aa a>
+xnoremap aa a>
+onoremap ia i>
+xnoremap ia i>
+
+" [rectangle]
+onoremap ar a]
+xnoremap ar a]
+onoremap ir i]
+xnoremap ir i]
+
+" 'quote'
+onoremap aq a'
+xnoremap aq a'
+onoremap iq i'
+xnoremap iq i'
+
+" "double quote"
+onoremap ad a"
+xnoremap ad a"
+onoremap id i"
+xnoremap id i"
+"}}}
+
+" Move to top/center/bottom.
+noremap <expr> zz (winline() == (winheight(0)+1)/ 2) ?
+      \ 'zt' : (winline() == 1)? 'zb' : 'zz'
 
 " Capitalize.
 nnoremap gu gUiw`]
 
 " Clear highlight.
 nnoremap <ESC><ESC> :nohlsearch<CR>:match<CR>
-
-" Easily macro.
-nnoremap @@ @a
-
-" Search.
-nnoremap ;n ;
-nnoremap ;m ,
 "}}}
 
 "-----------------------------------------------------------------------------
@@ -1508,34 +1559,6 @@ vnoremap <silent> co :ContinuousNumber <C-a><CR>
 command! -count -nargs=1 ContinuousNumber let c = col('.')|for n in range(1, <count>?<count>-line('.'):1)|exec 'normal! j' . n . <q-args>|call cursor('.', c)|endfor
 
 command! -nargs=+ Calc :ruby print <args>
-"}}}
-
-"-----------------------------------------------------------------------------
-" Functions:"{{{
-"
-function! s:my_on_filetype() abort "{{{
-  " Use FoldCCtext().
-  if &filetype !=# 'help'
-    setlocal foldtext=FoldCCtext()
-  endif
-
-  if !&l:modifiable
-    setlocal nofoldenable
-    setlocal foldcolumn=0
-    silent! IndentLinesDisable
-  endif
-
-  if &l:filetype != '' || bufname('%') != ''
-    redir => filetype_out
-    silent! filetype
-    redir END
-    if filetype_out =~# 'OFF'
-      " Lazy loading
-      silent! filetype plugin indent on
-      syntax enable
-    endif
-  endif
-endfunction "}}}
 "}}}
 
 "-----------------------------------------------------------------------------
