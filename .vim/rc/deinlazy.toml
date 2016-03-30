@@ -28,6 +28,10 @@ repo = 'fatih/vim-go'
 on_ft = 'go'
 
 [[plugins]]
+repo = 'fuenor/im_control.vim'
+on_path = '.*'
+
+[[plugins]]
 repo = 'gregsexton/gitv'
 on_cmd = 'Gitv'
 
