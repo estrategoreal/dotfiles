@@ -97,7 +97,7 @@ if dein#load_state(s:path)
   call dein#save_state()
 endif
 
-if has('vim_starting') && dein#check_install()
+if !has('vim_starting') && dein#check_install()
   " Installation check.
   call dein#install()
 endif
@@ -1080,6 +1080,7 @@ if dein#tap('unite.vim') "{{{
       let g:unite_source_grep_command = 'pt'
       let g:unite_source_grep_default_opts = '--nogroup --nocolor'
       let g:unite_source_grep_recursive_opt = ''
+      let g:unite_source_grep_encoding = 'utf-8'
     elseif executable('ack-grep')
       " For ack
       " http://beyondgrep.com/
@@ -1294,8 +1295,8 @@ if dein#tap('caw.vim') "{{{
     else
       nmap <buffer> gc <Plug>(caw:prefix)
       xmap <buffer> gc <Plug>(caw:prefix)
-      nmap <buffer> gcc <Plug>(caw:i:toggle)
-      xmap <buffer> gcc <Plug>(caw:i:toggle)
+      nmap <buffer> gcc <Plug>(caw:hatpos:toggle)
+      xmap <buffer> gcc <Plug>(caw:hatpos:toggle)
     endif
   endfunction
 endif "}}}
