@@ -132,17 +132,9 @@ repo = 'rhysd/committia.vim'
 on_path = 'COMMIT_EDITMSG'
 
 [[plugins]]
-repo = 'rhysd/rust-doc.vim'
-on_ft = 'rust'
-
-[[plugins]]
 repo = 'rhysd/vim-operator-surround'
 depends = 'vim-operator-user'
 on_map = [['n', '<Plug>']]
-
-[[plugins]]
-repo = 'rust-lang/rust.vim'
-on_ft = 'rust'
 
 [[plugins]]
 repo = 'Rykka/riv.vim'
