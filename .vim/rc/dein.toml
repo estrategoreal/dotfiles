@@ -57,13 +57,7 @@ repo = 'Shougo/unite-sudo'
 
 [[plugins]]
 repo = 'Shougo/vimproc.vim'
-
-  [plugins.build]
-  windows = 'tools\\update-dll-mingw'
-  cygwin = 'make'
-  mac = 'make'
-  linux = 'make'
-  unix = 'gmake'
+build = 'make'
 
 [[plugins]]
 repo = 'vim-jp/autofmt'
