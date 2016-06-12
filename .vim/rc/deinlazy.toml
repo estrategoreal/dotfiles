@@ -216,6 +216,7 @@ hook_add = '''
     let g:tabgar_autofocus = 1
     let g:tagbar_width = 42
   endif
+  let g:tagbar_sort = 0
 '''
 
 [[plugins]]
