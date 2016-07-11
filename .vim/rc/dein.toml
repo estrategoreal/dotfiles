@@ -8,9 +8,6 @@ repo = 'altercation/vim-colors-solarized'
 repo = 'hail2u/vim-css3-syntax'
 
 [[plugins]]
-repo = 'hewes/unite-gtags'
-
-[[plugins]]
 repo = 'kana/vim-operator-user'
 
 [[plugins]]
