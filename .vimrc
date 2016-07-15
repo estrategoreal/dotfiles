@@ -196,6 +196,11 @@ endif
 if has('kaoriya')
   " For Kaoriya only.
   set fileencodings=guess
+elseif !exists('did_encoding_settings') && has('iconv')
+  " Build encodings.
+  let &fileencodings = join([
+        \ 'ucs-bom', 'iso-2022-jp-3', 'utf-8', 'euc-jp', 'cp932'])
+  let did_encoding_settings = 1
 endif
 
 " When any Japanese character is not included, use encoding for fileencoding.
