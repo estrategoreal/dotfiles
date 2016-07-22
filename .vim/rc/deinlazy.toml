@@ -1023,7 +1023,8 @@ hook_add = '''
   else
     let g:w3m#external_browser = 'chromium'
   endif
-  let g:w3m#search_engine = 'https://www.google.co.jp/search?ie=' . &encoding . '&q=%s'
+  " let g:w3m#search_engine = 'https://www.google.co.jp/search?ie=' . &encoding . '&q=%s'
+  let g:w3m#search_engine = 'https://www.google.co.jp/search?q=%s'
   autocmd MyAutoCmd FileType w3m call s:w3m_settings()
   function! s:w3m_settings() abort
     nnoremap <buffer> H :<C-u>call w3m#Back()<CR>
