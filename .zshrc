@@ -196,16 +196,23 @@ export PROMPT="%F{magenta}%~
 %F{cyan}%n@%m%f%% "
 export RPROMPT="%1(v|%F{green}%1v%f|)"
 
-if is_darwin ; then
-  export PATH=$(brew --prefix coreutils)/libexec/gnubin:/usr/local/bin:/usr/local/sbin:/usr/sbin:/sbin:$PATH
-elif is_freebsd ; then
-  export PATH=$PATH:/sbin:/usr/sbin:/usr/local/sbin
-elif is_linux ; then
-  export PATH=$PATH:/sbin:/usr/sbin:/usr/local/sbin
-elif is_cygwin ; then
+if [[ -z $TMUX ]]; then
+  if is_darwin ; then
+    export PATH=$(brew --prefix coreutils)/libexec/gnubin:/usr/local/bin:/usr/local/sbin:/usr/sbin:/sbin:$PATH
+  elif is_freebsd ; then
+    export PATH=$PATH:/sbin:/usr/sbin:/usr/local/sbin
+  elif is_linux ; then
+    export PATH=$PATH:/sbin:/usr/sbin:/usr/local/sbin
+  elif is_cygwin ; then
+    export PATH=$PATH:/usr/local/share/vim:/usr/local/share/git-svn-clone-externals
+  elif is_msys ; then
+    export PATH=$PATH:/usr/local/share/vim:/usr/local/share/git-svn-clone-externals:/c/Ruby/bin
+  fi
+fi
+
+if is_cygwin ; then
   export LC_MESSAGES=C
   export CYGWIN=nodosfilewarning
-  export PATH=$PATH:/usr/local/share/vim:/usr/local/share/git-svn-clone-externals
   export LIBRARY_PATH=/lib:/lib/w32api:/usr/local/lib
   export TCL_LIBRARY=/usr/share/tcl8.4
 elif is_msys ; then
@@ -214,12 +221,10 @@ elif is_msys ; then
 %F{cyan}%n@%m%f %F{magenta}%~%f
 %K{blue}How may I serve you, Master?%k
 $ "
-  export PATH=$PATH:/usr/local/share/vim:/usr/local/share/git-svn-clone-externals:/c/Ruby/bin
   export XDG_CONFIG_HOME=$HOME/.config  # for neovim
 fi
 
 if is_darwin ; then
-  export HOMEBREW_CASK_OPTS=--appdir=/Applications
   brew_completion=$(brew --prefix 2>/dev/null)/share/zsh/site-functions
   if [ $? -eq 0 ] && [ -d "$brew_completion" ];then
     fpath=($brew_completion $fpath)
