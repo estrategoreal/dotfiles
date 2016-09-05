@@ -247,6 +247,11 @@ on_ft = ['c', 'cpp']
 hook_add = '''
   if IsWindows()
     let g:marching_clang_command = "C:/msys64/mingw64/bin/clang.exe"
+
+    " directory paths to include
+    let g:marching_include_paths = [
+    \   "C:/msys64/mingw64/lib/gcc/x86_64-w64-mingw32/6.1.0/include/c++"
+    \]
   endif
   let g:marching_enable_neocomplete = 1
 '''
@@ -322,7 +327,7 @@ hook_source = '''
   set completeopt+=noinsert
 
   " <TAB>: completion.
-  imap <silent><expr> <TAB>
+  inoremap <silent><expr> <TAB>
         \ pumvisible() ? "\<C-n>" :
         \ <SID>check_back_space() ? "\<TAB>" :
         \ deoplete#mappings#manual_complete()
@@ -358,6 +363,9 @@ hook_source = '''
         \ 'converter_auto_delimiter',
         \ ])
 
+  call deoplete#custom#set('clang', 'input_pattern', '\.\w*|\.->\w*|\w+::\w*')
+  call deoplete#custom#set('clang', 'max_pattern_length', -1)
+
   let g:deoplete#keyword_patterns = {}
   let g:deoplete#keyword_patterns._ = '[a-zA-Z_]\k*\(?'
 
@@ -366,6 +374,7 @@ hook_source = '''
         \ ['[^. *\t]\.\w*', '[a-zA-Z_]\w*::']
   let g:deoplete#omni#input_patterns.python = ''
 
+  let g:deoplete#enable_refresh_always = 1
   let g:deoplete#enable_camel_case = 1
 
   " deoplete-clang "{{{
@@ -473,6 +482,7 @@ hook_source = '''
   " Use smartcase.
   let g:neocomplete#enable_smart_case = 1
   let g:neocomplete#enable_camel_case = 1
+  let g:neocomplete#auto_complete_delay = 30
   " Use fuzzy completion.
   let g:neocomplete#enable_fuzzy_completion = 1
   " Set minimum syntax keyword length.
@@ -588,6 +598,7 @@ on_ft = ['vimfiler', 'vimshell']
 [[plugins]]
 repo = 'Shougo/neoyank.vim'
 on_if = 1
+on_event = 'TextYankPost'
 on_source = 'unite.vim'
 
 [[plugins]]
@@ -969,6 +980,11 @@ repo = 'tsukkee/unite-tag'
 on_source = 'unite.vim'
 
 [[plugins]]
+repo = 'tweekmonster/impsort.vim'
+on_cmd = 'ImpSort'
+hook_source = 'let g:impsort_highlight_imported = 0'
+
+[[plugins]]
 repo = 'tyru/caw.vim'
 on_map = {nx = '<Plug>'}
 hook_add = '''
@@ -1036,17 +1052,14 @@ hook_add = '''
 
 [[plugins]]
 repo = 'zchee/deoplete-clang'
-if = "has('nvim')"
 on_ft = ['c', 'cpp']
 
 [[plugins]]
 repo = 'zchee/deoplete-jedi'
-if = "has('nvim')"
 on_ft = 'python'
 
 [[plugins]]
 repo = 'zchee/deoplete-go'
-if = "has('nvim')"
 on_i = 1
 on_ft = 'go'
 
