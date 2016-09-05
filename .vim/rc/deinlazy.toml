@@ -1052,14 +1052,17 @@ hook_add = '''
 
 [[plugins]]
 repo = 'zchee/deoplete-clang'
+if = "has('nvim')"
 on_ft = ['c', 'cpp']
 
 [[plugins]]
 repo = 'zchee/deoplete-jedi'
+if = "has('nvim')"
 on_ft = 'python'
 
 [[plugins]]
 repo = 'zchee/deoplete-go'
+if = "has('nvim')"
 on_i = 1
 on_ft = 'go'
 
