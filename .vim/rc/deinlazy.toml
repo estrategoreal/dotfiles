@@ -708,10 +708,9 @@ hook_source = """
         \ }
   nnoremap <silent> [unite]u :<C-u>Unite menu:unite -resume<CR>
 
-  let g:unite_build_error_icon   = expand('~/.vim') . '/signs/err.'
-        \ . (IsWindows() ? 'bmp' : 'png')
-  let g:unite_build_warning_icon = expand('~/.vim') . '/signs/warn.'
-        \ . (IsWindows() ? 'bmp' : 'png')
+  let s:ext = (IsWindows() ? 'bmp' : 'png')
+  let g:unite_build_error_icon    = '~/.vim/signs/err.' . s:ext
+  let g:unite_build_warning_icon  = '~/.vim/signs/warn.' . s:ext
 """
 hook_add = '''
   " The prefix key.
