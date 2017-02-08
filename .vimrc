@@ -81,6 +81,10 @@ if filereadable(expand('~/.vimrc.local'))
 endif
 
 if has('vim_starting') "{{{
+  if IsWindows()
+    set runtimepath^=$HOME/.vim,$HOME/.vim/after
+  endif
+
   " Load dein.
   let s:dein_dir = finddir('dein.vim', '.;')
   if s:dein_dir != '' || &runtimepath !~ '/dein.vim'
