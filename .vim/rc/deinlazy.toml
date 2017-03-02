@@ -18,7 +18,6 @@ hook_add = '''
 
 [[plugins]]
 repo = 'cespare/vim-toml'
-on_ft = 'toml'
 
 [[plugins]]
 repo = 'chikatoike/concealedyank.vim'
@@ -27,7 +26,6 @@ on_map = {x = '<Plug>(operator-concealedyank)'}
 [[plugins]]
 repo = 'davidhalter/jedi-vim'
 if = "has('nvim')"
-on_ft = 'python'
 hook_source = '''
   autocmd MyAutoCmd FileType python
         \ if has('python') || has('python3') |
@@ -57,11 +55,9 @@ hook_add = '''
 
 [[plugins]]
 repo = 'elzr/vim-json'
-on_ft = 'json'
 
 [[plugins]]
 repo = 'fatih/vim-go'
-on_ft = 'go'
 
 [[plugins]]
 repo = 'fuenor/im_control.vim'
@@ -98,15 +94,12 @@ on_source = 'unite.vim'
 
 [[plugins]]
 repo = 'hynek/vim-python-pep8-indent'
-on_ft = 'python'
 
 [[plugins]]
 repo = 'jiangmiao/simple-javascript-indenter'
-on_ft = 'javascript'
 
 [[plugins]]
 repo = 'jelera/vim-javascript-syntax'
-on_ft = 'javascript'
 
 [[plugins]]
 repo = 'junegunn/vim-easy-align'
@@ -178,7 +171,6 @@ hook_source = '''
 
 [[plugins]]
 repo = 'kannokanno/previm'
-on_ft = ['markdown', 'rst', 'mkd']
 depends = 'open-browser.vim'
 
 [[plugins]]
@@ -188,7 +180,6 @@ hook_post_source = 'FastFoldUpdate'
 
 [[plugins]]
 repo = 'LeafCage/foldCC'
-on_ft = 'vim'
 
 [[plugins]]
 repo = 'lambdalisue/vim-findent'
@@ -225,7 +216,6 @@ hook_add = '''
 
 [[plugins]]
 repo = 'mrtazz/DoxygenToolkit.vim'
-on_ft = ['c', 'cpp']
 hook_add = '''
   nnoremap <silent> [Space]x :<C-u>Dox<CR>
   let g:load_doxygen_syntax = 1
@@ -234,7 +224,6 @@ hook_add = '''
 [[plugins]]
 repo = 'nsf/gocode'
 rtp = 'vim'
-on_ft = 'go'
 
 [[plugins]]
 repo = 'osyo-manga/vim-jplus'
@@ -243,7 +232,6 @@ hook_add = 'nmap J <Plug>(jplus)'
 
 [[plugins]]
 repo = 'osyo-manga/vim-marching'
-on_ft = ['c', 'cpp']
 hook_add = '''
   if IsWindows()
     let g:marching_clang_command = "C:/msys64/mingw64/bin/clang.exe"
@@ -258,7 +246,6 @@ hook_add = '''
 
 [[plugins]]
 repo = 'osyo-manga/vim-monster'
-on_ft = 'ruby'
 
 [[plugins]]
 repo = 'osyo-manga/vim-textobj-multiblock'
@@ -267,7 +254,6 @@ on_map = {ox = '<Plug>'}
 
 [[plugins]]
 repo = 'rcmdnk/vim-markdown'
-on_ft = ['markdown', 'mkd']
 
 [[plugins]]
 repo = 'rhysd/accelerated-jk'
@@ -294,7 +280,6 @@ hook_add = '''
 
 [[plugins]]
 repo = 'Rykka/riv.vim'
-on_ft = 'rst'
 
 [[plugins]]
 repo = 'saihoooooooo/glowshi-ft.vim'
@@ -574,7 +559,6 @@ on_i = 1
 repo = 'Shougo/neosnippet.vim'
 depends = ['neosnippet-snippets', 'context_filetype.vim']
 on_event = 'InsertCharPre'
-on_ft = 'snippet'
 hook_source = '''
   imap <C-k> <Plug>(neosnippet_expand_or_jump)
   smap <C-k> <Plug>(neosnippet_expand_or_jump)
@@ -593,7 +577,6 @@ hook_source = '''
 
 [[plugins]]
 repo = 'Shougo/neossh.vim'
-on_ft = ['vimfiler', 'vimshell']
 
 [[plugins]]
 repo = 'Shougo/neoyank.vim'
@@ -843,7 +826,6 @@ on_map = {n = '<Plug>'}
 hook_add = 'nmap <silent> <C-@> <Plug>(vimshell_switch)'
 hook_source = '''
   let g:vimshell_user_prompt = 'fnamemodify(getcwd(), ":~")'
-  "let g:vimshell_right_prompt = 'fugitive#statusline()'
   let g:vimshell_right_prompt =
          \ 'gita#statusline#format("%{|/}ln%lb%{ <> |}rn%{/|}rb")'
   let g:vimshell_prompt = '% '
@@ -905,19 +887,15 @@ hook_add = '''
 
 [[plugins]]
 repo = 'thinca/vim-ft-diff_fold'
-on_ft = 'diff'
 
 [[plugins]]
 repo = 'thinca/vim-ft-vim_fold'
-on_ft = 'vim'
 
 [[plugins]]
 repo = 'thinca/vim-ft-help_fold'
-on_ft = 'help'
 
 [[plugins]]
 repo = 'thinca/vim-qfreplace'
-on_ft = ['unite', 'quickfix']
 hook_add = '''
   autocmd MyAutoCmd FileType qf nnoremap <buffer> r :<C-u>Qfreplace<CR>
 '''
@@ -948,31 +926,6 @@ hook_source = '''
 
 [[plugins]]
 repo = 'todesking/ruby_hl_lvar.vim'
-on_ft = 'ruby'
-
-# [[plugins]]
-# repo = 'tpope/vim-fugitive'
-# on_cmd = ['Gdiff', 'Gstatus', 'Glog', 'Gwrite', 'Gcommit', 'Gblame']
-# hook_add = '''
-#   nnoremap <silent> [Space]gd :<C-u>call <SID>fugitive_tab('Gdiff')<CR>
-#   nnoremap <silent> [Space]gs :<C-u>Gstatus<CR>
-#   nnoremap <silent> [Space]gl :<C-u>call <SID>fugitive_tab('Glog')<CR>
-#   nnoremap <silent> [Space]ga :<C-u>Gwrite<CR>
-#   nnoremap <silent> [Space]gA :<C-u>Gwrite %<CR>
-#   nnoremap <silent> [Space]gc :<C-u>Gcommit<CR>
-#   nnoremap <silent> [Space]gC :<C-u>Gcommit --amend<CR>
-#   nnoremap <silent> [Space]gb :<C-u>call <SID>fugitive_tab('Gblame')<CR>
-#   function! s:fugitive_tab(cmd) abort
-#     if IsWindows()
-#       setlocal shellpipe=2>\&1\|iconv\ -f\ UTF-8\ -t\ CP932>%s
-#     endif
-#     execute 'tabedit ' . expand('%')
-#     execute a:cmd
-#     if IsWindows()
-#       setlocal shellpipe&
-#     endif
-#   endfunction
-# '''
 
 [[plugins]]
 repo = 'tsukkee/unite-tag'
@@ -1009,20 +962,16 @@ on_map = {n = '<Plug>'}
 
 [[plugins]]
 repo = 'ujihisa/vimshell-ssh'
-on_ft = 'vimshell'
 
 [[plugins]]
 repo = 'vim-jp/cpp-vim'
-on_ft = 'cpp'
 
 [[plugins]]
 repo = 'vim-ruby/vim-ruby'
 on_map = '<Plug>'
-on_ft = 'ruby'
 
 [[plugins]]
 repo = 'yomi322/vim-gitcomplete'
-on_ft = 'vimshell'
 
 [[plugins]]
 repo = 'yuratomo/w3m.vim'
@@ -1052,16 +1001,13 @@ hook_add = '''
 [[plugins]]
 repo = 'zchee/deoplete-clang'
 if = "has('nvim')"
-on_ft = ['c', 'cpp']
 
 [[plugins]]
 repo = 'zchee/deoplete-jedi'
 if = "has('nvim')"
-on_ft = 'python'
 
 [[plugins]]
 repo = 'zchee/deoplete-go'
 if = "has('nvim')"
 on_i = 1
-on_ft = 'go'
 

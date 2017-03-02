@@ -104,7 +104,6 @@ endif
 "}}}
 
 let g:dein#install_progress_type = 'title'
-let g:dein#install_message_type = 'none'
 let g:dein#enable_notification = 1
 let g:dein#notification_icon = '~/.vim/signs/warn.png'
 
@@ -115,7 +114,7 @@ if dein#load_state(s:path)
 
   call dein#begin(s:path, [expand('<sfile>'), s:toml, s:toml_lazy])
 
-  call dein#load_toml(s:toml, {'lazy': 0})
+  call dein#load_toml(s:toml, {'lazy' : 0})
   call dein#load_toml(s:toml_lazy, {'lazy' : 1})
 
   call dein#end()
@@ -351,7 +350,6 @@ set noshowmode
 " Always display the line with tab page labels.
 set showtabline=2
 " Set the content of the status line.
-"set statusline=%<%m%r%h%w%y%{'['.(&fenc!=''?&fenc:&enc).':'.&ff.']'}\ %1.40f%=%{fugitive#statusline()}\ \ %l/%L,%c%V%5P
 set statusline=%<%m%r%h%w%y%{'['.(&fenc!=''?&fenc:&enc).':'.&ff.']'}\ %1.40f%=%{gita#statusline#preset('branch')}\ \ %l/%L,%c%V%5P
 
 " Turn down a long line appointed in 'breakat'

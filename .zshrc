@@ -143,7 +143,8 @@ function ide() {
     gvim +"set columns=179" +"VimFiler -buffer-name=explorer -toggle ~" +"tabedit $name" +TagbarOpen +"VimFilerCurrentDir -create -explorer -simple -winwidth=48" +"wincmd l"
   else
     # gvim +"set columns=179" +"VimFiler -buffer-name=explorer -toggle ~" +tabnew +TlistOpen +"wincmd h" +"VimFilerCurrentDir -create -explorer -simple -winwidth=48"
-    gvim +"set columns=179" +"VimFiler -buffer-name=explorer -toggle ~" +tabnew +TagbarOpen +"wincmd h" +"VimFilerCurrentDir -create -explorer -simple -winwidth=48"
+    # gvim +"set columns=179" +"VimFiler -buffer-name=explorer -toggle ~" +tabnew +TagbarOpen +"wincmd h" +"VimFilerCurrentDir -create -explorer -simple -winwidth=48"
+    gvim +"set columns=179" +"VimFiler -buffer-name=explorer -toggle ~" +tabnew +TagbarOpen +"VimFilerCurrentDir -create -explorer -simple -winwidth=48" +"wincmd l"
   fi
 }
 
