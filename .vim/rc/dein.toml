@@ -5,7 +5,25 @@ repo = 'Shougo/dein.vim'
 repo = 'altercation/vim-colors-solarized'
 
 [[plugins]]
+repo = 'cespare/vim-toml'
+
+[[plugins]]
+repo = 'elzr/vim-json'
+
+[[plugins]]
+repo = 'fatih/vim-go'
+
+[[plugins]]
 repo = 'hail2u/vim-css3-syntax'
+
+[[plugins]]
+repo = 'hynek/vim-python-pep8-indent'
+
+[[plugins]]
+repo = 'jiangmiao/simple-javascript-indenter'
+
+[[plugins]]
+repo = 'jelera/vim-javascript-syntax'
 
 [[plugins]]
 repo = 'kana/vim-operator-user'
@@ -68,7 +86,14 @@ hook_add = """
 # """
 
 [[plugins]]
+repo = 'nsf/gocode'
+rtp = 'vim'
+
+[[plugins]]
 repo = 'osyo-manga/unite-quickfix'
+
+[[plugins]]
+repo = 'rcmdnk/vim-markdown'
 
 [[plugins]]
 repo = 'Shougo/neosnippet-snippets'
@@ -86,4 +111,10 @@ on_source = ['unite.vim', 'vimshell.vim']
 
 [[plugins]]
 repo = 'vim-jp/autofmt'
+
+[[plugins]]
+repo = 'vim-jp/cpp-vim'
+
+[[plugins]]
+repo = 'vim-ruby/vim-ruby'
 
