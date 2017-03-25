@@ -237,10 +237,13 @@ if is_darwin ; then
     source $(brew --prefix)/etc/brew-wrap
   fi
 elif is_linux || is_cygwin ; then
-  export PATH=$HOME/.rbenv/bin:$PATH
+  export PATH=$HOME/.rbenv/bin:$HOME/.pyenv/bin:$PATH
 fi
 if [ -x "`which rbenv`" ]; then
   eval "$(rbenv init -)"
+fi
+if [ -x "`which pyenv`" ]; then
+  eval "$(pyenv init -)"
 fi
 
 [ -f ~/.zshrc.tmux ] && source ~/.zshrc.tmux
