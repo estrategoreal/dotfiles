@@ -207,9 +207,13 @@ if [[ -z $TMUX ]]; then
   elif is_cygwin ; then
     export PATH=$PATH:/usr/local/share/vim:/usr/local/share/git-svn-clone-externals
   elif is_msys ; then
-    export PATH=$PATH:/usr/local/share/vim:/usr/local/share/git-svn-clone-externals:/c/Ruby/bin
+    export PATH=$PATH:/usr/local/share/vim:/usr/local/share/git-svn-clone-externals:/c/Ruby/bin:/c/Python:/c/Python/Scripts:/c/Go/bin
   fi
 fi
+
+export GOPATH=$HOME/.go
+export GOROOT_BOOTSTRAP=$GOPATH/go1.4
+export PATH=$PATH:$GOPATH/bin
 
 if is_cygwin ; then
   export LC_MESSAGES=C
@@ -237,13 +241,16 @@ if is_darwin ; then
     source $(brew --prefix)/etc/brew-wrap
   fi
 elif is_linux || is_cygwin ; then
-  export PATH=$HOME/.rbenv/bin:$HOME/.pyenv/bin:$PATH
+  export PATH=$HOME/.rbenv/bin:$HOME/.pyenv/bin:$HOME/.goenv/bin:$PATH
 fi
 if [ -x "`which rbenv`" ]; then
   eval "$(rbenv init -)"
 fi
 if [ -x "`which pyenv`" ]; then
   eval "$(pyenv init -)"
+fi
+if [ -x "`which goenv`" ]; then
+  eval "$(goenv init -)"
 fi
 
 [ -f ~/.zshrc.tmux ] && source ~/.zshrc.tmux
