@@ -209,11 +209,11 @@ if [[ -z $TMUX ]]; then
   elif is_msys ; then
     export PATH=$PATH:/usr/local/share/vim:/usr/local/share/git-svn-clone-externals:/c/Ruby/bin:/c/Python:/c/Python/Scripts:/c/Go/bin
   fi
-fi
 
-export GOPATH=$HOME/.go
-export GOROOT_BOOTSTRAP=$GOPATH/go1.4
-export PATH=$PATH:$GOPATH/bin
+  export GOPATH=$HOME/.go
+  export GOROOT_BOOTSTRAP=$GOPATH/go1.4
+  export PATH=$PATH:$GOPATH/bin
+fi
 
 if is_cygwin ; then
   export LC_MESSAGES=C
