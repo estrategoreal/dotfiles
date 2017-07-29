@@ -138,7 +138,8 @@ hook_add = 'xmap p <Plug>(operator-replace)'
 
 [[plugins]]
 repo = 'kana/vim-smartchr'
-on_event = 'InsertCharPre'
+# on_event = 'InsertCharPre'
+on_event = 'InsertEnter'
 hook_source = '''
   inoremap <expr> , smartchr#one_of(', ', ',')
 
@@ -538,7 +539,8 @@ on_i = 1
 [[plugins]]
 repo = 'Shougo/neosnippet.vim'
 depends = ['neosnippet-snippets', 'context_filetype.vim']
-on_event = 'InsertCharPre'
+# on_event = 'InsertCharPre'
+on_event = 'InsertEnter'
 on_ft = 'snippet'
 hook_source = '''
   imap <C-k> <Plug>(neosnippet_expand_or_jump)
