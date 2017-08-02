@@ -1,20 +1,24 @@
 snippet     if
+options     head
 abbr        if () {}
     if (${1:#:condition}) {
         ${0:TARGET}
     }
 
 snippet else
+options     head
     else {
         ${0:TARGET}
     }
 
 snippet elseif
+options     head
     else if (${1:#:condition}) {
         ${0:TARGET}
     }
 
 snippet     ifelse
+options     head
 abbr        if () {} else {}
     if (${1:#:condition}) {
         ${2:TARGET}
@@ -23,24 +27,28 @@ abbr        if () {} else {}
     }
 
 snippet     for
+options     head
 abbr        for () {}
-    for (${1} = 0; $1 < ${2}; $1++) {
-        ${0:TARGET}
+    for (${1:int} ${2:i} = ${3:0}; $2 < ${4}; $2++) {
+        ${0:#:TARGET}
     }
 
 snippet     while
+options     head
 abbr        while () {}
     while (${1:#:condition}) {
         ${0:TARGET}
     }
 
 snippet     do_while
+options     head
 alias       do
     do {
         ${0:TARGET:code}
     } while (${1:#:condition});
 
 snippet     switch
+options     head
 abbr        switch () {}
     switch (${1:#:var}) {
     case ${2:#:val}:
@@ -49,6 +57,7 @@ abbr        switch () {}
     }
 
 snippet     function
+options     head
 alias       func
 abbr        func() {}
     ${1:void} ${2:#:func_name}(${3:#:args}) {
@@ -56,6 +65,7 @@ abbr        func() {}
     }
 
 snippet     macro_function
+options     head
 alias       macro
 abbr        #define ... do {} while (0)
     #define ${1:#:macro}()   do { \
@@ -63,6 +73,7 @@ abbr        #define ... do {} while (0)
     } while (0)
 
 snippet     struct
+options     head
 abbr        struct {}
     struct ${1:#:name} {
         ${0:TARGET:data}
@@ -70,11 +81,13 @@ abbr        struct {}
 
 # Typedef struct
 snippet struct_typedef
+options     head
     typedef struct _${1:#:name} {
         ${0:TARGET:data}
     } $1;
 
 snippet     enum
+options     head
 abbr        enum {}
     enum ${1:#:name} {
         ${0:TARGET}
@@ -82,18 +95,22 @@ abbr        enum {}
 
 # Typedef enum
 snippet enum_typedef
+options     head
     typedef enum _${1:#:name} {
         ${0:TARGET}
     } $1;
 
 # hard-tab is necessary; C indent doesn't support this.
 snippet main
-    int main(int argc, char const* argv[])
-    {
-        ${0:TARGET}
-        return 0;
-    }
+options     head
+	int main(int argc, char const* argv[])
+	{
+		${0:TARGET}
+		return 0;
+	}
+
 snippet main2
+options     head
     int main(void)
     {
         ${0:TARGET}
@@ -102,14 +119,17 @@ snippet main2
 
 # #include <...>
 snippet inc
+options     head
 alias   #inc, #include
     #include <${1:stdio}.h>${0}
 # #include "..."
 snippet inc2
+options     head
 alias   #inc2, #include2
     #include "${1}.h"${0}
 
 snippet ifdef
+options     head
 alias   #ifdef
 abbr #ifdef ... #else ... #endif
     #ifdef ${1:#:SYMBOL}
@@ -118,6 +138,7 @@ abbr #ifdef ... #else ... #endif
     #endif  /* $1 */
 
 snippet ifndef
+options     head
 alias   #ifndef
 abbr #ifndef ... #define ... #endif
     #ifndef $1
@@ -125,19 +146,21 @@ abbr #ifndef ... #define ... #endif
     #endif${0}
 
 snippet def
+options     head
 alias   #def, #define
     #define 
 
 # Include-Guard
 snippet once
+options     head
 abbr include-guard
     #ifndef ${1:SYMBOL}
-    #define $1
+        #define $1
 
-    ${0:TARGET}
-    #endif  /* $1 */
+        ${0:TARGET}
+    #endif /* $1 */
 
-# Tertiary conditional
+# Ternary conditional operator
 snippet conditional
     (${1:#:condition}) ? ${2:#:a} : ${3:#:b}
 
@@ -156,6 +179,7 @@ snippet comment
 alias /*
     /* ${1:#:comment} */
     ${0}
+
 snippet comment2
     /*
      * ${1:#:comment}
@@ -167,6 +191,7 @@ alias size
     sizeof(${0:TARGET})
 
 snippet helloworld
+options     head
     #include <stdio.h>
     int main(int argc, char const* argv[])
     {
