@@ -11,9 +11,6 @@ repo = 'cespare/vim-toml'
 repo = 'elzr/vim-json'
 
 [[plugins]]
-repo = 'fatih/vim-go'
-
-[[plugins]]
 repo = 'hail2u/vim-css3-syntax'
 
 [[plugins]]
@@ -30,9 +27,6 @@ repo = 'kana/vim-operator-user'
 
 [[plugins]]
 repo = 'kana/vim-textobj-user'
-
-[[plugins]]
-repo = 'Kocha/vim-unite-tig'
 
 # [[plugins]]
 # repo = 'lambdalisue/vim-gita'
@@ -86,11 +80,14 @@ hook_add = """
 """
 
 [[plugins]]
-repo = 'nsf/gocode'
-rtp = 'vim'
+repo = 'mattn/webapi-vim'
 
 [[plugins]]
-repo = 'osyo-manga/unite-quickfix'
+repo = 'mxw/vim-jsx'
+
+[[plugins]]
+repo = 'nsf/gocode'
+rtp = 'vim'
 
 [[plugins]]
 repo = 'rcmdnk/vim-markdown'
@@ -99,15 +96,19 @@ repo = 'rcmdnk/vim-markdown'
 repo = 'Shougo/neosnippet-snippets'
 
 [[plugins]]
-repo = 'Shougo/unite-build'
+repo = 'Shougo/neossh.vim'
 
 [[plugins]]
-repo = 'Shougo/unite-sudo'
+repo = 'Shougo/unite-outline'
 
 [[plugins]]
-repo = 'Shougo/vimproc.vim'
-build = 'make'
-on_source = ['unite.vim', 'vimshell.vim']
+repo = 'thinca/vim-ft-diff_fold'
+
+[[plugins]]
+repo = 'thinca/vim-ft-help_fold'
+
+[[plugins]]
+repo = 'tsukkee/unite-tag'
 
 [[plugins]]
 repo = 'vim-jp/autofmt'

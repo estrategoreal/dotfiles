@@ -17,20 +17,10 @@ hook_add = '''
 '''
 
 [[plugins]]
-repo = 'chikatoike/concealedyank.vim'
-on_map = {x = '<Plug>(operator-concealedyank)'}
-
-[[plugins]]
 repo = 'davidhalter/jedi-vim'
 if = "!has('nvim')"
 on_ft = 'python'
 hook_source = '''
-  autocmd MyAutoCmd FileType python
-        \ if has('python') || has('python3') |
-        \   setlocal omnifunc=jedi#completions |
-        \ else |
-        \   setlocal omnifunc= |
-        \ endif
   let g:jedi#completions_enabled = 0
   let g:jedi#auto_vim_configuration = 0
   let g:jedi#smart_auto_mappings = 0
@@ -54,73 +44,33 @@ hook_add = '''
 '''
 
 [[plugins]]
+repo = 'fatih/vim-go'
+on_ft = 'go'
+
+[[plugins]]
 repo = 'fuenor/im_control.vim'
 on_if = 1
 
 [[plugins]]
-repo = 'gregsexton/gitv'
-on_cmd = 'Gitv'
+repo = 'h1mesuke/vim-alignta'
+on_i = 1
 hook_add = '''
-  nnoremap <silent> [Space]gv :<C-u>Gitv<CR>
-  nnoremap <silent> [Space]gf :<C-u>Gitv!<CR>
-'''
+  let g:unite_source_alignta_preset_arguments = [
+        \ ["Align at '/*' & '*/'", '<-- /* -> */' ],
+        \ ["Align at '='", '=>\='],
+        \ ["Align at ':'", '01 :'],
+        \ ["Align at '|'", '|'   ],
+        \ ["Align at ')'", '0 )' ],
+        \ ["Align at ']'", '0 ]' ],
+        \ ["Align at '}'", '}'   ],
+        \]
 
-# [[plugins]]
-# repo = 'h1mesuke/vim-alignta'
-# on_i = 1
-# hook_add = '''
-#   let g:unite_source_alignta_preset_arguments = [
-#         \ ["Align at '/*' & '*/'", '<-- /* -> */' ],
-#         \ ["Align at '='", '=>\='],
-#         \ ["Align at ':'", '01 :'],
-#         \ ["Align at '|'", '|'   ],
-#         \ ["Align at ')'", '0 )' ],
-#         \ ["Align at ']'", '0 ]' ],
-#         \ ["Align at '}'", '}'   ],
-#         \]
-#
-#   xnoremap <silent> [unite]a :<C-u>Unite alignta:arguments<CR>
-# '''
+  xnoremap <silent> [unite]a :<C-u>Unite alignta:arguments<CR>
+'''
 
 [[plugins]]
 repo = 'hewes/unite-gtags'
 on_source = 'unite.vim'
-
-[[plugins]]
-repo = 'junegunn/vim-easy-align'
-on_map = '<Plug>(EasyAlign)'
-hook_add = '''
-  let g:easy_align_delimiters = {
-        \ '>': { 'pattern': '>>\|=>\|>' },
-        \ '/': {
-        \     'pattern':         '//\+\|/\*\|\*/',
-        \     'delimiter_align': 'l',
-        \     'ignore_groups':   ['!Comment'] },
-        \ ']': {
-        \     'pattern':       '[[\]]',
-        \     'left_margin':   0,
-        \     'right_margin':  0,
-        \     'stick_to_left': 0
-        \   },
-        \ ')': {
-        \     'pattern':       '[()]',
-        \     'left_margin':   0,
-        \     'right_margin':  0,
-        \     'stick_to_left': 0
-        \   },
-        \ 'd': {
-        \     'pattern':      ' \(\S\+\s*[;=]\)\@=',
-        \     'left_margin':  0,
-        \     'right_margin': 0
-        \   }
-        \ }
-
-  " Start interactive EasyAlign in visual mode (e.g. vip<Enter>)
-  xmap <Enter> <Plug>(EasyAlign)
-
-  " Start interactive EasyAlign for a motion/text object (e.g. <Leader>aip)
-  nmap <Leader>a <Plug>(EasyAlign)
-'''
 
 [[plugins]]
 repo = 'kana/vim-niceblock'
@@ -129,12 +79,6 @@ hook_add = '''
   xmap I <Plug>(niceblock-I)
   xmap A <Plug>(niceblock-A)
 '''
-
-[[plugins]]
-repo = 'kana/vim-operator-replace'
-depends = 'vim-operator-user'
-on_map = {nx = '<Plug>'}
-hook_add = 'xmap p <Plug>(operator-replace)'
 
 [[plugins]]
 repo = 'kana/vim-smartchr'
@@ -161,26 +105,11 @@ on_cmd = 'PrevimOpen'
 depends = 'open-browser.vim'
 
 [[plugins]]
-repo = 'Konfekt/FastFold'
-on_event = 'BufEnter'
-hook_post_source = 'FastFoldUpdate'
-
-[[plugins]]
 repo = 'LeafCage/foldCC'
 on_ft = 'vim'
 
 [[plugins]]
 repo = 'lambdalisue/vim-findent'
-on_if = 1
-hook_add = '''
-  " Note: It is too slow.
-  " autocmd MyAutoCmd BufRead * Findent! --no-warnings
-  nnoremap <silent> [Space]i :<C-u>Findent! --no-warnings<CR>
-'''
-
-[[plugins]]
-repo = 'lambdalisue/vim-protocol'
-on_path = '^https\?://'
 
 [[plugins]]
 repo = 'majutsushi/tagbar'
@@ -204,6 +133,7 @@ hook_add = '''
 
 [[plugins]]
 repo = 'mrtazz/DoxygenToolkit.vim'
+on_cmd = 'Dox'
 hook_add = '''
   nnoremap <silent> [Space]x :<C-u>Dox<CR>
   let g:load_doxygen_syntax = 1
@@ -212,29 +142,18 @@ hook_add = '''
 [[plugins]]
 repo = 'osyo-manga/vim-jplus'
 on_map = {n = '<Plug>'}
-hook_add = 'nmap J <Plug>(jplus)'
-
-[[plugins]]
-repo = 'osyo-manga/vim-marching'
 hook_add = '''
-  if IsWindows()
-    let g:marching_clang_command = "C:/msys64/mingw64/bin/clang.exe"
-
-    " directory paths to include
-    let g:marching_include_paths = [
-    \   "C:/msys64/mingw64/lib/gcc/x86_64-w64-mingw32/6.1.0/include/c++"
-    \]
-  endif
-  let g:marching_enable_neocomplete = 1
+  nmap J <Plug>(jplus)
 '''
 
 [[plugins]]
-repo = 'osyo-manga/vim-monster'
-
-[[plugins]]
-repo = 'osyo-manga/vim-textobj-multiblock'
-depends = 'vim-textobj-user'
-on_map = {ox = '<Plug>'}
+repo = 'racer-rust/vim-racer'
+on_ft = 'rust'
+hook_source = '''
+  let $RUST_SRC_PATH = expand('~/.multirust/toolchains/'
+  \ .'stable-x86_64-unknown-linux-gnu/'
+  \ .'lib/rustlib/src/rust/src/')
+'''
 
 [[plugins]]
 repo = 'rhysd/accelerated-jk'
@@ -243,10 +162,6 @@ hook_add = '''
   nmap <silent>j <Plug>(accelerated_jk_gj)
   nmap <silent>k <Plug>(accelerated_jk_gk)
 '''
-
-[[plugins]]
-repo = 'rhysd/committia.vim'
-on_path = 'COMMIT_EDITMSG'
 
 [[plugins]]
 repo = 'rhysd/vim-operator-surround'
@@ -260,20 +175,16 @@ hook_add = '''
 '''
 
 [[plugins]]
-repo = 'Rykka/riv.vim'
+repo = 'rhysd/rust-doc.vim'
+on_ft = 'rust'
 
 [[plugins]]
-repo = 'saihoooooooo/glowshi-ft.vim'
-on_map = {nx = '<Plug>'}
-hook_add = '''
-  let g:glowshi_ft_no_default_key_mappings = 1
-  nmap f <Plug>(glowshi-ft-f)
-  xmap f <Plug>(glowshi-ft-f)
-  nmap F <Plug>(glowshi-ft-F)
-  xmap F <Plug>(glowshi-ft-F)
+repo = 'rhysd/vim-gfm-syntax'
+on_event = 'BufRead'
 
-  let g:glowshi_ft_timeoutlen = 1000
-'''
+[[plugins]]
+repo = 'rust-lang/rust.vim'
+on_ft = 'rust'
 
 [[plugins]]
 repo = 'Shougo/context_filetype.vim'
@@ -530,11 +441,6 @@ on_if = 1
 
 [[plugins]]
 repo = 'Shougo/neomru.vim'
-on_if = 1
-
-[[plugins]]
-repo = 'Shougo/neopairs.vim'
-on_i = 1
 
 [[plugins]]
 repo = 'Shougo/neosnippet.vim'
@@ -546,20 +452,15 @@ hook_source = '''
   imap <C-k> <Plug>(neosnippet_expand_or_jump)
   smap <C-k> <Plug>(neosnippet_expand_or_jump)
   xmap <C-k> <Plug>(neosnippet_expand_target)
-  imap <C-s> <Plug>(neosnippet_start_unite_snippet)
-  xmap <C-l> <Plug>(neosnippet_start_unite_snippet_target)
 
   " Enable snipMate compatibility feature.
   let g:neosnippet#enable_snipmate_compatibility = 1
-  let g:neosnippet#enable_complete_done = 1
+  let g:neosnippet#enable_completed_snippet = 1
   let g:neosnippet#expand_word_boundary = 1
 
   " let g:snippets_dir = '~/.vim/snippets/,~/.vim/bundle/snipmate/snippets/'
   let g:neosnippet#snippets_directory = '~/.vim/snippets'
 '''
-
-[[plugins]]
-repo = 'Shougo/neossh.vim'
 
 [[plugins]]
 repo = 'Shougo/neoyank.vim'
@@ -624,13 +525,7 @@ hook_source = """
 
   let g:unite_enable_auto_select = 0
 
-  if executable('hw')
-    " Use hw(highway)
-    " https://github.com/tkengo/highway
-    let g:unite_source_grep_command = 'hw'
-    let g:unite_source_grep_default_opts = '--no-group --no-color'
-    let g:unite_source_grep_recursive_opt = ''
-  elseif executable('ag')
+  if executable('ag')
     " Use ag(the silver searcher)
     " https://github.com/ggreer/the_silver_searcher
     let g:unite_source_grep_command = 'ag'
@@ -645,12 +540,6 @@ hook_source = """
     let g:unite_source_grep_default_opts = '--nogroup --nocolor'
     let g:unite_source_grep_recursive_opt = ''
     let g:unite_source_grep_encoding = 'utf-8'
-  elseif executable('ack-grep')
-    " For ack
-    " http://beyondgrep.com/
-    let g:unite_source_grep_command = 'ack-grep'
-    let g:unite_source_grep_default_opts = '-i --no-heading --no-color -k -H'
-    let g:unite_source_grep_recursive_opt = ''
   endif
 
   " For unite-alias.
@@ -753,19 +642,11 @@ hook_add = '''
 '''
 
 [[plugins]]
-repo = 'Shougo/unite-help'
-on_source = 'unite.vim'
-
-[[plugins]]
-repo = 'Shougo/unite-outline'
-on_source = 'unite.vim'
-
-[[plugins]]
 repo = 'Shougo/vimfiler.vim'
 depends = 'unite.vim'
 on_map = {n = '<Plug>'}
 on_if = "isdirectory(bufname('%'))"
-hook_add = 'nnoremap <silent> <C-g> :<C-u>VimFiler -buffer-name=explorer -simple -toggle<CR>'
+hook_add = 'nnoremap <silent> <C-g> :<C-u>VimFiler -invisible<CR>'
 hook_source = '''
   let g:vimfiler_as_default_explorer = 1
 
@@ -773,6 +654,9 @@ hook_source = '''
   let g:vimfiler_safe_mode_by_default = 0
 
   if IsWindows()
+    let g:vimfiler_detect_drives = [
+          \ 'C:/', 'D:/', 'E:/', 'F:/', 'G:/', 'H:/', 'I:/',
+          \ 'J:/', 'K:/', 'L:/', 'M:/', 'N:/']
     " Use trashbox.
     let g:unite_kind_file_use_trashbox = 1
   else
@@ -802,6 +686,11 @@ hook_source = '''
     endif
   endfunction"}}}
 '''
+
+[[plugins]]
+repo = 'Shougo/vimproc.vim'
+build = 'make'
+on_source = ['unite.vim', 'vimshell.vim']
 
 [[plugins]]
 repo = 'Shougo/vimshell.vim'
@@ -856,26 +745,9 @@ hook_source = '''
 [[plugins]]
 repo = 'Shougo/vinarise.vim'
 on_cmd = 'Vinarise'
-hook_add = 'let g:vinarise_enable_auto_detect = 1'
-
-[[plugins]]
-repo = 't9md/vim-choosewin'
-on_map = {n = '<Plug>'}
 hook_add = '''
-  nmap g<C-w>  <Plug>(choosewin)
-  let g:choosewin_overlay_enable = 1
-  let g:choosewin_overlay_clear_multibyte = 1
-  let g:choosewin_blink_on_land = 0
+    let g:vinarise_enable_auto_detect = 1
 '''
-
-[[plugins]]
-repo = 'thinca/vim-ft-diff_fold'
-
-[[plugins]]
-repo = 'thinca/vim-ft-vim_fold'
-
-[[plugins]]
-repo = 'thinca/vim-ft-help_fold'
 
 [[plugins]]
 repo = 'thinca/vim-qfreplace'
@@ -883,11 +755,6 @@ on_ft = ['unite', 'qf']
 hook_add = '''
   autocmd MyAutoCmd FileType qf nnoremap <buffer> r :<C-u>Qfreplace<CR>
 '''
-
-[[plugins]]
-repo = 'thinca/vim-quickrun'
-on_map = {n = '<Plug>'}
-hook_add = 'nmap <silent> <Leader>r <Plug>(quickrun)'
 
 [[plugins]]
 repo = 'thinca/vim-ref'
@@ -913,10 +780,6 @@ repo = 'todesking/ruby_hl_lvar.vim'
 on_ft = 'ruby'
 
 [[plugins]]
-repo = 'tsukkee/unite-tag'
-on_source = 'unite.vim'
-
-[[plugins]]
 repo = 'tweekmonster/impsort.vim'
 on_cmd = 'ImpSort'
 hook_source = 'let g:impsort_highlight_imported = 0'
@@ -925,7 +788,7 @@ hook_source = 'let g:impsort_highlight_imported = 0'
 repo = 'tyru/caw.vim'
 on_map = {nx = '<Plug>'}
 hook_add = '''
-  function! s:init_caw() abort
+  function! InitCaw() abort
     if !&l:modifiable
       silent! nunmap <buffer> gc
       silent! xunmap <buffer> gc
@@ -938,18 +801,12 @@ hook_add = '''
       xmap <buffer> gcc <Plug>(caw:hatpos:toggle)
     endif
   endfunction
-  autocmd MyAutoCmd FileType * call s:init_caw()
+  autocmd MyAutoCmd FileType * call InitCaw()
+  call InitCaw()
 '''
 
 [[plugins]]
 repo = 'tyru/open-browser.vim'
-on_map = {n = '<Plug>'}
-
-[[plugins]]
-repo = 'ujihisa/vimshell-ssh'
-
-[[plugins]]
-repo = 'yomi322/vim-gitcomplete'
 
 [[plugins]]
 repo = 'yuratomo/w3m.vim'
@@ -981,7 +838,7 @@ repo = 'tweekmonster/deoplete-clang2'
 if = "has('nvim')"
 on_ft = ['c', 'cpp']
 hook_source = '''
-  let b:clang2_orig_maps = {}
+  autocmd FileType c,cpp let b:clang2_orig_maps = {}
 '''
 
 [[plugins]]
@@ -994,4 +851,9 @@ repo = 'zchee/deoplete-go'
 if = "has('nvim')"
 on_i = 1
 on_ft = 'go'
+
+[[plugins]]
+repo = 'zchee/deoplete-zsh'
+if = "has('nvim')"
+on_ft = 'zsh'
 
