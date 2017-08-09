@@ -17,6 +17,9 @@ hook_add = '''
 '''
 
 [[plugins]]
+repo = 'basyura/twibill.vim'
+
+[[plugins]]
 repo = 'davidhalter/jedi-vim'
 if = "!has('nvim')"
 on_ft = 'python'
@@ -51,26 +54,62 @@ on_ft = 'go'
 repo = 'fuenor/im_control.vim'
 on_if = 1
 
-[[plugins]]
-repo = 'h1mesuke/vim-alignta'
-on_i = 1
-hook_add = '''
-  let g:unite_source_alignta_preset_arguments = [
-        \ ["Align at '/*' & '*/'", '<-- /* -> */' ],
-        \ ["Align at '='", '=>\='],
-        \ ["Align at ':'", '01 :'],
-        \ ["Align at '|'", '|'   ],
-        \ ["Align at ')'", '0 )' ],
-        \ ["Align at ']'", '0 ]' ],
-        \ ["Align at '}'", '}'   ],
-        \]
-
-  xnoremap <silent> [unite]a :<C-u>Unite alignta:arguments<CR>
-'''
+# [[plugins]]
+# repo = 'h1mesuke/vim-alignta'
+# on_i = 1
+# hook_add = '''
+#   let g:unite_source_alignta_preset_arguments = [
+#         \ ["Align at '/*' & '*/'", '<-- /* -> */' ],
+#         \ ["Align at '='", '=>\='],
+#         \ ["Align at ':'", '01 :'],
+#         \ ["Align at '|'", '|'   ],
+#         \ ["Align at ')'", '0 )' ],
+#         \ ["Align at ']'", '0 ]' ],
+#         \ ["Align at '}'", '}'   ],
+#         \]
+#
+#   xnoremap <silent> [unite]a :<C-u>Unite alignta:arguments<CR>
+# '''
 
 [[plugins]]
 repo = 'hewes/unite-gtags'
 on_source = 'unite.vim'
+
+[[plugins]]
+repo = 'junegunn/vim-easy-align'
+on_map = '<Plug>(EasyAlign)'
+hook_add = '''
+  let g:easy_align_delimiters = {
+        \ '>': { 'pattern': '>>\|=>\|>' },
+        \ '/': {
+        \     'pattern':         '//\+\|/\*\|\*/',
+        \     'delimiter_align': 'l',
+        \     'ignore_groups':   ['!Comment'] },
+        \ ']': {
+        \     'pattern':       '[[\]]',
+        \     'left_margin':   0,
+        \     'right_margin':  0,
+        \     'stick_to_left': 0
+        \   },
+        \ ')': {
+        \     'pattern':       '[()]',
+        \     'left_margin':   0,
+        \     'right_margin':  0,
+        \     'stick_to_left': 0
+        \   },
+        \ 'd': {
+        \     'pattern':      ' \(\S\+\s*[;=]\)\@=',
+        \     'left_margin':  0,
+        \     'right_margin': 0
+        \   }
+        \ }
+
+  " Start interactive EasyAlign in visual mode (e.g. vip<Enter>)
+  xmap <Enter> <Plug>(EasyAlign)
+
+  " Start interactive EasyAlign for a motion/text object (e.g. <Leader>aip)
+  nmap <Leader>a <Plug>(EasyAlign)
+'''
 
 [[plugins]]
 repo = 'kana/vim-niceblock'
@@ -145,6 +184,10 @@ on_map = {n = '<Plug>'}
 hook_add = '''
   nmap J <Plug>(jplus)
 '''
+
+[[plugins]]
+repo = 'osyo-manga/vim-monster'
+on_ft = 'ruby'
 
 [[plugins]]
 repo = 'racer-rust/vim-racer'
