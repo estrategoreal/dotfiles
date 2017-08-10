@@ -598,7 +598,7 @@ hook_source = """
   let g:unite_source_menu_menus.unite.command_candidates = {
         \ 'directory' : 'Unite -buffer-name=files '.
         \       '-default-action=lcd bookmark directory_mru',
-        \ 'history'   : 'Unite history/command',
+        \ 'history'   : 'Unite history/unite',
         \ 'mapping'   : 'Unite mapping',
         \ 'message'   : 'Unite output:message',
         \ 'quickfix'  : 'Unite qflist -no-quit',
@@ -617,8 +617,6 @@ hook_add = '''
   nmap ; [unite]
   xmap ; [unite]
 
-  nnoremap <silent> [unite]b
-        \ :<C-u>Unite -buffer-name=build`tabpagenr()` -no-quit build<CR>
   nnoremap <silent> [unite]c
         \ :<C-u>Unite gtags/context -buffer-name=search -auto-preview -no-quit<CR>
   nnoremap <silent> [unite]d
@@ -642,8 +640,6 @@ hook_add = '''
         \ jump_point file_point buffer_tab:- file_mru
         \ `finddir('.git', ';') != '' ? 'file_rec/git' : ''`
         \ buffer_tab:- file file/new<CR>
-  nnoremap <silent> [Window]t
-        \ :<C-u>Unite -start-insert tig<CR>
   nnoremap <silent> [Window]w
         \ :<C-u>Unite -force-immediately window:all:no-current<CR>
 
@@ -677,11 +673,6 @@ hook_add = '''
   " nnoremap <silent><expr> [Tag]p &filetype == 'help' ?
   "       \ ":\<C-u>pop\<CR>" : ":\<C-u>Unite jump\<CR>"
   "}}}
-
-  " Execute help.
-  nnoremap <silent> <C-h> :<C-u>Unite -buffer-name=help help<CR>
-  " Execute help by cursor keyword.
-  nnoremap <silent> g<C-h> :<C-u>UniteWithCursorWord help<CR>
 '''
 
 [[plugins]]
@@ -741,8 +732,7 @@ on_map = {n = '<Plug>'}
 hook_add = 'nmap <silent> <C-@> <Plug>(vimshell_switch)'
 hook_source = '''
   let g:vimshell_user_prompt = 'fnamemodify(getcwd(), ":~")'
-  let g:vimshell_right_prompt =
-         \ 'gita#statusline#format("%{|/}ln%lb%{ <> |}rn%{/|}rb")'
+  let g:vimshell_right_prompt = ''
   let g:vimshell_prompt = '% '
   let g:vimshell_split_command = ''
   let g:vimshell_enable_transient_user_prompt = 1
