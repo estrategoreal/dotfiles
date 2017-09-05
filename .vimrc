@@ -350,7 +350,6 @@ set noshowmode
 " Always display the line with tab page labels.
 set showtabline=2
 " Set the content of the status line.
-" set statusline=%<%m%r%h%w%y%{'['.(&fenc!=''?&fenc:&enc).':'.&ff.']'}\ %1.40f%=%{gita#statusline#preset('branch')}\ \ %l/%L,%c%V%5P
 set statusline=%<%m%r%h%w%y%{'['.(&fenc!=''?&fenc:&enc).':'.&ff.']'}\ %1.40f%=%{gina#component#repo#branch()}\ \ %l/%L,%c%V%5P
 
 " Turn down a long line appointed in 'breakat'
