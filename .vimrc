@@ -562,6 +562,8 @@ nnoremap <silent> [Tabbed]C :<C-u>call <SID>my_tabnew('%')<CR>
 nnoremap <silent> [Tabbed]i :<C-u>call <SID>my_idenew()<CR>
 nnoremap <silent> [Tabbed]d :<C-u>tabclose<CR>
 nnoremap <silent> [Tabbed]<C-t> :<C-u>Unite tab<CR>
+nnoremap <silent> [Tabbed]n :<C-u>tabnext<CR>
+nnoremap <silent> [Tabbed]p :<C-u>tabprevious<CR>
 
 function! s:my_tabnew(file) abort
   if empty(a:file)
