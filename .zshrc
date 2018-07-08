@@ -237,7 +237,8 @@ if is_darwin ; then
   if [ -f $(brew --prefix)/etc/brew-wrap ];then
     source $(brew --prefix)/etc/brew-wrap
   fi
-elif is_linux || is_cygwin ; then
+fi
+if is_darwin || is_linux || is_cygwin ; then
   export PATH=$HOME/.anyenv/bin:$PATH
 fi
 if [ -x "`which anyenv`" ]; then
