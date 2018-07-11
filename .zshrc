@@ -65,15 +65,14 @@ zstyle ':completion:*' matcher-list '' 'm:{a-z}={A-Z}' 'm:{a-zA-Z}={A-Za-z}' 'r:
 zstyle ':completion:*:*:kill:*:processes' list-colors '=(#b) #([0-9]#)*=0=01;31'
 zstyle ':completion:*:kill:*' command 'ps -u $USER -o pid,%cpu,tty,cputime,cmd'
 
+autoload -Uz add-zsh-hook
 autoload -Uz vcs_info
+setopt PROMPT_SUBST
 zstyle ':vcs_info:*' formats '(%s)-[%b]'
 zstyle ':vcs_info:*' actionformats '(%s)-[%b|%a]'
 
-precmd() {
-  psvar=()
-  LANG=en_US.UTF-8 vcs_info
-  [[ -n "$vcs_info_msg_0_" ]] && psvar[1]="$vcs_info_msg_0_"
-}
+_vcs_precmd () { vcs_info }
+add-zsh-hook precmd _vcs_precmd
 
 autoload history-search-end
 zle -N history-beginning-search-backward-end history-search-end
@@ -190,9 +189,9 @@ fi
 
 # Source global definitions
 
-export PROMPT="%F{magenta}%~
-%F{cyan}%n@%m%f%% "
-export RPROMPT="%1(v|%F{green}%1v%f|)"
+export PROMPT='%F{magenta}%~
+%F{cyan}%n@%m%f%% '
+export RPROMPT='%F{green}${vcs_info_msg_0_}%f'
 
 if [[ -z $TMUX ]]; then
   if is_darwin ; then
@@ -219,10 +218,6 @@ if is_cygwin ; then
   export TCL_LIBRARY=/usr/share/tcl8.4
 elif is_msys ; then
   export LC_MESSAGES=C
-  export PS1="
-%F{cyan}%n@%m%f %F{magenta}%~%f
-%K{blue}How may I serve you, Master?%k
-$ "
   export XDG_CONFIG_HOME=$HOME/.config  # for neovim
 fi
 
