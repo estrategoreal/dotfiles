@@ -190,7 +190,7 @@ fi
 # Source global definitions
 
 export PROMPT='%F{magenta}%~
-%F{cyan}%n@%m%f%% '
+%F{cyan}%n@%m%f% $ '
 export RPROMPT='%F{green}${vcs_info_msg_0_}%f'
 
 if [[ -z $TMUX ]]; then
