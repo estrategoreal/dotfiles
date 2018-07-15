@@ -234,7 +234,7 @@ if is_darwin ; then
   fi
 fi
 if is_darwin || is_linux || is_cygwin ; then
-  export PATH=$HOME/.anyenv/bin:$PATH
+  export PATH=$PATH:$HOME/.anyenv/bin
 fi
 if [ -x "`which anyenv`" ]; then
   eval "$(anyenv init -)"
