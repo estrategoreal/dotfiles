@@ -71,18 +71,10 @@ alias vf 'gvim +"VimFiler -buffer-name=explorer -simple -toggle"'
 alias formc 'find . -iregex ".+\.\(c\|h\)\$" -type f -print0 | xargs -0 uncrustify -c ~/.uncrustify4c.cfg --no-backup'
 alias formcpp 'find . -iregex ".+\.\(c\|cpp\|h\)\$" -type f -print0 | xargs -0 uncrustify -c ~/.uncrustify4cpp.cfg --no-backup'
 
-set git_dirty_color red
-set git_not_dirty_color green
-
 function parse_git_branch
   set -l branch (git branch 2> /dev/null | grep -e '\* ' | sed 's/^..\(.*\)/\1/')
-  set -l git_diff (git diff)
 
-  if test -n "$git_diff"
-    echo (set_color $git_dirty_color)$branch(set_color normal)
-  else
-    echo (set_color $git_not_dirty_color)$branch(set_color normal)
-  end
+  echo (set_color green)$branch(set_color normal)
 end
 
 function fish_prompt
