@@ -6,7 +6,7 @@ function is_screen_running() { [ ! -z "$STY" ]; }
 function is_tmux_runnning() { [ ! -z "$TMUX" ]; }
 function is_screen_or_tmux_running() { is_screen_running || is_tmux_runnning; }
 function shell_has_started_interactively() { [ ! -z "$PS1" ]; }
-function is_ssh_running() { [ ! -z "$SSH_CONECTION" ]; }
+function is_ssh_running() { [ ! -z "$SSH_CONNECTION" ]; }
 
 function tmux_automatically_attach_session()
 {
@@ -57,6 +57,8 @@ function tmux_automatically_attach_session()
       else
         tmux new-session && echo "tmux created new session"
       fi
+    else
+      exec fish
     fi
   fi
 }

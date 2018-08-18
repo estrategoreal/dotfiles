@@ -19,7 +19,7 @@ function shell_has_started_interactively
   status --is-interactive
 end
 function is_ssh_running
-  not test -z "$SSH_CONECTION"
+  not test -z "$SSH_CONNECTION"
 end
 
 function tmux_automatically_attach_session
