@@ -139,7 +139,7 @@ if is_darwin
   end
 
   function tarbz2
-    COPYFILE_DISABLE=true tar cjvf $argv[1].tbz --exclude .DS_Store $argv[1]
+    env COPYFILE_DISABLE=true tar cjvf $argv[1].tbz --exclude .DS_Store $argv[1]
   end
 else if is_freebsd
   function udpkg
