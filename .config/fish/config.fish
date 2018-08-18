@@ -82,7 +82,7 @@ function fish_prompt
   set prompt (set_color magenta)(prompt_pwd)
 
   echo $prompt
-  echo (set_color cyan)$USER'@'(prompt_hostname)(set_color normal)'> '
+  echo (set_color cyan)(whoami)'@'(hostname | cut -d . -f 1)(set_color normal)'> '
 end
 
 function fish_right_prompt
