@@ -197,8 +197,8 @@ end
 if is_darwin; or is_linux; or is_cygwin
   set -gx PATH $HOME/.anyenv/bin $PATH
 end
-if test -x "`which anyenv`"
-  eval "(anyenv init -)"
+if test -x (which anyenv)
+  eval (anyenv init - fish | source)
 end
 
 test -f $HOME/.config/fish/tmux.fish; and source $HOME/.config/fish/tmux.fish
