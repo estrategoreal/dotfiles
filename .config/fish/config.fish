@@ -197,7 +197,7 @@ end
 if is_darwin; or is_linux; or is_cygwin
   set -gx PATH $HOME/.anyenv/bin $PATH
 end
-if test -x (which anyenv)
+if type anyenv >/dev/null 2>&1
   eval (anyenv init - fish | source)
 end
 
