@@ -57,7 +57,7 @@ if is_darwin
 
   alias debian '/Applications/VirtualBox.app/Contents/MacOS/VBoxManage startvm Debian --type gui'
   alias fbsd '/Applications/VirtualBox.app/Contents/MacOS/VBoxManage startvm FreeBSD --type gui'
-  alias mint '/Applications/VirtualBox.app/Contents/MacOS/VBoxManage startvm Mint --type gui'
+  alias manjaro '/Applications/VirtualBox.app/Contents/MacOS/VBoxManage startvm Manjaro --type gui'
   alias rmds 'sudo find ~ -name .DS_Store -print -exec rm {} ";"'
 else if is_cygwin
   alias open 'cygstart'
