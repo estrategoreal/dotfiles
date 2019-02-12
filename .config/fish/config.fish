@@ -169,6 +169,11 @@ if test -z $TMUX
     set -gx PATH $PATH /usr/local/share/vim /usr/local/share/git-svn-clone-externals /c/Ruby/bin /c/Python /c/Python/Scripts /c/Go/bin
   end
 
+  if test -d $HOME/.anyenv
+    set -gx PATH $HOME/.anyenv/bin $PATH
+    eval (anyenv init - | source)
+  end
+
   set -gx GOPATH $HOME/.go
   set -gx GOROOT_BOOTSTRAP $GOPATH/go1.4
   set -gx PATH $PATH $GOPATH/bin
@@ -194,12 +199,6 @@ end
 #     source (brew --prefix)/etc/brew-wrap
 #   end
 # end
-if is_darwin; or is_linux; or is_cygwin
-  set -gx PATH $HOME/.anyenv/bin $PATH
-end
-if type anyenv >/dev/null 2>&1
-  eval (anyenv init - fish | source)
-end
 
 test -f $HOME/.config/fish/tmux.fish; and source $HOME/.config/fish/tmux.fish
 
