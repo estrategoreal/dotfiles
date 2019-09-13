@@ -171,7 +171,7 @@ if test -z $TMUX
 
   if test -d $HOME/.anyenv
     set -gx PATH $HOME/.anyenv/bin $PATH
-    eval (anyenv init - | source)
+    eval (anyenv init - fish | source)
   end
 
   set -gx GOPATH $HOME/.go
