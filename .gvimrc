@@ -17,7 +17,7 @@
 " set guifont=-misc-fixed-medium-r-normal--14-130-75-75-c-70-iso8859-1
 if has('mac')
   set noimdisableactivate
-  set guifont=Ricty_Diminished:h14,Osaka-Mono:h14
+  set guifont=Cica:h14,Osaka-Mono:h14
   set antialias
   augroup Transparency
     autocmd!
@@ -28,14 +28,15 @@ if has('mac')
     set ambiwidth=double
   endif
 elseif has('win32') || has('win64')
-  set guifont=Ricty_Diminished:h12,MeiryoKe_Gothic:h11,MS_Gothic:h11:cSHIFTJIS
+  set guifont=Cica:h12,MeiryoKe_Gothic:h11,MS_Gothic:h11:cSHIFTJIS
+  set renderingoptions=type:directx,renmode:5
 
   " Toggle font setting.
   function! FontToggle()
-    if &guifont =~ '^Ricty:'
+    if &guifont =~ '^Cica'
       set guifont=MeiryoKe_Gothic:h11,MS_Gothic:h11:cSHIFTJIS
     else
-      set guifont=Ricty_Diminished:h12
+      set guifont=Cica:h12
     endif
   endfunction
 
@@ -45,7 +46,7 @@ elseif has('win32') || has('win64')
     set ambiwidth=auto
   endif
 else
-  set guifont=Ricty\ Diminished\ 11
+  set guifont=Cica\ 11
 endif
 
 " Save the setting of window.
