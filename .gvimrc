@@ -29,7 +29,7 @@ if has('mac')
   endif
 elseif has('win32') || has('win64')
   set guifont=Cica:h12,MeiryoKe_Gothic:h11,MS_Gothic:h11:cSHIFTJIS
-  set renderingoptions=type:directx,renmode:5
+  set renderoptions=type:directx,renmode:5
 
   " Toggle font setting.
   function! FontToggle()
