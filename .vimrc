@@ -82,7 +82,7 @@ endif
 
 if has('vim_starting') "{{{
   if IsWindows()
-    set runtimepath^=$HOME/.vim,$HOME/.vim/after
+    set runtimepath+=$HOME/.vim,$HOME/.vim/after
   endif
 
   " Load dein.
