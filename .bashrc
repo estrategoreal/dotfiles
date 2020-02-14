@@ -114,7 +114,8 @@ function udtags() {
 
 if is_darwin ; then
   function mkiso() {
-    hdiutil makehybrid -o ${1##*/}.iso $1
+    find $1 -name .DS_Store -print -exec rm {} ";"
+    hdiutil makehybrid -iso -udf -o ${1##*/}.iso $1
   }
 
   function tarbz2() {

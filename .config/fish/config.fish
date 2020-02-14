@@ -134,8 +134,9 @@ end
 
 if is_darwin
   function mkiso
+    find $argv[1] -name .DS_Store -print -exec rm {} ";"
     set name (string match -r '[^/]*$' $argv[1])
-    hdiutil makehybrid -o $name.iso $argv[1]
+    hdiutil makehybrid -iso -udf -o $name.iso $argv[1]
   end
 
   function tarbz2
