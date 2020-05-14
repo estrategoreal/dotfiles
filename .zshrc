@@ -156,7 +156,7 @@ function udtags() {
   if [[ $# -eq 1 ]] ; then
     cd $1 || return
   fi
-  for t in tags GPATH GRTAGS GSYMS GTAGS
+  for t in tags GPATH GRTAGS GTAGS
   do
     [[ -e $t ]] && rm -f $t
   done
@@ -168,8 +168,7 @@ function udtags() {
 
 if is_darwin ; then
   function mkiso() {
-    find $1 -name .DS_Store -print -exec rm {} ";"
-    hdiutil makehybrid -iso -udf -o ${1##*/}.iso $1
+    hdiutil makehybrid -o ${1##*/}.iso $1
   }
 
   function tarbz2() {

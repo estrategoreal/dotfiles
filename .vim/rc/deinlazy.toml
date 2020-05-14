@@ -155,7 +155,7 @@ repo = 'majutsushi/tagbar'
 on_cmd = 'TagbarOpen'
 hook_add = '''
   if IsWindows()
-    let g:tagbar_ctags_bin = 'C:/msys64/usr/local/bin/ctags'
+    let g:tagbar_ctags_bin = 'C:/msys64/usr/bin/ctags'
   elseif IsMsys() || IsMac()
     let g:tagbar_ctags_bin = '/usr/local/bin/ctags'
   elseif IsFreeBSD()
