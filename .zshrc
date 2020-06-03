@@ -138,9 +138,9 @@ function ide() {
         name="/msys64$1"
       fi
     fi
-    gvim +"set columns=179" +"VimFiler -buffer-name=explorer -toggle ~" +"tabedit $name" +TagbarOpen +"VimFilerCurrentDir -create -explorer -winwidth=48" +"wincmd l"
+    gvim +"set columns=199" +"VimFiler -buffer-name=explorer -toggle ~" +"tabedit $name" +TagbarOpen +"VimFilerCurrentDir -create -explorer -winwidth=48" +"wincmd l"
   else
-    gvim +"set columns=179" +"VimFiler -buffer-name=explorer -toggle ~" +tabnew +TagbarOpen +"wincmd h" +"VimFilerCurrentDir -create -explorer -winwidth=48"
+    gvim +"set columns=199" +"VimFiler -buffer-name=explorer -toggle ~" +tabnew +TagbarOpen +"wincmd h" +"VimFilerCurrentDir -create -explorer -winwidth=48"
   fi
 }
 
@@ -203,7 +203,7 @@ if [[ -z $TMUX ]]; then
   elif is_cygwin ; then
     export PATH=$PATH:/usr/local/share/vim:/usr/local/share/git-svn-clone-externals
   elif is_msys ; then
-    export PATH=$PATH:/usr/local/share/vim:/usr/local/share/git-svn-clone-externals:/c/Ruby/bin:/c/Python:/c/Python/Scripts:/c/Go/bin
+    export PATH=$PATH:/usr/local/share/vim:/usr/local/share/git-svn-clone-externals:/c/Ruby/bin:/c/Ruby/bin/ruby_builtin_dlls:/c/Python:/c/Python/Scripts:/c/Go/bin
   fi
 
   if [ -d $HOME/.anyenv ];then

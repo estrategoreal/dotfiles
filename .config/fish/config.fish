@@ -103,9 +103,9 @@ function ide
         set name "/msys64$argv[1]"
       end
     end
-    gvim +"set columns=179" +"VimFiler -buffer-name=explorer -toggle ~" +"tabedit $name" +TagbarOpen +"VimFilerCurrentDir -create -explorer -winwidth=48" +"wincmd l" &
+    gvim +"set columns=199" +"VimFiler -buffer-name=explorer -toggle ~" +"tabedit $name" +TagbarOpen +"VimFilerCurrentDir -create -explorer -winwidth=48" +"wincmd l" &
   else
-    gvim +"set columns=179" +"VimFiler -buffer-name=explorer -toggle ~" +tabnew +TagbarOpen +"wincmd h" +"VimFilerCurrentDir -create -explorer -winwidth=48" &
+    gvim +"set columns=199" +"VimFiler -buffer-name=explorer -toggle ~" +tabnew +TagbarOpen +"wincmd h" +"VimFilerCurrentDir -create -explorer -winwidth=48" &
   end
 end
 
@@ -166,7 +166,7 @@ if test -z $TMUX
   else if is_cygwin
     set -gx PATH=$PATH /usr/local/share/vim /usr/local/share/git-svn-clone-externals
   else if is_msys
-    set -gx PATH $PATH /usr/local/share/vim /usr/local/share/git-svn-clone-externals /c/Ruby/bin /c/Python /c/Python/Scripts /c/Go/bin
+    set -gx PATH $PATH /usr/local/share/vim /usr/local/share/git-svn-clone-externals /c/Ruby/bin /c/Ruby/bin/ruby_builtin_dlls /c/Python /c/Python/Scripts /c/Go/bin
   end
 
   if test -d $HOME/.anyenv
