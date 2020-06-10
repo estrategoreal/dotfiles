@@ -161,7 +161,7 @@ function udtags() {
     [[ -e $t ]] && rm -f $t
   done
   echo "updating tags..."
-  ctags -R --extra=q
+  ctags -R --languages=c,c++ --extras=+q
   gtags -v 2>/dev/null
   cd $currpath
 }

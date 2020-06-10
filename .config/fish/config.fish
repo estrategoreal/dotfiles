@@ -127,7 +127,7 @@ function udtags
     test -e $t; and rm -f $t
   end
   echo "updating tags..."
-  ctags -R --languages=c,c++ --extra=+q
+  ctags -R --languages=c,c++ --extras=+q
   gtags -v 2>/dev/null
   cd $currpath
 end
