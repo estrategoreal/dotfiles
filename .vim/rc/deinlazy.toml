@@ -52,7 +52,6 @@ on_ft = 'go'
 
 [[plugins]]
 repo = 'fuenor/im_control.vim'
-on_if = 1
 
 # [[plugins]]
 # repo = 'h1mesuke/vim-alignta'
@@ -235,14 +234,10 @@ repo = 'Shougo/context_filetype.vim'
 [[plugins]]
 repo = 'Shougo/deoplete.nvim'
 depends = 'context_filetype.vim'
-if = "has('nvim')"
-on_i = 1
+on_event = 'InsertEnter'
 hook_source = '''
-  " Use deoplete.
-  let g:deoplete#enable_at_startup = 1
-
   " Use smartcase.
-  let g:deoplete#enable_smart_case = 1
+  call deoplete#custom#option('smart_case', 1)
 
   set completeopt+=noinsert
 
@@ -250,7 +245,7 @@ hook_source = '''
   inoremap <silent><expr> <TAB>
         \ pumvisible() ? "\<C-n>" :
         \ <SID>check_back_space() ? "\<TAB>" :
-        \ deoplete#mappings#manual_complete()
+        \ deoplete#manual_complete()
   function! s:check_back_space() abort "{{{
     let col = col('.') - 1
     return !col || getline('.')[col - 1]  =~ '\s'
@@ -260,227 +255,53 @@ hook_source = '''
   inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
 
   " <C-h>, <BS>: close popup and delete backword char.
-  inoremap <expr><C-h> deoplete#mappings#smart_close_popup()."\<C-h>"
-  inoremap <expr><BS> deoplete#mappings#smart_close_popup()."\<C-h>"
+  inoremap <expr><C-h> deoplete#smart_close_popup()."\<C-h>"
+  inoremap <expr><BS> deoplete#smart_close_popup()."\<C-h>"
 
-  inoremap <expr><C-g> deoplete#mappings#undo_completion()
+  inoremap <expr><C-g> deoplete#undo_completion()
   " <C-l>: redraw candidates
-  inoremap <expr><C-l> deoplete#mappings#refresh()
+  inoremap <expr><C-l> deoplete#refresh()
 
   " <CR>: close popup and save indent.
   inoremap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
   function! s:my_cr_function() abort
-    return deoplete#mappings#close_popup() . "\<CR>"
+    return pumvisible() ? deoplete#close_popup()."\<CR>" : "\<CR>"
   endfunction
 
-  inoremap <expr> ' pumvisible() ? deoplete#mappings#close_popup() : "'"
+  call deoplete#custom#source('_', 'matchers',
+        \ ['matcher_fuzzy', 'matcher_length'])
+  call deoplete#custom#source('denite', 'matchers',
+        \ ['matcher_full_fuzzy', 'matcher_length'])
 
-  call deoplete#custom#set('_', 'converters', [
-        \ 'converter_remove_paren',
+  call deoplete#custom#source('zsh', 'filetypes', ['zsh', 'sh'])
+  call deoplete#custom#source('nextword', 'filetypes',
+        \ ['markdown', 'help', 'gitcommit', 'text'])
+
+  call deoplete#custom#source('_', 'converters', [
         \ 'converter_remove_overlap',
+        \ 'converter_case',
+        \ 'matcher_length',
         \ 'converter_truncate_abbr',
+        \ 'converter_truncate_info',
         \ 'converter_truncate_menu',
-        \ 'converter_auto_delimiter',
         \ ])
 
-  call deoplete#custom#set('clang', 'input_pattern', '\.\w*|\.->\w*|\w+::\w*')
-  call deoplete#custom#set('clang', 'max_pattern_length', -1)
+  call deoplete#custom#option('keyword_pattern', {
+        \ '_': '[a-zA-Z_]\k\?',
+        \ })
 
-  let g:deoplete#keyword_patterns = {}
-  let g:deoplete#keyword_patterns._ = '[a-zA-Z_]\k*\(?'
+  call deoplete#custom#var('omni', 'input_patterns', {
+        \ 'ruby': ['[^. *\t]\.\w*', '[a-zA-Z_]\w*::'],
+        \ })
 
-  let g:deoplete#omni#input_patterns = {}
-  let g:deoplete#omni#input_patterns.ruby =
-        \ ['[^. *\t]\.\w*', '[a-zA-Z_]\w*::']
-  let g:deoplete#omni#input_patterns.python = ''
+  call deoplete#custom#option('refresh_always', 1)
+  call deoplete#custom#option('camel_case', 1)
 
-  let g:deoplete#enable_refresh_always = 1
-  let g:deoplete#enable_camel_case = 1
-
-  " deoplete-clang "{{{
-  " libclang shared library path
-  let g:deoplete#sources#clang#libclang_path = '/usr/lib/libclang.so'
-
-  " clang builtin header path
-  let g:deoplete#sources#clang#clang_header = '/usr/include/clang'
-
-  " libclang default compile flags
-  let g:deoplete#sources#clang#flags = ['-x', 'c++', '-std=c++11']
-  "}}}
-'''
-
-[[plugins]]
-repo = 'Shougo/neocomplcache.vim'
-if = "!has('nvim')"
-disabled = "has('lua')"
-on_event = 'InsertEnter'
-hook_source = '''
-  " Use neocomplcache.
-  let g:neocomplcache_enable_at_startup = 1
-
-  " Use smartcase.
-  let g:neocomplcache_enable_smart_case = 0
-  " Use camel case completion.
-  let g:neocomplcache_enable_camel_case_completion = 0
-  " Use underbar completion.
-  let g:neocomplcache_enable_underbar_completion = 0
-  " Use fuzzy completion.
-  let g:neocomplcache_enable_fuzzy_completion = 1
-  " Set minimum syntax keyword length.
-  let g:neocomplcache_min_syntax_length = 3
-  " Set auto completion length.
-  let g:neocomplcache_auto_completion_start_length = 2
-  " Set manual completion length.
-  let g:neocomplcache_manual_completion_start_length = 0
-  " Set minimum keyword length.
-  let g:neocomplcache_min_keyword_length = 3
-
-  let g:neocomplcache_enable_auto_close_preview = 1
-
-  if !exists('g:neocomplcache_force_omni_patterns')
-    let g:neocomplcache_force_omni_patterns = {}
-  endif
-  let g:neocomplcache_force_omni_patterns.c =
-        \ '[^.[:digit:] *\t]\%(\.\|->\)'
-  let g:neocomplcache_force_omni_patterns.cpp =
-        \ '[^.[:digit:] *\t]\%(\.\|->\)\|\h\w*::'
-  let g:neocomplcache_force_omni_patterns.objc =
-        \ '[^.[:digit:] *\t]\%(\.\|->\)'
-
-  " Define dictionary.
-  let g:neocomplcache_dictionary_filetype_lists = {
-        \ 'default' : '',
-        \ 'vimshell' : $CACHE .'/.vimshell/command-history'
-        \ }
-
-  " Define keyword.
-  if !exists('g:neocomplcache_keyword_patterns')
-    let g:neocomplcache_keyword_patterns = {}
-  endif
-  let g:neocomplcache_keyword_patterns['default'] = '[0-9a-zA-Z:#_]\+'
-  let g:neocomplete#enable_multibyte_completion = 1
-
-  " <CR>: close popup and save indent.
-  inoremap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
-  function! s:my_cr_function() abort
-    return neocomplcache#smart_close_popup() . "\<CR>"
-  endfunction
-  " <TAB>: completion.
-  inoremap <expr> <TAB> pumvisible() ? "\<C-n>" : "\<TAB>"
-  " <C-h>, <BS>: close popup and delete backword char.
-  inoremap <expr> <C-h> neocomplcache#smart_close_popup()."\<C-h>"
-  inoremap <expr> <BS>  neocomplcache#smart_close_popup()."\<C-h>"
-  " <C-y>: paste.
-  inoremap <expr> <C-y> pumvisible() ? neocomplcache#close_popup() : "\<C-r>\""
-  " <C-e>: close popup.
-  inoremap <expr> <C-e> pumvisible() ? neocomplcache#cancel_popup() : "\<End>"
-
-  " AutoComplPop like behavior.
-  let g:neocomplcache_enable_auto_select = 1
-
-  " Enable heavy omni completion.
-  if !exists('g:neocomplcache_omni_patterns')
-    let g:neocomplcache_omni_patterns = {}
-  endif
-  let g:neocomplcache_omni_patterns.ruby = '[^. *\t]\.\h\w*\|\h\w*::'
-  " let g:neocomplcache_force_omni_patterns.ruby = '[^. *\t]\.\w*\|\h\w*::'
-  let g:neocomplcache_force_omni_patterns.python = '[^. \t]\.\w*'
-  let g:neocomplcache_omni_patterns.c = '[^.[:digit:] *\t]\%(\.\|->\)'
-  let g:neocomplcache_omni_patterns.cpp = '[^.[:digit:] *\t]\%(\.\|->\)\|\h\w*::'
-'''
-
-[[plugins]]
-repo = 'Shougo/neocomplete.vim'
-depends = 'context_filetype.vim'
-if = "!has('nvim')"
-disabled = "!has('lua')"
-on_event = 'InsertEnter'
-hook_source = '''
-  " Use neocomplete.
-  let g:neocomplete#enable_at_startup = 1
-
-  " Use smartcase.
-  let g:neocomplete#enable_smart_case = 1
-  let g:neocomplete#enable_camel_case = 1
-  let g:neocomplete#auto_complete_delay = 30
-  " Use fuzzy completion.
-  let g:neocomplete#enable_fuzzy_completion = 1
-  " Set minimum syntax keyword length.
-  let g:neocomplete#sources#syntax#min_keyword_length = 3
-  " Set auto completion length.
-  let g:neocomplete#auto_completion_start_length = 2
-  " Set manual completion length.
-  let g:neocomplete#manual_completion_start_length = 0
-  " Set minimum keyword length.
-  let g:neocomplete#min_keyword_length = 3
-
-  " Define dictionary.
-  let g:neocomplete#sources#dictionary#directories = {
-        \ 'default' : '',
-        \ 'vimshell' : $CACHE.'/vimshell/command-history'
-        \ }
-
-  " Define keyword.
-  if !exists('g:neocomplete#keyword_patterns')
-    let g:neocomplete#keyword_patterns = {}
-  endif
-  let g:neocomplete#keyword_patterns._ = '\h\k*(\?'
-
-  " Plugin key-mappings.
-  inoremap <expr> <C-g> neocomplete#undo_completion()
-  inoremap <expr> <C-l> neocomplete#complete_common_string()
-
-  " <CR>: close popup and save indent.
-  inoremap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
-  function! s:my_cr_function() abort
-    return neocomplete#smart_close_popup() . "\<CR>"
-  endfunction
-  " <TAB>: completion.
-  inoremap <expr> <TAB> pumvisible() ? "\<C-n>" : "\<TAB>"
-  " <C-h>, <BS>: close popup and delete backword char.
-  inoremap <expr> <C-h> neocomplete#smart_close_popup()."\<C-h>"
-  inoremap <expr> <BS>  neocomplete#smart_close_popup()."\<C-h>"
-  " <C-y>: paste.
-  inoremap <expr> <C-y> pumvisible() ? neocomplete#close_popup() : "\<C-r>\""
-  " <C-e>: close popup.
-  inoremap <expr> <C-e> pumvisible() ? neocomplete#cancel_popup() : "\<End>"
-  " Close popup by <Space>.
-  " inoremap <expr><Space> pumvisible() ? "\<C-y>" : "\<Space>"
-
-  " AutoComplPop like behavior.
-  let g:neocomplete#enable_auto_select = 1
-
-  " Enable heavy omni completion.
-  if !exists('g:neocomplete#sources#omni#input_patterns')
-    let g:neocomplete#sources#omni#input_patterns = {}
-  endif
-  if !exists('g:neocomplete#sources#omni#functions')
-    let g:neocomplete#sources#omni#functions = {}
-  endif
-  if !exists('g:neocomplete#force_omni_input_patterns')
-    let g:neocomplete#force_omni_input_patterns = {}
-  endif
-  let g:neocomplete#enable_auto_close_preview = 1
-
-  let g:neocomplete#sources#omni#input_patterns.c =
-        \ '[^.[:digit:] *\t]\%(\.\|->\)\%(\h\w*\)\?'
-  let g:neocomplete#sources#omni#input_patterns.cpp =
-        \ '[^.[:digit:] *\t]\%(\.\|->\)\%(\h\w*\)\?\|\h\w*::\%(\h\w*\)\?'
-  " let g:neocomplete#sources#omni#input_patterns.ruby =
-  "       \ '[^. *\t]\.\w*\|\h\w*::\w*'
-  let g:neocomplete#sources#omni#input_patterns.python =
-        \ '[^. *\t]\.\w*\|\h\w*'
-  let g:neocomplete#force_omni_input_patterns.objc =
-        \ '\[\h\w*\s\h\?\|\h\w*\%(\.\|->\)'
-  let g:neocomplete#force_omni_input_patterns.ruby =
-        \ '[^.[:digit:] *\t]\%(\.\|->\)\w*\|\h\w*::\w*'
-  let g:neocomplete#sources#omni#functions.go =
-        \ 'gocomplete#Complete'
+  call deoplete#enable()
 '''
 
 [[plugins]]
 repo = 'Shougo/neoinclude.vim'
-on_if = 1
 
 [[plugins]]
 repo = 'Shougo/neomru.vim'
@@ -507,7 +328,6 @@ hook_source = '''
 
 [[plugins]]
 repo = 'Shougo/neoyank.vim'
-on_if = 1
 on_event = 'TextYankPost'
 on_source = 'unite.vim'
 
@@ -867,22 +687,13 @@ hook_add = '''
 '''
 
 [[plugins]]
-repo = 'tweekmonster/deoplete-clang2'
-if = "has('nvim')"
-on_ft = ['c', 'cpp']
-hook_source = '''
-  autocmd FileType c,cpp let b:clang2_orig_maps = {}
-'''
-
-[[plugins]]
 repo = 'zchee/deoplete-jedi'
 if = "has('nvim')"
 on_ft = 'python'
 
 [[plugins]]
 repo = 'zchee/deoplete-go'
-if = "has('nvim')"
-on_i = 1
+on_event = 'InsertEnter'
 on_ft = 'go'
 
 [[plugins]]
