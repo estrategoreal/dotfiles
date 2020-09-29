@@ -65,11 +65,11 @@ repo = 'rcmdnk/vim-markdown'
 
 [[plugins]]
 repo = 'roxma/nvim-yarp'
-if = "has('python3') && !has('nvim')"
+if = "!has('nvim')"
 
 [[plugins]]
 repo = 'roxma/vim-hug-neovim-rpc'
-if = "has('python3') && !has('nvim')"
+if = "!has('nvim')"
 
 [[plugins]]
 repo = 'Shougo/neosnippet-snippets'
