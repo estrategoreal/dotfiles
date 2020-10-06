@@ -238,15 +238,17 @@ hook_add = '''
   \ :<C-u>Defx -listed -resume -buffer-name=win-`win_getid()`<CR>
 '''
 hook_source = '''
-  call defx#custom#column('mark', {
-          \ 'readonly_icon': '✗',
-          \ 'selected_icon': '✓',
-          \ })
-  call defx#custom#column('icon', {
-          \ 'directory_icon': '▸',
-          \ 'opened_icon': '▾',
-          \ 'root_icon': ' ',
-          \ })
+  if !IsWindows()
+    call defx#custom#column('mark', {
+            \ 'readonly_icon': '✗',
+            \ 'selected_icon': '✓',
+            \ })
+    call defx#custom#column('icon', {
+            \ 'directory_icon': '▸',
+            \ 'opened_icon': '▾',
+            \ 'root_icon': ' ',
+            \ })
+  endif
 '''
 [plugins.ftplugin]
 defx = '''
