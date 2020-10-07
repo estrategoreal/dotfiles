@@ -558,9 +558,15 @@ nnoremap <silent><expr> q winnr('$') != 1 ? ':<C-u>close<CR>' : ""
 nmap <C-t> [Tabbed]
 nnoremap [Tabbed] <Nop>
 " Create a tab page.
-nnoremap <silent> [Tabbed]c :<C-u>call <SID>my_tabnew('')<CR>
-nnoremap <silent> [Tabbed]C :<C-u>call <SID>my_tabnew('%')<CR>
-nnoremap <silent> [Tabbed]i :<C-u>call <SID>my_idenew()<CR>
+if v:version >= 802
+  nnoremap <silent> [Tabbed]c :<C-u>call <SID>my_tabnew2('')<CR>
+  nnoremap <silent> [Tabbed]C :<C-u>call <SID>my_tabnew2('%')<CR>
+  nnoremap <silent> [Tabbed]i :<C-u>call <SID>my_idenew2()<CR>
+else
+  nnoremap <silent> [Tabbed]c :<C-u>call <SID>my_tabnew('')<CR>
+  nnoremap <silent> [Tabbed]C :<C-u>call <SID>my_tabnew('%')<CR>
+  nnoremap <silent> [Tabbed]i :<C-u>call <SID>my_idenew()<CR>
+endif
 nnoremap <silent> [Tabbed]d :<C-u>tabclose<CR>
 nnoremap <silent> [Tabbed]<C-t> :<C-u>Unite tab<CR>
 nnoremap <silent> [Tabbed]n :<C-u>tabnext<CR>
@@ -583,6 +589,26 @@ function! s:my_idenew() abort
   tabnew
   TagbarOpen
   VimFilerExplorer -winwidth=46
+  wincmd l
+endfunction
+
+function! s:my_tabnew2(file) abort
+  if empty(a:file)
+    tabnew
+    vsplit
+    Defx -buffer-name=explorer -toggle
+  else
+    execute 'tabedit ' . a:file
+    vsplit
+    wincmd l
+    Defx -buffer-name=explorer -toggle
+  endif
+endfunction
+
+function! s:my_idenew2() abort
+  tabnew
+  TagbarOpen
+  Defx -split=vertical -winwidth=46 -direction=topleft
   wincmd l
 endfunction
 "}}}
