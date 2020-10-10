@@ -341,6 +341,16 @@ hook_source = '''
           \ 'separator': ['--'],
           \ 'default_opts': ['-i', '--vimgrep', '--no-heading'],
           \ })
+  elseif executable('pt')
+    call denite#custom#var('file/rec', 'command',
+          \ ['pt', '--nocolor', '--nogroup' , ''])
+    call denite#custom#var('grep', {
+          \ 'command': ['pt', '--threads', '1'],
+          \ 'recursive_opts': [],
+          \ 'final_opts': [],
+          \ 'separator': ['--'],
+          \ 'default_opts': ['--nocolor', '--nogroup'],
+          \ })
   else
     call denite#custom#var('file/rec', 'command',
           \ ['ag', '--follow', '--nocolor', '--nogroup', '-g', ''])
@@ -711,14 +721,14 @@ hook_source = """
 
   let g:unite_enable_auto_select = 0
 
-  if executable('ag')
-    " Use ag(the silver searcher)
-    " https://github.com/ggreer/the_silver_searcher
-    let g:unite_source_grep_command = 'ag'
-    let g:unite_source_grep_default_opts =
-      \ '-i --vimgrep --hidden --ignore ' .
-      \  '''.hg'' --ignore ''.svn'' --ignore ''.git'' --ignore ''.bzr'''
+  if executable('rg')
+    " Use ripgrep
+    " https://github.com/BurntSushi/ripgrep
+    "let g:unite_source_rec_async_command = ['rg', '--files', '--glob', '!.git', '--color', 'never']
+    let g:unite_source_grep_command = 'rg'
+    let g:unite_source_grep_default_opts = '-i --vimgrep --no-heading'
     let g:unite_source_grep_recursive_opt = ''
+    let g:unite_source_grep_encoding = 'utf-8'
   elseif executable('pt')
     " Use pt(the platinum searcher)
     " https://github.com/monochromegane/the_platinum_searcher
@@ -726,6 +736,14 @@ hook_source = """
     let g:unite_source_grep_default_opts = '--nogroup --nocolor'
     let g:unite_source_grep_recursive_opt = ''
     let g:unite_source_grep_encoding = 'utf-8'
+  elseif executable('ag')
+    " Use ag(the silver searcher)
+    " https://github.com/ggreer/the_silver_searcher
+    let g:unite_source_grep_command = 'ag'
+    let g:unite_source_grep_default_opts =
+      \ '-i --vimgrep --hidden --ignore ' .
+      \  '''.hg'' --ignore ''.svn'' --ignore ''.git'' --ignore ''.bzr'''
+    let g:unite_source_grep_recursive_opt = ''
   endif
 
   " For unite-alias.

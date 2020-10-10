@@ -195,7 +195,7 @@ export RPROMPT='%F{green}${vcs_info_msg_0_}%f'
 
 if [[ -z $TMUX ]]; then
   if is_darwin ; then
-    export PATH=$(brew --prefix coreutils)/libexec/gnubin:/usr/local/sbin:$PATH
+    export PATH=$(brew --prefix coreutils)/libexec/gnubin:$(brew --prefix gnu-sed)/libexec/gnubin:/usr/local/sbin:$PATH
   elif is_freebsd ; then
     export PATH=$PATH:/sbin:/usr/sbin:/usr/local/sbin
   elif is_linux ; then
