@@ -1,7 +1,7 @@
 [[plugins]]
 repo = 'basyura/TweetVim'
 depends = ['twibill.vim', 'open-browser.vim']
-# if = 'v:version < 802'
+if = 'v:version < 802'
 on_cmd = 'TweetVimHomeTimeline'
 hook_add = '''
   " Start TweetVim.
@@ -19,7 +19,7 @@ hook_add = '''
 
 [[plugins]]
 repo = 'basyura/twibill.vim'
-# if = 'v:version < 802'
+if = 'v:version < 802'
 
 [[plugins]]
 repo = 'davidhalter/jedi-vim'
@@ -74,13 +74,12 @@ repo = 'fuenor/im_control.vim'
 
 [[plugins]]
 repo = 'hewes/unite-gtags'
-# if = 'v:version < 802'
+if = 'v:version < 802'
 on_source = 'unite.vim'
 
 [[plugins]]
 repo = 'Jagua/vim-denite-ghq'
-# if = 'v:version >= 802'
-if = 'has("nvim")'
+if = 'v:version >= 802'
 on_source = 'denite.nvim'
 
 [[plugins]]
@@ -196,6 +195,11 @@ hook_add = '''
 [[plugins]]
 repo = 'osyo-manga/vim-monster'
 on_ft = 'ruby'
+
+[[plugins]]
+repo = 'ozelentok/denite-gtags'
+if = 'v:version >= 802'
+on_source = 'denite.nvim'
 
 [[plugins]]
 repo = 'racer-rust/vim-racer'
@@ -329,10 +333,14 @@ defx = '''
 
 [[plugins]]
 repo = 'Shougo/denite.nvim'
-# if = 'v:version >= 802'
-if = 'has("nvim")'
+if = 'v:version >= 802'
 on_cmd = 'Denite'
 hook_source = '''
+  autocmd FileType denite-filter call s:denite_filter_my_settings()
+  function! s:denite_filter_my_settings() abort
+    imap <silent><buffer> <C-o> <Plug>(denite_filter_quit)
+  endfunction
+
   if executable('rg')
     " For ripgrep
     " Note: rg is faster than ag
@@ -376,6 +384,7 @@ hook_source = '''
             \ 'final_opts': [],
             \ })
   endif
+  call denite#custom#source('grep', 'max_candidates', 10000)
 
   call denite#custom#source('file/old', 'matchers', [
         \ 'matcher/clap', 'matcher/project_files', 'matcher/ignore_globs',
@@ -437,42 +446,79 @@ hook_source = '''
         \   'venv/', 'images/', '*.min.*', 'img/', 'fonts/'])
 '''
 hook_add = '''
-  nnoremap <silent> ;r
-        \ :<C-u>Denite -buffer-name=register
-        \ register neoyank<CR>
-  xnoremap <silent> ;r
-        \ :<C-u>Denite -default-action=replace -buffer-name=register
-        \ register neoyank<CR>
-  nnoremap <silent> [Window]<Space>
-  \ :<C-u>Denite file/rec:~/.vim/rc<CR>
-  nnoremap <silent><expr> / wordcount().chars > 30000 ?
-  \ ":\<C-u>Denite -buffer-name=search -start-filter
-  \  -search line/external\<CR>" :
-  \ ":\<C-u>Denite -buffer-name=search -start-filter -search line\<CR>"
-  nnoremap <silent><expr> * wordcount().chars > 30000 ?
-  \ ":\<C-u>DeniteCursorWord -buffer-name=search -search line/external\<CR>" :
-  \ ":\<C-u>DeniteCursorWord -buffer-name=search -search line\<CR>"
-  xnoremap <silent> *
-  \ "qy:Denite -input=`@q` -buffer-name=search -search line<CR>
+  " The prefix key.
+  nnoremap [denite] <Nop>
+  xnoremap [denite] <Nop>
+  nmap ; [denite]
+  xmap ; [denite]
+
+  nnoremap <silent> [denite]c
+       \ :<C-u>Denite gtags_context -buffer-name=search -auto-action=preview<CR>
+  nnoremap <silent> [denite]d
+        \ :<C-u>DeniteBufferDir -buffer-name=files file<CR>
+  nnoremap <silent> [denite]f
+        \ :<C-u>Denite buffer file_mru<CR>
+  nnoremap <silent> [denite]h
+        \ :<C-u>DeniteCursorWord help<CR>
+  nnoremap <silent> [denite]j
+        \ :<C-u>Denite change jump<CR>
+  nnoremap <silent> [denite]o
+        \ :<C-u>Denite outline -start-insert -resume<CR>
+  nnoremap <silent> [denite]r
+        \ :<C-u>Denite -buffer-name=register -default-action=append register neoyank<CR>
+  xnoremap <silent> [denite]r
+        \ d:<C-u>Denite -buffer-name=register -default-action=replace register neoyank<CR>
+  nnoremap <silent> [denite]s
+        \ :<C-u>Denite source<CR>
+  nnoremap <silent> [denite]t
+        \ :<C-u>DeniteCursorWord -buffer-name=tag tag:include<CR>
   nnoremap <silent><expr> [Window]s finddir('.git', ';') != '' ?
-  \ ":\<C-u>Denite -sorters=sorter/rank -unique
-  \  file/point file/old file/dirty file/git file file:new\<CR>" :
-  \ ":\<C-u>Denite -sorters=sorter/rank -unique
-  \  file/point file/old file file:new\<CR>"
-  nnoremap <silent> n
-  \ :<C-u>Denite -buffer-name=search -resume<CR>
-  nnoremap <silent><expr> tt  &filetype == 'help' ?  "g\<C-]>" :
-  \ ":\<C-u>DeniteCursorWord -buffer-name=tag -immediately tag:include\<CR>"
-  nnoremap <silent><expr> tp  &filetype == 'help' ?
-  \ ":\<C-u>pop\<CR>" : ":\<C-u>Denite jump\<CR>"
-  nnoremap <silent> [Window]n :<C-u>Denite dein<CR>
-  nnoremap <silent> [Window]g :<C-u>Denite ghq -default-action=cd<CR>
-  nnoremap <silent> ;g :<C-u>Denite -buffer-name=search
-  \ -no-empty grep<CR>
-  nnoremap <silent> <C-t> :<C-u>Denite -buffer-name=deol -split=floating
-  \ -cursor-pos=`tabpagenr()-1` deol:zsh<CR>
-  nnoremap <silent> <C-k> :<C-u>Denite change jump<CR>
-  nnoremap <silent> <C-h> :<C-u>DeniteCursorWord help<CR>
+        \ ":\<C-u>Denite -sorters=sorter/rank -unique
+        \  file/point file/old file/dirty file/git file file:new\<CR>" :
+        \ ":\<C-u>Denite -sorters=sorter/rank -unique
+        \  file/point file/old file file:new\<CR>"
+  nnoremap <silent> [Window]<Space>
+        \ :<C-u>Denite file/rec:~/.vim/rc<CR>
+  " nnoremap <silent><expr> / wordcount().chars > 30000 ?
+  "      \ ":\<C-u>Denite -buffer-name=search -start-filter
+  "      \  -search line/external\<CR>" :
+  "      \ ":\<C-u>Denite -buffer-name=search -start-filter -search line\<CR>"
+  " nnoremap <silent><expr> * wordcount().chars > 30000 ?
+  "      \ ":\<C-u>DeniteCursorWord -buffer-name=search -search line/external\<CR>" :
+  "      \ ":\<C-u>DeniteCursorWord -buffer-name=search -search line\<CR>"
+  " xnoremap <silent> *
+  "      \ "qy:Denite -input=`@q` -buffer-name=search -search line<CR>
+
+  nnoremap <silent> [denite]g
+        \ :<C-u>Denite grep -buffer-name=grep`tabpagenr()` -auto-action=preview<CR>
+  nnoremap <silent> [denite]G
+        \ :<C-u>DeniteCursorWord grep -buffer-name=search -auto-action=preview<CR>
+  xnoremap <silent> [denite]G
+        \ :<C-u>call <SID>visual_grep()<CR>
+  function! s:visual_grep() abort
+    let tmp = @@
+    silent normal gvy
+    let selected = @@
+    let @@ = tmp
+    execute 'Denite grep:.::' . selected . ' -buffer-name=search -auto-action=preview'
+  endfunction
+  "nnoremap <silent> [Space]b :<C-u>DeniteBookmarkAdd<CR>
+
+  " t: tags-and-searches "{{{
+  " The prefix key.
+  nnoremap [Tag] <Nop>
+  nmap t [Tag]
+  " Jump.
+  nnoremap [Tag]t <C-]> zv zz
+  " Jump next.
+  nnoremap <silent> [Tag]n :<C-u>tnext<CR>
+  " Jump previous.
+  nnoremap <silent> [Tag]p :<C-u>pop<CR>
+  " nnoremap <silent><expr> [Tag]t &filetype == 'help' ?  "g\<C-]>" :
+  "       \ ":\<C-u>DeniteCursorWord -buffer-name=tag -immediately tag:include\<CR>"
+  " nnoremap <silent><expr> [Tag]p &filetype == 'help' ?
+  "       \ ":\<C-u>pop\<CR>" : ":\<C-u>Denite jump\<CR>"
+  "}}}
 '''
 [plugins.ftplugin]
 denite = '''
@@ -508,8 +554,7 @@ denite = '''
 [[plugins]]
 repo = 'Shougo/deol.nvim'
 depends = 'denite.nvim'
-# if = 'v:version >= 802'
-if = 'has("nvim")'
+if = 'v:version >= 802'
 on_source = ['defx.nvim', 'denite.nvim']
 hook_add = '''
   nnoremap <silent> [Space]s :<C-u>Deol zsh -no-start-insert<CR>
@@ -638,8 +683,7 @@ hook_source = '''
 
 [[plugins]]
 repo = 'Shougo/junkfile.vim'
-# if = 'v:version >= 802'
-if = 'has("nvim")'
+if = 'v:version >= 802'
 on_source = 'denite.nvim'
 hook_add = '''
   nnoremap <silent> [Window]e :<C-u>Denite junkfile:new junkfile<CR>
@@ -650,6 +694,10 @@ repo = 'Shougo/neoinclude.vim'
 
 [[plugins]]
 repo = 'Shougo/neomru.vim'
+on_source = 'denite.nvim'
+hook_add = '''
+  let g:neomru#file_mru_limit = 200
+'''
 
 [[plugins]]
 repo = 'Shougo/neosnippet.vim'
@@ -678,16 +726,12 @@ hook_source = '''
 [[plugins]]
 repo = 'Shougo/neoyank.vim'
 on_event = 'TextYankPost'
-# if = 'v:version < 802'
-on_source = 'unite.vim'
-# else
-#   on_source = ['denite.vim']
-# endif
+on_source = ['denite.nvim', 'unite.vim']
 
 [[plugins]]
 repo = 'Shougo/unite.vim'
 depends = 'neomru.vim'
-# if = 'v:version < 802'
+if = 'v:version < 802'
 hook_source = """
   " Start insert.
   call unite#custom#profile('action', 'context', {
@@ -860,7 +904,7 @@ hook_add = '''
 [[plugins]]
 repo = 'Shougo/vimfiler.vim'
 depends = 'unite.vim'
-# if = 'v:version < 802'
+if = 'v:version < 802'
 on_map = {n = '<Plug>'}
 on_if = "isdirectory(bufname('%'))"
 hook_add = 'nnoremap <silent> <C-g> :<C-u>VimFiler -invisible<CR>'
@@ -906,13 +950,13 @@ hook_source = '''
 
 [[plugins]]
 repo = 'Shougo/vimproc.vim'
-# if = 'v:version < 802'
+if = 'v:version < 802'
 build = 'make'
 on_source = ['unite.vim', 'vimshell.vim']
 
 [[plugins]]
 repo = 'Shougo/vimshell.vim'
-# if = 'v:version < 802'
+if = 'v:version < 802'
 on_map = {n = '<Plug>'}
 hook_add = 'nmap <silent> <C-@> <Plug>(vimshell_switch)'
 hook_source = '''
@@ -964,13 +1008,12 @@ hook_source = '''
 repo = 'Shougo/vinarise.vim'
 on_cmd = 'Vinarise'
 hook_add = '''
-    let g:vinarise_enable_auto_detect = 1
+  let g:vinarise_enable_auto_detect = 1
 '''
 
 [[plugins]]
 repo = 'thinca/vim-qfreplace'
-# if = 'v:version < 802'
-on_ft = ['unite', 'qf']
+on_ft = 'qf'
 hook_add = '''
   autocmd MyAutoCmd FileType qf nnoremap <buffer> r :<C-u>Qfreplace<CR>
 '''
