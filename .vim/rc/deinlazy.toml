@@ -151,6 +151,11 @@ on_cmd = 'PrevimOpen'
 depends = 'open-browser.vim'
 
 [[plugins]]
+repo = 'kmnk/denite-dirmark'
+if = 'v:version >= 802'
+on_source = 'denite.nvim'
+
+[[plugins]]
 repo = 'LeafCage/foldCC'
 on_ft = 'vim'
 
@@ -363,8 +368,7 @@ hook_source = '''
     " Pt command on grep source
     call denite#custom#var('grep', {
             \ 'command': ['pt'],
-            \ 'default_opts': [
-            \   '-i', '--nogroup', '--nocolor', '--smart-case'],
+            \ 'default_opts': ['--nogroup', '--nocolor', '--smart-case'],
             \ 'recursive_opts': [],
             \ 'pattern_opt': [],
             \ 'separator': ['--'],
@@ -457,13 +461,13 @@ hook_add = '''
   nnoremap <silent> [denite]d
         \ :<C-u>DeniteBufferDir -buffer-name=files file<CR>
   nnoremap <silent> [denite]f
-        \ :<C-u>Denite buffer file_mru<CR>
+        \ :<C-u>Denite buffer file_mru dirmark<CR>
   nnoremap <silent> [denite]h
         \ :<C-u>DeniteCursorWord help<CR>
   nnoremap <silent> [denite]j
         \ :<C-u>Denite change jump<CR>
   nnoremap <silent> [denite]o
-        \ :<C-u>Denite outline -start-insert -resume<CR>
+        \ :<C-u>Denite outline<CR>
   nnoremap <silent> [denite]r
         \ :<C-u>Denite -buffer-name=register -default-action=append register neoyank<CR>
   xnoremap <silent> [denite]r
@@ -502,7 +506,7 @@ hook_add = '''
     let @@ = tmp
     execute 'Denite grep:.::' . selected . ' -buffer-name=search -auto-action=preview'
   endfunction
-  "nnoremap <silent> [Space]b :<C-u>DeniteBookmarkAdd<CR>
+  nnoremap <silent> [Space]b :<C-u>Denite dirmark/add::"`expand('%:p:h')`"<CR>
 
   " t: tags-and-searches "{{{
   " The prefix key.
