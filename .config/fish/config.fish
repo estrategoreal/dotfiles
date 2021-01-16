@@ -4,27 +4,27 @@
 set OSTYPE (uname)
 ## macOS
 function is_darwin
-  test $OSTYPE = Darwin; and return 0
+  test $OSTYPE = Darwin && return 0
   return 1
 end
 ## FreeBSD
 function is_freebsd
-  test $OSTYPE = FreeBSD; and return 0
+  test $OSTYPE = FreeBSD && return 0
   return 1
 end
 ## Linux
 function is_linux
-  test $OSTYPE = Linux; and return 0
+  test $OSTYPE = Linux && return 0
   return 1
 end
 ## Cygwin
 function is_cygwin
-  test (string sub -s 1 -l 5 $OSTYPE) = MINGW; and return 0
+  test (string sub -s 1 -l 5 $OSTYPE) = MINGW && return 0
   return 1
 end
 ## Msys
 function is_msys
-  test (string sub -s 1 -l 4 $OSTYPE) = MSYS; and return 0
+  test (string sub -s 1 -l 4 $OSTYPE) = MSYS && return 0
   return 1
 end
 
@@ -103,9 +103,9 @@ function ide
         set name "/msys64$argv[1]"
       end
     end
-    gvim +"set columns=199" +"VimFiler -buffer-name=explorer -toggle ~" +"tabedit $name" +TagbarOpen +"VimFilerCurrentDir -create -explorer -winwidth=48" +"wincmd l" &
+    gvim +"set columns=199" +"Defx -buffer-name=explorer -toggle ~" +"tabedit $name" +TagbarOpen +"Defx -new -split=vertical -winwidth=48 -direction=topleft ." &
   else
-    gvim +"set columns=199" +"VimFiler -buffer-name=explorer -toggle ~" +tabnew +TagbarOpen +"wincmd h" +"VimFilerCurrentDir -create -explorer -winwidth=48" &
+    gvim +"set columns=199" +"Defx -buffer-name=explorer -toggle ~" +tabnew +TagbarOpen +"Defx -new -split=vertical -winwidth=48 -direction=topleft ." &
   end
 end
 
@@ -124,7 +124,7 @@ function udtags
     cd $argv[1]; or return
   end
   for t in tags GPATH GRTAGS GTAGS
-    test -e $t; and rm -f $t
+    test -e $t && rm -f $t
   end
   echo "updating tags..."
   ctags -R --languages=c,c++ --extras=+q
@@ -139,7 +139,8 @@ if is_darwin
   end
 
   function tarbz2
-    env COPYFILE_DISABLE=true tar cjvf $argv[1].tbz --exclude .DS_Store $argv[1]
+    set name (string match -r '[^/]*$' $argv[1])
+    env COPYFILE_DISABLE=true tar cjvf $name.tbz --exclude .DS_Store $argv[1]
   end
 else if is_freebsd
   function udpkg
@@ -152,13 +153,14 @@ else if is_freebsd
   end
 end
 
-test -f $HOME/.config/fish/local.fish; and source $HOME/.config/fish/local.fish
+test -f $HOME/.config/fish/local.fish && source $HOME/.config/fish/local.fish
 
 # Source global definitions
 
 if test -z $TMUX
   if is_darwin
-    set -gx PATH (brew --prefix coreutils)/libexec/gnubin (brew --prefix gnu-sed)/libexec/gnubin /usr/local/sbin $PATH
+    set -gx PATH /opt/homebrew/bin /usr/local/sbin $PATH
+    set -gx PATH (brew --prefix coreutils)/libexec/gnubin (brew --prefix gnu-sed)/libexec/gnubin $PATH
   else if is_freebsd
     set -gx PATH $PATH /sbin /usr/sbin /usr/local/sbin
   else if is_linux
@@ -191,7 +193,7 @@ end
 
 # if is_darwin
 #   set brew_completion (brew --prefix 2>/dev/null)/etc/bash_completion
-#   if $staus -eq 0; and test -f "$brew_completion"
+#   if $staus -eq 0 && test -f "$brew_completion"
 #     source $brew_completion
 #   fi
 #
@@ -200,5 +202,5 @@ end
 #   end
 # end
 
-test -f $HOME/.config/fish/tmux.fish; and source $HOME/.config/fish/tmux.fish
+test -f $HOME/.config/fish/tmux.fish && source $HOME/.config/fish/tmux.fish
 

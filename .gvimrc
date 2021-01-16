@@ -16,7 +16,6 @@
 " set the X11 font to use
 " set guifont=-misc-fixed-medium-r-normal--14-130-75-75-c-70-iso8859-1
 if has('mac')
-  set noimdisableactivate
   set guifont=Cica:h14,Osaka-Mono:h14
   set antialias
   augroup Transparency

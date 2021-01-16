@@ -138,9 +138,9 @@ function ide() {
         name="/msys64$1"
       fi
     fi
-    gvim +"set columns=199" +"VimFiler -buffer-name=explorer -toggle ~" +"tabedit $name" +TagbarOpen +"VimFilerCurrentDir -create -explorer -winwidth=48" +"wincmd l"
+    gvim +"set columns=199" +"Defx -buffer-name=explorer -toggle ~" +"tabedit $name" +TagbarOpen +"Defx -new -split=vertical -winwidth=48 -direction=topleft ."
   else
-    gvim +"set columns=199" +"VimFiler -buffer-name=explorer -toggle ~" +tabnew +TagbarOpen +"wincmd h" +"VimFilerCurrentDir -create -explorer -winwidth=48"
+    gvim +"set columns=199" +"Defx -buffer-name=explorer -toggle ~" +tabnew +TagbarOpen +"Defx -new -split=vertical -winwidth=48 -direction=topleft ."
   fi
 }
 
@@ -172,7 +172,7 @@ if is_darwin ; then
   }
 
   function tarbz2() {
-    COPYFILE_DISABLE=true tar cjvf $1.tbz --exclude .DS_Store $1
+    COPYFILE_DISABLE=true tar cjvf ${1%/}.tbz --exclude .DS_Store $1
   }
 elif is_freebsd ; then
   function udpkg() {
@@ -195,7 +195,8 @@ export RPROMPT='%F{green}${vcs_info_msg_0_}%f'
 
 if [[ -z $TMUX ]]; then
   if is_darwin ; then
-    export PATH=$(brew --prefix coreutils)/libexec/gnubin:$(brew --prefix gnu-sed)/libexec/gnubin:/usr/local/sbin:$PATH
+    export PATH=/opt/homebrew/bin:/usr/local/sbin:$PATH
+    export PATH=$(brew --prefix coreutils)/libexec/gnubin:$(brew --prefix gnu-sed)/libexec/gnubin:$PATH
   elif is_freebsd ; then
     export PATH=$PATH:/sbin:/usr/sbin:/usr/local/sbin
   elif is_linux ; then
