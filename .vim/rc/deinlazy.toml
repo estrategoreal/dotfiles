@@ -163,14 +163,13 @@ on_ft = 'vim'
 repo = 'lambdalisue/vim-findent'
 
 [[plugins]]
-repo = 'majutsushi/tagbar'
+repo = 'preservim/tagbar'
 on_cmd = 'TagbarOpen'
 hook_add = '''
   if IsWindows()
     let g:tagbar_ctags_bin = 'C:/msys64/usr/local/bin/ctags'
   elseif IsMac()
     let g:tagbar_ctags_bin = '/opt/homebrew/bin/ctags'
-  elseif IsMac()
   elseif IsMsys()
     let g:tagbar_ctags_bin = '/usr/local/bin/ctags'
   elseif IsFreeBSD()
