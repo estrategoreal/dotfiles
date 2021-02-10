@@ -159,7 +159,7 @@ test -f $HOME/.config/fish/local.fish && source $HOME/.config/fish/local.fish
 
 if test -z $TMUX
   if is_darwin
-    set -gx PATH /opt/homebrew/bin /usr/local/sbin $PATH
+    set -gx PATH /opt/homebrew/bin /opt/homebrew/sbin $PATH
     set -gx PATH (brew --prefix coreutils)/libexec/gnubin (brew --prefix gnu-sed)/libexec/gnubin $PATH
   else if is_freebsd
     set -gx PATH $PATH /sbin /usr/sbin /usr/local/sbin
