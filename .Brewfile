@@ -8,7 +8,7 @@ brew "ffmpeg"
 brew "fish"
 brew "git"
 brew "gnu-sed"
-#brew "mas"
+brew "mas"
 brew "ripgrep"
 brew "tmux"
 brew "universal-ctags", args: ["HEAD"]
@@ -55,4 +55,4 @@ cask "tunnelblick"
 #cask "virtualbox"
 cask "vlc"
 
-#mas "Spark", id: 1176895641
+mas "Spark", id: 1176895641
