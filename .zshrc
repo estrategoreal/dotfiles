@@ -140,7 +140,7 @@ function ide() {
     fi
     gvim +"set columns=199" +"Defx -buffer-name=explorer -toggle ~" +"tabedit $name" +TagbarOpen +"Defx -new -split=vertical -winwidth=48 -direction=topleft ."
   else
-    gvim +"set columns=199" +"Defx -buffer-name=explorer -toggle ~" +tabnew +TagbarOpen +"Defx -new -split=vertical -winwidth=48 -direction=topleft ."
+    gvim +"set columns=199" +"Defx -buffer-name=explorer -toggle ~" +tabnew +TagbarOpen +"Defx -new -split=vertical -winwidth=48 -direction=topleft -no-focus ."
   fi
 }
 
