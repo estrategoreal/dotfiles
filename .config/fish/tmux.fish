@@ -1,7 +1,7 @@
 # tmux.fish
 
 function is_exists
-  type $argv >/dev/null 2>&1; return $status
+  type $argv >/dev/null 2>&1
 end
 function is_osx
   test "$OSTYPE" = "darwin*"
@@ -13,7 +13,7 @@ function is_tmux_runnning
   not test -z "$TMUX"
 end
 function is_screen_or_tmux_running
-  is_screen_running; or is_tmux_runnning
+  is_screen_running || is_tmux_runnning
 end
 function shell_has_started_interactively
   status --is-interactive
@@ -50,14 +50,12 @@ function tmux_automatically_attach_session
         echo -n "Tmux: attach? (y/N/num) "
         read
         if "$REPLY" =~ '^[Yy]$' || "$REPLY" = ''
-          tmux attach-session
-          if $status -eq 0
+          if tmux attach-session
             echo "(tmux -V) attached session"
             return 0
           end
         else if "$REPLY" =~ '^[0-9]+$'
-          tmux attach -t "$REPLY"
-          if $status -eq 0
+          if tmux attach -t "$REPLY"
             echo "(tmux -V) attached session"
             return 0
           end
