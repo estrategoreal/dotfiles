@@ -172,7 +172,7 @@ if test -z $TMUX
   end
 
   if test -d $HOME/.anyenv
-    set -gx PATH $HOME/.anyenv/bin $PATH
+    set -Ux fish_user_paths $HOME/.anyenv/bin $fish_user_paths
     eval (anyenv init - | source)
   end
 
