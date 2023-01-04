@@ -72,11 +72,13 @@ set guioptions=Mc
 
 if has('win32') || has('win64')
   gui
-  augroup Transparency
-    autocmd!
-    autocmd FocusGained * set transparency=240
-    "autocmd FocusLost * set transparency=120
-  augroup END
+  if has('kaoriya')
+    augroup Transparency
+      autocmd!
+      autocmd FocusGained * set transparency=240
+      "autocmd FocusLost * set transparency=120
+    augroup END
+  endif
 endif
 
 " Setting of colorscheme.

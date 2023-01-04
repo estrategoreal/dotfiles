@@ -36,7 +36,6 @@ cask "iina"
 cask "iterm2"
 cask "karabiner-elements"
 cask "keepassxc"
-cask "keepingyouawake"
 cask "libreoffice"
 cask "libreoffice-language-pack"
 cask "macdown"
@@ -55,3 +54,4 @@ cask "tunnelblick"
 cask "vlc"
 
 mas "Spark", id: 1176895641
+mas "Amphetamine", id: 937984704
