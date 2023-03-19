@@ -116,28 +116,6 @@ on_ft = 'vim'
 repo = 'lambdalisue/vim-findent'
 
 [[plugins]]
-repo = 'preservim/tagbar'
-on_cmd = 'TagbarOpen'
-hook_add = '''
-  if IsWindows()
-    let g:tagbar_ctags_bin = 'C:/msys64/usr/local/bin/ctags'
-  elseif IsMac()
-    let g:tagbar_ctags_bin = '/opt/homebrew/bin/ctags'
-  elseif IsMsys()
-    let g:tagbar_ctags_bin = '/usr/local/bin/ctags'
-  elseif IsFreeBSD()
-    let g:tagbar_ctags_bin = '/usr/local/bin/exctags'
-  else
-    let g:tagbar_ctags_bin = '/usr/bin/ctags'
-  endif
-  if has('gui_running')
-    let g:tabgar_autofocus = 1
-    let g:tagbar_width = 42
-  endif
-  let g:tagbar_sort = 0
-'''
-
-[[plugins]]
 repo = 'mrtazz/DoxygenToolkit.vim'
 on_cmd = 'Dox'
 hook_add = '''
@@ -159,6 +137,28 @@ on_ft = 'ruby'
 [[plugins]]
 repo = 'ozelentok/denite-gtags'
 on_source = 'denite.nvim'
+
+[[plugins]]
+repo = 'preservim/tagbar'
+on_cmd = 'TagbarOpen'
+hook_add = '''
+  if IsWindows()
+    let g:tagbar_ctags_bin = 'C:/msys64/usr/local/bin/ctags'
+  elseif IsMac()
+    let g:tagbar_ctags_bin = '/opt/homebrew/bin/ctags'
+  elseif IsMsys()
+    let g:tagbar_ctags_bin = '/usr/local/bin/ctags'
+  elseif IsFreeBSD()
+    let g:tagbar_ctags_bin = '/usr/local/bin/exctags'
+  else
+    let g:tagbar_ctags_bin = '/usr/bin/ctags'
+  endif
+  if has('gui_running')
+    let g:tabgar_autofocus = 1
+    let g:tagbar_width = 42
+  endif
+  let g:tagbar_sort = 0
+'''
 
 [[plugins]]
 repo = 'racer-rust/vim-racer'
@@ -206,10 +206,11 @@ repo = 'Shougo/context_filetype.vim'
 [[plugins]]
 repo = 'Shougo/ddc.vim'
 depends = 'denops.vim'
-if = 'has("nvim")'
 on_event = ['InsertEnter', 'CursorHold']
 hook_source = '''
   " Customize global settings
+
+  set completeopt+=noinsert
 
   " You must set the default ui.
   " Note: native ui
@@ -223,12 +224,14 @@ hook_source = '''
   " Use matcher_head and sorter_rank.
   " https://github.com/Shougo/ddc-matcher_head
   " https://github.com/Shougo/ddc-sorter_rank
+  call ddc#custom#patch_global('sources', ['neosnippet'])
   call ddc#custom#patch_global('sourceOptions', #{
-        \   _: #{
-        \     matchers: ['matcher_head'],
-        \     sorters: ['sorter_rank']},
-        \   },
-        \ )
+        \  _: #{
+        \   matchers: ['matcher_head'],
+        \   sorters: ['sorter_rank'],
+        \ },
+        \   neosnippet: {'mark': 'ns', 'dup': v:true},
+        \ })
 
   " Change source options
   call ddc#custom#patch_global('sourceOptions', #{
@@ -239,9 +242,12 @@ hook_source = '''
         \ })
 
   " Customize settings on a filetype
-  call ddc#custom#patch_filetype(
-        \  ['c', 'cpp'], 'sources', ['around', 'clangd']
-        \ )
+  " call ddc#custom#patch_filetype(['c', 'cpp'], 'sources',
+  "      \ ['around', 'clangd']
+  "      \ )
+  call ddc#custom#patch_filetype(['c', 'cpp'], 'sources',
+       \ ['around', 'neosnippet']
+       \ )
   call ddc#custom#patch_filetype(['c', 'cpp'], 'sourceOptions', #{
         \   clangd: #{ mark: 'C'},
         \ })
@@ -268,27 +274,22 @@ hook_source = '''
 
 [[plugins]]
 repo = 'Shougo/ddc-matcher_head'
-if = 'has("nvim")'
 on_source = 'ddc.vim'
 
 [[plugins]]
 repo = 'Shougo/ddc-sorter_rank'
-if = 'has("nvim")'
 on_source = 'ddc.vim'
 
 [[plugins]]
 repo = 'Shougo/ddc-source-around'
-if = 'has("nvim")'
 on_source = 'ddc.vim'
 
 [[plugins]]
 repo = 'Shougo/ddc-ui-native'
-if = 'has("nvim")'
 on_source = 'ddc.vim'
 
 [[plugins]]
 repo = 'Shougo/ddc-zsh'
-if = 'has("nvim")'
 on_source = 'ddc.vim'
 depends = 'ddc.vim'
 
@@ -634,78 +635,6 @@ zsh = '''
 '''
 
 [[plugins]]
-repo = 'Shougo/deoplete.nvim'
-depends = 'context_filetype.vim'
-if = '!has("nvim")'
-on_event = 'InsertEnter'
-hook_source = '''
-  " Use smartcase.
-  call deoplete#custom#option('smart_case', 1)
-
-  set completeopt+=noinsert
-
-  " <TAB>: completion.
-  " inoremap <silent><expr> <TAB>
-  "       \ pumvisible() ? "\<C-n>" :
-  "       \ <SID>check_back_space() ? "\<TAB>" :
-  "       \ deoplete#manual_complete()
-  " function! s:check_back_space() abort "{{{
-  "   let col = col('.') - 1
-  "   return !col || getline('.')[col - 1]  =~ '\s'
-  " endfunction"}}}
-  inoremap <silent><expr> <TAB>
-        \ pumvisible() ? "\<C-n>" : "\<TAB>"
-
-  " <S-TAB>: completion back.
-  inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
-
-  " <C-h>, <BS>: close popup and delete backword char.
-  inoremap <expr><C-h> deoplete#smart_close_popup()."\<C-h>"
-  inoremap <expr><BS> deoplete#smart_close_popup()."\<C-h>"
-
-  inoremap <expr><C-g> deoplete#undo_completion()
-  " <C-l>: redraw candidates
-  inoremap <expr><C-l> deoplete#refresh()
-
-  " <CR>: close popup and save indent.
-  inoremap <silent> <CR> <C-r>=<SID>my_cr_function()<CR>
-  function! s:my_cr_function() abort
-    return pumvisible() ? deoplete#close_popup()."\<CR>" : "\<CR>"
-  endfunction
-
-  call deoplete#custom#source('_', 'matchers',
-        \ ['matcher_fuzzy', 'matcher_length'])
-  call deoplete#custom#source('denite', 'matchers',
-        \ ['matcher_full_fuzzy', 'matcher_length'])
-
-  call deoplete#custom#source('zsh', 'filetypes', ['zsh', 'sh'])
-  call deoplete#custom#source('nextword', 'filetypes',
-        \ ['markdown', 'help', 'gitcommit', 'text'])
-
-  call deoplete#custom#source('_', 'converters', [
-        \ 'converter_remove_overlap',
-        \ 'converter_case',
-        \ 'matcher_length',
-        \ 'converter_truncate_abbr',
-        \ 'converter_truncate_info',
-        \ 'converter_truncate_menu',
-        \ ])
-
-  call deoplete#custom#option('keyword_pattern', {
-        \ '_': '[a-zA-Z_]\k\?',
-        \ })
-
-  call deoplete#custom#var('omni', 'input_patterns', {
-        \ 'ruby': ['[^. *\t]\.\w*', '[a-zA-Z_]\w*::'],
-        \ })
-
-  call deoplete#custom#option('refresh_always', 1)
-  call deoplete#custom#option('camel_case', 1)
-
-  call deoplete#enable()
-'''
-
-[[plugins]]
 repo = 'Shougo/deoppet.nvim'
 depends = ['neosnippet-snippets', 'context_filetype.vim']
 if = 'has("nvim")'
@@ -866,15 +795,4 @@ hook_add = '''
     nnoremap <buffer> Q :<C-u>W3mClose<CR>
   endfunction
 '''
-
-[[plugins]]
-repo = 'zchee/deoplete-go'
-if = '!has("nvim")'
-on_event = 'InsertEnter'
-on_ft = 'go'
-
-[[plugins]]
-repo = 'zchee/deoplete-zsh'
-if = '!has("nvim")'
-on_ft = ['zsh', 'sh']
 

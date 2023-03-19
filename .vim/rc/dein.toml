@@ -98,16 +98,10 @@ repo = 'Shougo/neosnippet-snippets'
 repo = 'Shougo/neossh.vim'
 
 [[plugins]]
-repo = 'Shougo/unite-outline'
-
-[[plugins]]
 repo = 'thinca/vim-ft-diff_fold'
 
 [[plugins]]
 repo = 'thinca/vim-ft-help_fold'
-
-[[plugins]]
-repo = 'tsukkee/unite-tag'
 
 [[plugins]]
 repo = 'vim-jp/autofmt'
