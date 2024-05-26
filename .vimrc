@@ -39,6 +39,10 @@ function! IsFreeBSD() abort
   return s:is_freebsd
 endfunction
 
+function! UseDdu() abort
+  return 0
+endfunction
+
 " Use English interface.
 if IsWindows()
   " For Windows.
