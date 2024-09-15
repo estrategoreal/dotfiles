@@ -50,7 +50,7 @@ cask "skype"
 cask "the-unarchiver"
 cask "transmission"
 cask "tunnelblick"
-#cask "virtualbox"
+cask "virtualbox"
 cask "vlc"
 
 mas "Spark", id: 1176895641
